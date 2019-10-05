@@ -94,9 +94,14 @@ public class Main {
         return code;
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
-        List<String> input = Files.readAllLines(Paths.get("input.txt"));
+        List<String> input = null;
+        try {
+            input = Files.readAllLines(Paths.get("input.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Main a = new Main();
         System.out.println("Bathroom code: " + a.getBathroomCode(input));
 
