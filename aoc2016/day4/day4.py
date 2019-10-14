@@ -1,6 +1,7 @@
 import re
 from collections import Counter
 
+
 def is_room(r):
     """Return true if a room is valid"""
     encrypted_name = r.split('-')[:-1]
@@ -10,6 +11,7 @@ def is_room(r):
     sorted_letter_freq = sorted(letter_freq, key=lambda L: (-letter_freq[L], L))
     checksum = re.search(r"\[(.*)\]", r).group(1)
     return checksum == ''.join(sorted_letter_freq[:5])
+
 
 # print(is_room("aaaaa-bbb-z-y-x-123[abxyz]"))
 
