@@ -3,6 +3,11 @@ import java.io.FileReader;
 import java.io.IOException;
 
 public class FuelCalculator {
+    /**
+     * Returns fuel required to lift mass m
+     * @param m Mass
+     * @return Fuel amount
+     */
     public int fuelRequiredForMass(int m) {
         return m / 3 - 2;
     }
