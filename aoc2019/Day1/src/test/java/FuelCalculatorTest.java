@@ -1,10 +1,12 @@
+import org.junit.jupiter.api.Test;
+
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FuelCalculatorTest {
 
-    @org.junit.jupiter.api.Test
+    @Test
     void fuelRequiredForMass() {
         Map<Integer, Integer> tt = Map.of(
                 12, 2,
