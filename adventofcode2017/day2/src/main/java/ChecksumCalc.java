@@ -11,13 +11,41 @@ public class ChecksumCalc {
         return nums;
     }
 
-    public int check(String s) {
-        String[] lines = s.split("\n");
+    public int sumCheck(String s) {
+        List<List<Integer>> data = parseInput(s);
         int sum = 0;
-        for (String l : lines) {
-            List<Integer> numbers = parseInts(l);
-            sum += Collections.max(numbers) - Collections.min(numbers);
+        for (List<Integer> row : data) {
+            sum += Collections.max(row) - Collections.min(row);
         }
         return sum;
+    }
+
+    public int dividesCheck(String s) {
+        List<List<Integer>> data = parseInput(s);
+        int sum = 0;
+        for (List<Integer> row : data) {
+            for (int i = 0; i < row.size(); i++) {
+                int a = row.get(i);
+                for (int j = 0; j < row.size(); j++) {
+                    if (i == j) {
+                        continue;
+                    }
+                    int b = row.get(j);
+                    if (a % b == 0) {
+                        sum += (a / b);
+                    }
+                }
+            }
+        }
+        return sum;
+    }
+
+    private List<List<Integer>> parseInput(String s) {
+        String[] lines = s.split("\n");
+        List<List<Integer>> data = new ArrayList<List<Integer>>();
+        for (String l : lines) {
+            data.add(parseInts(l));
+        }
+        return data;
     }
 }

@@ -8,18 +8,26 @@ class ChecksumCalcTest {
     public void TestSum() {
         ChecksumCalc c = new ChecksumCalc();
 
-        assertEquals(8, c.check("5 1 9 5"));
-        String s1 = "5 1 9 5\n" +
+        assertEquals(8, c.sumCheck("5 1 9 5"));
+        String s = "5 1 9 5\n" +
                 "7 5 3\n" +
                 "2 4 6 8";
-        assertEquals(18, c.check(s1));
+        assertEquals(18, c.sumCheck(s));
 
         // Day 1
         // Parse a list of integers, tab and newline separated
         // For each line, find min/max and calc diff
         // Sum all the diffs
         // This is my checksum!
-        assertEquals(41919, c.check(puzzleInput));
+        assertEquals(41919, c.sumCheck(puzzleInput));
+    }
+
+    @Test
+    public void TestDivides() {
+        ChecksumCalc c = new ChecksumCalc();
+        assertEquals(4, c.dividesCheck("5 9 2 8"));
+        assertEquals(3, c.dividesCheck("9 4 7 3"));
+        assertEquals(303, c.dividesCheck(puzzleInput));
     }
 
     String puzzleInput = "798\t1976\t1866\t1862\t559\t1797\t1129\t747\t85\t1108\t104\t2000\t248\t131\t87\t95\n" +
