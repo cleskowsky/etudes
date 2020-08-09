@@ -9,7 +9,21 @@ public class App {
     public boolean hasSameAdjacentDigits(char[] digits) {
         for (int i = 0; i < digits.length - 1; i++) {
             if (digits[i] == digits[i + 1]) {
-                return true;
+
+                // Part 2
+                // If digits[i] is part of a match group that's larger
+                // than 2, skip past that group
+                if ((i + 2) < digits.length && (digits[i] == digits[i + 2])) {
+                    for (int j = i + 1; j < digits.length - 1; j++) {
+                        if (digits[i] == digits[j]) {
+                            i = j;
+                            continue;
+                        }
+                        break;
+                    }
+                } else {
+                    return true;
+                }
             }
         }
         return false;
