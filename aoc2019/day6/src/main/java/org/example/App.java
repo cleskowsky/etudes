@@ -1,5 +1,7 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,5 +29,16 @@ public class App {
 			}
 		}
 		return orbits;
+	}
+	
+	public List findAllOrbitedObjects(Map<String, String> data, String orbiter) {
+		List<String> ret = new ArrayList<>();
+		while (true) {
+			ret.add(orbiter);
+			if (orbiter.equals("COM")) {
+				return ret;
+			}
+			orbiter = data.get(orbiter);
+		}
 	}
 }
