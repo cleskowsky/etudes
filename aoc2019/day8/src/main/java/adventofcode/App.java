@@ -4,6 +4,7 @@ import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Hello world!
@@ -27,13 +28,17 @@ public class App {
 @Data
 class Image {
     String raw;
+    int layerWidth;
+    int layerHeight;
     List<String> layers;
 
     public Image(String raw, int w, int h) {
         this.raw = raw;
+        this.layerWidth = w;
+        this.layerHeight = h;
         this.layers = new ArrayList<>();
 
-        int layerLength = w * h;
+        int layerLength = layerWidth * layerHeight;
         int layerOffset = 0;
         for (int n = 1; layerOffset < raw.length(); n++) {
             layers.add(raw.substring(layerOffset, layerOffset + layerLength));
@@ -43,5 +48,14 @@ class Image {
 
     public String getLayer(int n) {
         return layers.get(n);
+    }
+
+    public void printLayer(int x) {
+        String l = layers.get(x);
+        int offset = 0;
+        while (offset < l.length()) {
+            System.out.println(l.substring(offset, offset + layerWidth).replace('0', ' '));
+            offset += layerWidth;
+        }
     }
 }
