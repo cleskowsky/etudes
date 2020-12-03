@@ -1,14 +1,12 @@
 package a;
 
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
 public class Day2 {
 	public static void main(String[] args) throws Exception {
-		URL url = Day2.class.getClassLoader().getResource("day2.txt");
-		List<String> passwords = Files.readAllLines(Path.of(url.toURI()));
+		List<String> passwords = Files.readAllLines(Path.of("input/day2.txt"));
 		
 		int matchesA = 0;
 		int matchesB = 0;
@@ -27,7 +25,7 @@ public class Day2 {
 			}
 			int min = Integer.parseInt(parts[0]);
 			int max = Integer.parseInt(parts[1]);
-
+			
 			// Part a
 			long n = password.chars().filter(c -> c == ch).count();
 			if (n >= min && n <= max) {
