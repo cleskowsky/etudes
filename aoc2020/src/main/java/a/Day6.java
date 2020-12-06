@@ -8,10 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import lombok.Data;
-
 public class Day6 {
-	@Data
 	public static class Group {
 		private Map<String, Integer> questions;
 		private int size;

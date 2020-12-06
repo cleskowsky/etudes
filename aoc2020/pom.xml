@@ -7,13 +7,6 @@
     <groupId>a</groupId>
     <artifactId>aoc2020</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>1.18.16</version>
-        </dependency>
-    </dependencies>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
