@@ -13,32 +13,44 @@ public class Day9 {
         }
 
         // Part a
+        long weakness = 0;
         for (int i = 25; i < ciphertext.length; i++) {
             long next = ciphertext[i];
             if (!isValidNext(ciphertext, i-25, i-1, next)) {
-                System.out.println(next);
+                weakness = next;
                 break;
             }
         }
+        System.out.println(weakness);
 
         // Part b
-        long myNumber = 32321523;
         for (int i = 0; i < ciphertext.length; i++) {
             long sum = 0;
             for (int j = i; j < ciphertext.length; j++) {
                 sum += ciphertext[j];
-                if (sum > myNumber) {
+                if (sum > weakness) {
                     break;
                 }
-                if (sum == myNumber) {
+                if (sum == weakness) {
                     System.out.printf("Found! i: %d, j: %d, ct[i]: %d, ct[j]: %d%n",
                             i, j, ciphertext[i], ciphertext[j]);
 
+                    long smallest = ciphertext[i];
+                    long biggest = ciphertext[i];
+                    for (int k = i; k <=j; k++) {
+                        long curr = ciphertext[k];
+                        if (smallest > curr) {
+                            smallest = curr;
+                        }
+                        if (biggest < curr) {
+                            biggest = curr;
+                        }
+                    }
+
                     // smallest: 1145730
                     // biggest: 3649251
-                    System.out.println(1145730 + 3649251);
-
-                    System.exit(0);
+                    System.out.println(smallest + biggest);
+                    return;
                 }
             }
         }
