@@ -4,20 +4,14 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 public class Day11 {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        // Input
-//        String[] lines = Files.readString(Path.of("inputs/11sample.txt")).split("\\n");
-        String[] lines = Files.readString(Path.of("inputs/11.txt")).split("\\n");
-        int w = lines[0].length();
-        int h = lines.length;
-        char[][] gen = new char[h][w];
-        for (int i = 0; i < h; i++) {
-            String l = lines[i];
-            for (int j = 0; j < w; j++) {
-                gen[i][j] = l.charAt(j);
-            }
-        }
+//        String inputFile = "inputs/11sample.txt";
+        String inputFile = "inputs/11.txt";
+
+        char[][] gen = Input(inputFile);
+        int h = gen.length;
+        int w = gen[0].length;
 
         // Part a
         int[][] neighbours = new int[][]{
@@ -34,49 +28,128 @@ public class Day11 {
             // We'll have to keep evolving new generations until
             // they stabilized
             char[][] newGen = new char[h][w];
-            for (int i = 0; i < h; i++) {
-                for (int j = 0; j < w; j++) {
-                    int sum = 0;
-                    for (int[] n : neighbours) {
-                        if (i + n[0] < 0 || i + n[0] >= h) {
-                            continue;
-                        }
-                        if (j + n[1] < 0 || j + n[1] >= w) {
-                            continue;
-                        }
-                        if (gen[i + n[0]][j + n[1]] == '#') {
-                            sum++;
-                        }
-                    }
-                    if (gen[i][j] == 'L' && sum == 0) {
-                        newGen[i][j] = '#';
+            for (int j = 0; j < h; j++) {
+                for (int i = 0; i < w; i++) {
+                    int sum = neighboursParta(gen, neighbours, j, i);
+                    if (gen[j][i] == 'L' && sum == 0) {
+                        newGen[j][i] = '#';
                         changed = true;
-                    } else if (gen[i][j] == '#' && sum >= 4) {
-                        newGen[i][j] = 'L';
+                    } else if (gen[j][i] == '#' && sum >= 4) {
+                        newGen[j][i] = 'L';
                         changed = true;
                     } else {
-                        newGen[i][j] = gen[i][j];
+                        newGen[j][i] = gen[j][i];
                     }
                 }
             }
             gen = newGen;
-
-//            for (char[] l : gen) {
-//                System.out.println(l);
-//            }
-//            System.out.println();
         }
+        System.out.println(countOccupiedSeats(gen));
 
-        int occupiedSeats = 0;
-        for (int i = 0; i < h; i++) {
-            for (int j = 0; j < w; j++) {
-                if (gen[i][j] == '#') {
-                    occupiedSeats++;
+        // Part b
+
+        gen = Input(inputFile);
+
+        changed = true;
+        while (changed) {
+            changed = false;
+
+            // We'll have to keep evolving new generations until
+            // they stabilized
+            char[][] newGen = new char[h][w];
+            for (int j = 0; j < h; j++) {
+                for (int i = 0; i < w; i++) {
+                    int sum = neighboursPartb(gen, neighbours, j, i);
+                    if (gen[j][i] == 'L' && sum == 0) {
+                        newGen[j][i] = '#';
+                        changed = true;
+                    } else if (gen[j][i] == '#' && sum >= 5) {
+                        newGen[j][i] = 'L';
+                        changed = true;
+                    } else {
+                        newGen[j][i] = gen[j][i];
+                    }
+                }
+            }
+            gen = newGen;
+        }
+        System.out.println(countOccupiedSeats(gen));
+    }
+
+    private static int neighboursPartb(char[][] gen, int[][] neighbours, int j, int i) {
+        int sum = 0;
+        for (int[] n : neighbours) {
+            // We'll proceed in the neighbour direction until we find
+            // a seat (occupied or not) or fall off the map
+            int k = 1;
+            boolean seatFound = false;
+            while (!seatFound) {
+                int y = j + n[0] * k;
+                int x = i + n[1] * k;
+                if ((y < 0 || y >= gen.length) || (x < 0 || x >= gen[0].length)) {
+                    break;
+                }
+                switch (gen[y][x]) {
+                    case 'L':
+                        seatFound = true;
+                        break;
+                    case '#':
+                        seatFound = true;
+                        sum++;
+                        break;
+                    default:
+                        k++;
                 }
             }
         }
-        System.out.println(occupiedSeats);
+        return sum;
+    }
 
-        // Part b
+    private static int neighboursParta(char[][] gen, int[][] neighbours, int j, int i) {
+        int sum = 0;
+        for (int[] n : neighbours) {
+            int y = j + n[0];
+            int x = i + n[1];
+            if ((y < 0 || y >= gen.length) || (x < 0 || x >= gen[0].length)) {
+                continue;
+            }
+            if (gen[j + n[0]][i + n[1]] == '#') {
+                sum++;
+            }
+        }
+        return sum;
+    }
+
+    private static int countOccupiedSeats(char[][] gen) {
+        int sum = 0;
+        for (int j = 0; j < gen.length; j++) {
+            for (int i = 0; i < gen[0].length; i++) {
+                if (gen[j][i] == '#') {
+                    sum++;
+                }
+            }
+        }
+        return sum;
+    }
+
+    private static void printGen(char[][] gen) {
+        for (char[] l : gen) {
+            System.out.println(l);
+        }
+        System.out.println();
+    }
+
+    private static char[][] Input(String fileName) {
+        String[] lines = new String[]{""};
+        try {
+            lines = Files.readString(Path.of(fileName)).split("\\n");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        char[][] gen = new char[lines.length][];
+        for (int i = 0; i < lines.length; i++) {
+            gen[i] = lines[i].toCharArray();
+        }
+        return gen;
     }
 }
