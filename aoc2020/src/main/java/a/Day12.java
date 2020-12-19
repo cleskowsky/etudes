@@ -7,38 +7,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day12 {
-    static class Pair {
-        int x;
-        int y;
+    enum Heading {
+        NORTH(0, 1),
+        EAST(1, 0),
+        SOUTH(0, -1),
+        WEST(-1, 0);
 
-        public Pair(int x, int y) {
+        int x, y;
+
+        Heading(int x, int y) {
             this.x = x;
             this.y = y;
         }
-    }
-
-    enum Heading {
-        NORTH(new Pair(0, 1)),
-        EAST(new Pair(1, 0)),
-        SOUTH(new Pair(0, -1)),
-        WEST(new Pair(-1, 0));
-
-        Pair p;
-
-        Heading(Pair p) {
-            this.p = p;
-        }
-
-        public int getX() {
-            return p.x;
-        }
-
-        public int getY() {
-            return p.y;
-        }
 
         public static Heading getHeading(int n) {
-            String[] headings = new String[] { "N", "E", "S", "W" };
+            String[] headings = new String[]{"N", "E", "S", "W"};
             return getHeading(headings[n]);
         }
 
@@ -74,8 +57,7 @@ public class Day12 {
         // Parta
         int x = 0;
         int y = 0;
-
-        int facing = 1;  // East
+        int facing = 1;
 
         for (Move m : moves) {
             switch (m.way) {
@@ -84,13 +66,13 @@ public class Day12 {
                 case "S":
                 case "W":
                     Heading h = Heading.getHeading(m.way);
-                    x += m.by * h.getX();
-                    y += m.by * h.getY();
+                    x += m.by * h.x;
+                    y += m.by * h.y;
                     break;
                 case "F":
                     h = Heading.getHeading(facing);
-                    x += m.by * h.getX();
-                    y += m.by * h.getY();
+                    x += m.by * h.x;
+                    y += m.by * h.y;
                     break;
                 case "L":
                     facing -= m.by / 90;
@@ -108,46 +90,46 @@ public class Day12 {
         System.out.println(Math.abs(x) + Math.abs(y));
 
         // Partb
-        Pair waypoint = new Pair(10, 1);
-        Pair ship = new Pair(0, 0);
-        for (Move a : moves) {
-            move(ship, waypoint, a);
+        int[] waypoint = new int[]{10, 1};
+        int[] ship = new int[]{0, 0};
+        for (Move m : moves) {
+            move(ship, waypoint, m);
         }
-        System.out.println(Math.abs(ship.x) + Math.abs(ship.y));
+        System.out.println(Math.abs(ship[0]) + Math.abs(ship[1]));
     }
 
-    public static void move(Pair ship, Pair wayPoint, Move move) {
+    public static void move(int[] ship, int[] wayPoint, Move move) {
         switch (move.way) {
             case "N":
             case "E":
             case "S":
             case "W":
                 Heading h = Heading.getHeading(move.way);
-                wayPoint.x += move.by * h.getX();
-                wayPoint.y += move.by * h.getY();
+                wayPoint[0] += move.by * h.x;
+                wayPoint[1] += move.by * h.y;
                 break;
             case "L":
                 int n = move.by / 90;
                 for (int i = 0; i < n; i++) {
-                    int x = -1 * wayPoint.y;
-                    int y = wayPoint.x;
-                    wayPoint.x = x;
-                    wayPoint.y = y;
+                    int x = -1 * wayPoint[1];
+                    int y = wayPoint[0];
+                    wayPoint[0] = x;
+                    wayPoint[1] = y;
                 }
                 break;
             case "R":
                 n = move.by / 90;
                 for (int i = 0; i < n; i++) {
-                    int x = wayPoint.y;
-                    int y = -1 * wayPoint.x;
-                    wayPoint.x = x;
-                    wayPoint.y = y;
+                    int x = wayPoint[1];
+                    int y = -1 * wayPoint[0];
+                    wayPoint[0] = x;
+                    wayPoint[1] = y;
                 }
                 break;
             case "F":
                 for (int i = 0; i < move.by; i++) {
-                    ship.x += wayPoint.x;
-                    ship.y += wayPoint.y;
+                    ship[0] += wayPoint[0];
+                    ship[1] += wayPoint[1];
                 }
                 break;
         }
