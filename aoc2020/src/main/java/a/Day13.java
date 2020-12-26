@@ -3,12 +3,12 @@ package a;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Arrays;
 
 public class Day13 {
     @Data
     public static class Pair {
-        int id, idx;
+        private int id, idx;
 
         public Pair(int id, int idx) {
             this.id = id;
@@ -47,38 +47,23 @@ public class Day13 {
 
         // Partb
 
-//        s = "17,x,13,19";
-//        s = "67,7,59,61";
-//        s = "1789,37,47,1889";
+        s = "17,x,13,19";
+        s = "67,7,59,61";
+        s = "1789,37,47,1889";
         s = "23,x,x,x,x,x,x,x,x,x,x,x,x,41,x,x,x,37,x,x,x,x,x,479,x,x,x,x,x,x,x,x,x,x,x,x,13,x,x,x,17,x,x,x,x,x,x,x,x,x,x,x,29,x,373,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,19";
 
+        // From LizTheGray completely. I am not quite sure about this yet. Made
+        // a note to come back here. There's an idea here I'd like to understand
         busIDs = Input(s);
-
-        long start = new Date().getTime();
-        long tick = 0;
-        while (true) {
-            int sum = 0;
-            for (int i = 0; i < busIDs.length; i++) {
-                Pair b = busIDs[i];
-                if ((tick + b.getIdx()) % b.getId() == 0) {
-                    sum++;
-                } else {
-                    break;
-                }
+        long minValue = 0;
+        long runningProduct = 1;
+        for (Pair b : busIDs) {
+            while ((minValue + b.getIdx()) % b.getId() != 0) {
+                minValue += runningProduct;
             }
-            if (sum == busIDs.length) {
-                break;
-            }
-            if (tick % 10000000 == 0) {
-                // Let's see progress. This is going to take awhile
-                System.out.println(tick);
-            }
-            tick++;
+            runningProduct *= b.getId();
         }
-        System.out.println(tick);
-        // Got here : 1074979300000
-        // Still no match :/
-        System.out.println(new Date().getTime() - start);
+        System.out.println(minValue);
     }
 
     public static Pair[] Input(String data) {
@@ -92,17 +77,16 @@ public class Day13 {
             // x: bus number, y: index
             busIDs.add(new Pair(Integer.parseInt(split[i]), i));
         }
-        return busIDs.toArray(new Pair[]{});
-
-//        // Using an arraylist
-//        var busIDs = new ArrayList<Integer>();
-//        for (String b : s.split(",")) {
-//            if (b.equals("x")) {
-//                busIDs.add(0);
-//            } else {
-//                busIDs.add(Integer.parseInt(b));
-//            }
-//        }
-
+        var sorted = busIDs.toArray(new Pair[]{});
+        Arrays.sort(sorted, (x, y) -> {
+            if (x.getId() < y.getId()) {
+                return 1;
+            } else if (x.getId() > y.getId()) {
+                return -1;
+            } else {
+                return 0;
+            }
+        });
+        return sorted;
     }
 }
