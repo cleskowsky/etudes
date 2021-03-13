@@ -47,36 +47,31 @@ public class Day18 {
         return eval(parseExpr(s));
     }
 
-    private long eval(Node n) {
-        if (n instanceof Constant) {
-            return ((Constant) n).getN();
-        } else if (n instanceof Expr) {
-            return eval((Expr) n);
+    private long eval(Node expr) {
+        System.out.println(expr);
+        if (expr instanceof Constant) {
+            return ((Constant) expr).getN();
+        } else if (expr instanceof Expr) {
+            Expr e = (Expr) expr;
+            Constant result = new Constant(eval(e.getNodes().get(0)));
+            int i = 1;
+            while (i < e.getNodes().size()) {
+                Node x = result;
+                Op op = (Op) e.getNodes().get(i);
+                Node y = e.getNodes().get(i + 1);
+                long n = 0;
+                if (op.toString().equals("+")) {
+                    n = eval(x) + eval(y);
+                } else if (op.toString().equals("*")) {
+                    n = eval(x) * eval(y);
+                }
+                result = new Constant(n);
+                i += 2;
+            }
+            return result.getN();
         } else {
-            throw new RuntimeException("Couldn't evaluate: " + n);
+            throw new RuntimeException("Couldn't evaluate: " + expr);
         }
-    }
-
-    private long eval(Node x, Op o, Node y) {
-        if (o.toString().equals("+")) {
-            return eval(x) + eval(y);
-        } else if (o.toString().equals("*")) {
-            return eval(x) * eval(y);
-        } else {
-            throw new RuntimeException("Invalid operation: " + o);
-        }
-    }
-
-    private long eval(Expr e) {
-        System.out.println(e);
-        Constant x = new Constant(eval(e.getNodes().get(0)));
-        int i = 1;
-        while (i < e.getNodes().size()) {
-            long n = eval(x, (Op) e.getNodes().get(i), e.getNodes().get(i + 1));
-            x = new Constant(n);
-            i += 2;
-        }
-        return x.getN();
     }
 
     public Expr parseExpr(String s) {
