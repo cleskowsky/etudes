@@ -1,5 +1,6 @@
 package a;
 
+import a.day18.Day18;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
