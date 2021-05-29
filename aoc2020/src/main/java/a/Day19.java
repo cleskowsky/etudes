@@ -8,29 +8,38 @@ public class Day19 {
 
     /**
      * Check message matches rules in pattern using RuleSet rs
-     * @param p Pattern : A list of rules we'll need to compare against individual
-     *          message chars
-     * @param s The satellite message to match
+     *
+     * @param p  Pattern : A list of rules we'll need to compare against individual
+     *           message chars
+     * @param s  The satellite message to match
      * @param rs ResultSet : A set of rules
      * @return True if match
      */
     public static boolean checkMessage(List<Integer> p, String s, RuleSet rs) {
-        for (int i = 0; i < p.size(); i++) {
-            if (i > s.length() - 1) {
-                return false;
+        if ((s.isEmpty() && !p.isEmpty()) ||
+                (p.isEmpty() && !s.isEmpty())) {
+            return false;
+        } else if (p.isEmpty() && s.isEmpty()) {
+            return true;
+        }
+        int ruleID = p.get(0);
+        if (rs.get(ruleID) instanceof Terminal) {
+            Terminal t = (Terminal) rs.get(ruleID);
+            if (s.charAt(0) == t.getC()) {
+                return checkMessage(p.subList(1, p.size()), s.substring(1), rs);
             }
-            int ruleID = p.get(i);
-            if (rs.get(ruleID) instanceof Terminal) {
-                Terminal t = (Terminal) rs.get(ruleID);
-                if (s.charAt(i) == t.getC()) {
-                    // Message string matches pattern up to i
-                    continue;
+        } else if (rs.get(ruleID) instanceof Choice) {
+            Choice c = (Choice) rs.get(ruleID);
+            for (Pattern x : c.getChildren()) {
+                List<Integer> candidatePattern = new ArrayList<>();
+                candidatePattern.addAll(x.getChildren());
+                candidatePattern.addAll(p.subList(1, p.size()));
+                if (checkMessage(candidatePattern, s, rs)) {
+                    return true;
                 }
-                return false;
             }
         }
-
-        return true;
+        return false;
     }
 }
 
