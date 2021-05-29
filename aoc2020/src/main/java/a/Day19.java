@@ -6,14 +6,13 @@ import java.util.*;
 
 public class Day19 {
 
-    public static final boolean DEBUG = true;
-
     /**
      * Check message matches rules in pattern using RuleSet rs
-     * @param p Pattern
-     * @param s Message
-     * @param rs ResultSet
-     * @return
+     * @param p Pattern : A list of rules we'll need to compare against individual
+     *          message chars
+     * @param s The satellite message to match
+     * @param rs ResultSet : A set of rules
+     * @return True if match
      */
     public static boolean checkMessage(List<Integer> p, String s, RuleSet rs) {
         for (int i = 0; i < p.size(); i++) {
@@ -45,14 +44,6 @@ class Pattern implements Rule {
     public Pattern(Integer... n) {
         children = Arrays.asList(n);
     }
-
-    public int get(int n) {
-        return children.get(n);
-    }
-
-    public int length() {
-        return children.size();
-    }
 }
 
 @Data
@@ -60,6 +51,7 @@ class Choice implements Rule {
     List<Pattern> children;
 
     public Choice(Pattern... n) {
+        this.children = Arrays.asList(n);
     }
 }
 
