@@ -59,27 +59,27 @@ interface Rule {
 
 @Data
 class Pattern implements Rule {
-    List<Integer> children;
+    List<Integer> children = new ArrayList<>();
 
     public Pattern(Integer... n) {
-        children = Arrays.asList(n);
+        Collections.addAll(children, n);
     }
 
-    public Pattern(List<Integer> x) {
-        this.children = x;
+    public void addRule(Integer n) {
+        children.add(n);
     }
 }
 
 @Data
 class Choice implements Rule {
-    List<Pattern> children;
+    List<Pattern> children = new ArrayList<>();
 
-    public Choice(Pattern... n) {
-        this.children = Arrays.asList(n);
+    public Choice(Pattern... p) {
+        Collections.addAll(children, p);
     }
 
-    public Choice(List<Pattern> x) {
-        this.children = x;
+    public void addPattern(Pattern p) {
+        children.add(p);
     }
 }
 

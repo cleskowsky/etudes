@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,10 +17,10 @@ class Day19Test {
         Pattern zero = new Pattern(1, 1);
         rs.put(0, zero);
         rs.put(1, new Terminal('a'));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aa", rs));
-        assertFalse(Day19.checkMessage(zero.getChildren(), "ab", rs));
-        assertFalse(Day19.checkMessage(zero.getChildren(), "a", rs));
-        assertFalse(Day19.checkMessage(zero.getChildren(), "aaa", rs));
+        assertTrue(Day19.checkMessage(null, "aa", rs));
+        assertFalse(Day19.checkMessage(null, "ab", rs));
+        assertFalse(Day19.checkMessage(null, "a", rs));
+        assertFalse(Day19.checkMessage(null, "aaa", rs));
 
     }
 
@@ -33,9 +32,9 @@ class Day19Test {
         rs.put(1, new Terminal('a'));
         rs.put(2, new Choice(new Pattern(1, 3), new Pattern(3, 1)));
         rs.put(3, new Terminal('b'));
-        assertFalse(Day19.checkMessage(zero.getChildren(), "a", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aab", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aba", rs));
+        assertFalse(Day19.checkMessage(null, "a", rs));
+        assertTrue(Day19.checkMessage(null, "aab", rs));
+        assertTrue(Day19.checkMessage(null, "aba", rs));
     }
 
     @Test
@@ -48,19 +47,33 @@ class Day19Test {
         rs.put(3, new Choice(new Pattern(4, 5), new Pattern(5, 4)));
         rs.put(4, new Terminal('a'));
         rs.put(5, new Terminal('b'));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aaaabb", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aaabab", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "abbabb", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "abbbab", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "aabbbb", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "abaaab", rs));
-        assertTrue(Day19.checkMessage(zero.getChildren(), "ababbb", rs));
+        assertTrue(Day19.checkMessage(null, "aaaabb", rs));
+        assertTrue(Day19.checkMessage(null, "aaabab", rs));
+        assertTrue(Day19.checkMessage(null, "abbabb", rs));
+        assertTrue(Day19.checkMessage(null, "abbbab", rs));
+        assertTrue(Day19.checkMessage(null, "aabbbb", rs));
+        assertTrue(Day19.checkMessage(null, "abaaab", rs));
+        assertTrue(Day19.checkMessage(null, "ababbb", rs));
     }
 
     @Test
     void part1() {
         RuleSet rs = InputRules("inputs/19rules.txt");
-        System.out.println(rs);
+        List<String> messages = InputMessages("inputs/19messages.txt");
+        int cnt = 0;
+        for (String s : messages) {
+            if (Day19.checkMessage(null, s, rs)) {
+                cnt++;
+            }
+        }
+        System.out.println(cnt);
+    }
+
+    @Test
+    void part2() {
+        RuleSet rs = InputRules("inputs/19rules.txt");
+        rs.put(8, new Choice(new Pattern(42), new Pattern(42, 8)));
+        rs.put(11, new Choice(new Pattern(42, 31), new Pattern(42, 11, 31)));
         List<String> messages = InputMessages("inputs/19messages.txt");
         int cnt = 0;
         for (String s : messages) {
@@ -87,21 +100,24 @@ class Day19Test {
                 } else {
                     // Pattern, choice
                     split = split[1].split(" \\| ");
-                    List<Pattern> x = new ArrayList<>();
-                    for (String pattern : split) {
-                        String[] numList = pattern.split(" ");
-                        List<Integer> nums = new ArrayList<>();
-                        for (String n : numList) {
-                            nums.add(Integer.parseInt(n.strip()));
-                        }
-                        x.add(new Pattern(nums));
-                    }
-                    if (x.size() == 1) {
+                    if (split.length == 1) {
                         // A pattern
-                        rs.put(ruleID, x.get(0));
+                        Pattern p = new Pattern();
+                        for (String x : split[0].split(" ")) {
+                            p.addRule(Integer.parseInt(x.strip()));
+                        }
+                        rs.put(ruleID, p);
                     } else {
                         // A choice
-                        rs.put(ruleID, new Choice(x));
+                        Choice c = new Choice();
+                        for (String x : split) {
+                            Pattern p = new Pattern();
+                            for (String y : x.split(" ")) {
+                                p.addRule(Integer.parseInt(y.strip()));
+                            }
+                            c.addPattern(p);
+                        }
+                        rs.put(ruleID, c);
                     }
                 }
             }
