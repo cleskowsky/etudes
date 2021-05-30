@@ -16,6 +16,11 @@ public class Day19 {
      * @return True if match
      */
     public static boolean checkMessage(List<Integer> p, String s, RuleSet rs) {
+        if (p == null) {
+            // First call to checkMessage
+            p = ((Pattern) rs.get(0)).getChildren();
+        }
+
         if ((s.isEmpty() && !p.isEmpty()) ||
                 (p.isEmpty() && !s.isEmpty())) {
             return false;
@@ -38,6 +43,12 @@ public class Day19 {
                     return true;
                 }
             }
+        } else if (rs.get(ruleID) instanceof Pattern) {
+            Pattern patt = (Pattern) rs.get(ruleID);
+            List<Integer> candidatePattern = new ArrayList<>();
+            candidatePattern.addAll(patt.getChildren());
+            candidatePattern.addAll(p.subList(1, p.size()));
+            return checkMessage(candidatePattern, s, rs);
         }
         return false;
     }
@@ -53,6 +64,10 @@ class Pattern implements Rule {
     public Pattern(Integer... n) {
         children = Arrays.asList(n);
     }
+
+    public Pattern(List<Integer> x) {
+        this.children = x;
+    }
 }
 
 @Data
@@ -61,6 +76,10 @@ class Choice implements Rule {
 
     public Choice(Pattern... n) {
         this.children = Arrays.asList(n);
+    }
+
+    public Choice(List<Pattern> x) {
+        this.children = x;
     }
 }
 

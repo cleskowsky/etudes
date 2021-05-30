@@ -2,6 +2,12 @@ package a;
 
 import org.junit.jupiter.api.Test;
 
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -33,7 +39,7 @@ class Day19Test {
     }
 
     @Test
-    void withSampleRuleSet() {
+    void usingSampleRuleSetFromAdventOfCode() {
         RuleSet rs = new RuleSet();
         Pattern zero = new Pattern(4, 1, 5);
         rs.put(0, zero);
@@ -49,5 +55,69 @@ class Day19Test {
         assertTrue(Day19.checkMessage(zero.getChildren(), "aabbbb", rs));
         assertTrue(Day19.checkMessage(zero.getChildren(), "abaaab", rs));
         assertTrue(Day19.checkMessage(zero.getChildren(), "ababbb", rs));
+    }
+
+    @Test
+    void part1() {
+        RuleSet rs = InputRules("inputs/19rules.txt");
+        System.out.println(rs);
+        List<String> messages = InputMessages("inputs/19messages.txt");
+        int cnt = 0;
+        for (String s : messages) {
+            if (Day19.checkMessage(null, s, rs)) {
+                cnt++;
+            }
+        }
+        System.out.println(cnt);
+    }
+
+    private RuleSet InputRules(String fname) {
+        RuleSet rs = new RuleSet();
+        try {
+            List<String> lines = Files.readAllLines(Path.of(new URI(fname).toString()));
+            for (String s : lines) {
+                String[] split = s.split(": ");
+                int ruleID = Integer.parseInt(split[0]);
+                if (split[1].contains("a")) {
+                    // Terminal
+                    rs.put(ruleID, new Terminal('a'));
+                } else if (split[1].contains("b")) {
+                    // Terminal
+                    rs.put(ruleID, new Terminal('b'));
+                } else {
+                    // Pattern, choice
+                    split = split[1].split(" \\| ");
+                    List<Pattern> x = new ArrayList<>();
+                    for (String pattern : split) {
+                        String[] numList = pattern.split(" ");
+                        List<Integer> nums = new ArrayList<>();
+                        for (String n : numList) {
+                            nums.add(Integer.parseInt(n.strip()));
+                        }
+                        x.add(new Pattern(nums));
+                    }
+                    if (x.size() == 1) {
+                        // A pattern
+                        rs.put(ruleID, x.get(0));
+                    } else {
+                        // A choice
+                        rs.put(ruleID, new Choice(x));
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return rs;
+    }
+
+    private List<String> InputMessages(String fname) {
+        List<String> msgs = null;
+        try {
+            msgs = Files.readAllLines(Path.of(new URI(fname).toString()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return msgs;
     }
 }
