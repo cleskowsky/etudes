@@ -25,6 +25,7 @@ def has_repeated_char(s):
     print(f'{s} does not have a repeated char')
     return False
 
+
 def contains_special_string(s):
     x = ['ab', 'cd', 'pq', 'xy']
     for y in x:
@@ -34,6 +35,7 @@ def contains_special_string(s):
 
     return True
 
+
 def is_nice(s):
     return has_3_vowels(s) and has_repeated_char(s) and contains_special_string(s)
 
@@ -41,7 +43,6 @@ def is_nice(s):
 print(is_nice('ugknbfddgicrmopn'))
 print(is_nice('jchzalrnumimnmhp'))
 print(is_nice('haegwjzuvuyypxyu'))
-
 
 data = open('day5.txt').readlines()
 print(data)
