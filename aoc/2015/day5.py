@@ -16,6 +16,7 @@ def has_3_vowels(s):
 
 
 def has_repeated_char(s):
+    """Returns true is s has at least one repeated char"""
     prev = ''
     for c in s:
         if prev == c:
@@ -26,7 +27,8 @@ def has_repeated_char(s):
     return False
 
 
-def contains_special_string(s):
+def does_not_contain(s):
+    """Returns false is s contains ab, cd, pq, or xy"""
     x = ['ab', 'cd', 'pq', 'xy']
     for y in x:
         if y in s:
@@ -37,7 +39,7 @@ def contains_special_string(s):
 
 
 def is_nice(s):
-    return has_3_vowels(s) and has_repeated_char(s) and contains_special_string(s)
+    return has_3_vowels(s) and has_repeated_char(s) and does_not_contain(s)
 
 
 print(is_nice('ugknbfddgicrmopn'))
