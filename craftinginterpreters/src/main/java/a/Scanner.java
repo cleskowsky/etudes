@@ -1,7 +1,12 @@
 package a;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static java.lang.Character.isAlphabetic;
+import static java.lang.Character.isDigit;
 
 public class Scanner {
 
@@ -10,6 +15,27 @@ public class Scanner {
 	int start = 0;
 	int current = 0;
 	int line = 1;
+
+	public static final Map<String, TokenType> keywords = new HashMap<>();
+
+	static {
+		keywords.put("and", TokenType.AND);
+		keywords.put("class", TokenType.CLASS);
+		keywords.put("else", TokenType.ELSE);
+		keywords.put("false", TokenType.FALSE);
+		keywords.put("for", TokenType.FOR);
+		keywords.put("fun", TokenType.FUN);
+		keywords.put("if", TokenType.IF);
+		keywords.put("nil", TokenType.NIL);
+		keywords.put("or", TokenType.OR);
+		keywords.put("print", TokenType.PRINT);
+		keywords.put("return", TokenType.RETURN);
+		keywords.put("super", TokenType.SUPER);
+		keywords.put("this", TokenType.THIS);
+		keywords.put("true", TokenType.TRUE);
+		keywords.put("var", TokenType.VAR);
+		keywords.put("while", TokenType.WHILE);
+	}
 
 	public Scanner(String source) {
 		this.source = source;
@@ -72,6 +98,16 @@ public class Scanner {
 			case '>':
 				addToken(match('=') ? TokenType.GREATER_EQUAL : TokenType.GREATER);
 				break;
+			case ' ':
+			case '\t':
+			case '\r':
+				break;
+			case '\n':
+				line++;
+				break;
+			case '"':
+				string();
+				break;
 			case '/':
 				if (match('/')) {
 					while (peek() != '\n' && !isAtEnd()) {
@@ -82,7 +118,13 @@ public class Scanner {
 				}
 				break;
 			default:
-				Lox.error(line, "Unexpected character.");
+				if (isDigit(c)) {
+					number();
+				} else if (isAlphabetic(c)) {
+					identifier();
+				} else {
+					Lox.error(line, "Unexpected character.");
+				}
 				break;
 		}
 	}
@@ -113,5 +155,62 @@ public class Scanner {
 			return '\0';
 		}
 		return source.charAt(current);
+	}
+
+	private void string() {
+		while (peek() != '"' && !isAtEnd()) {
+			if (peek() == '\n') {
+				line++;
+			}
+			advance();
+		}
+
+		if (isAtEnd()) {
+			Lox.error(line, "Unterminated string.");
+		}
+
+		String value = source.substring(start + 1, current - 1);
+		addToken(TokenType.STRING, value);
+	}
+
+	private void number() {
+		while (isDigit(peek())) {
+			advance();
+		}
+
+		if (peek() == '.' && isDigit(peekNext())) {
+			// Consume the dot
+			advance();
+
+			while (isDigit(peek())) {
+				advance();
+			}
+		}
+
+		addToken(TokenType.NUMBER,
+			Double.parseDouble(source.substring(start, current)));
+	}
+
+	private char peekNext() {
+		if (current + 1 >= source.length()) {
+			return '\0';
+		}
+		return source.charAt(current + 1);
+	}
+
+	private boolean isAlphanumeric(char c) {
+		return isDigit(c) || isAlphabetic(c);
+	}
+
+	private void identifier() {
+		while (isAlphanumeric(peek())) {
+			advance();
+		}
+		String text = source.substring(start, current);
+		TokenType type = keywords.get(text);
+		if (type == null) {
+			type = TokenType.IDENTIFIER;
+		}
+		addToken(type);
 	}
 }
