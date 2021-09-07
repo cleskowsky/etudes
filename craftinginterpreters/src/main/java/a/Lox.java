@@ -12,6 +12,8 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 public class Lox {
+	static boolean hadError = false;
+
 	public static void main(String[] args) throws IOException {
 		System.out.println(Arrays.toString(args));
 		System.out.println(args.length);
@@ -34,6 +36,9 @@ public class Lox {
 	private void runFile(String path) throws IOException {
 		byte[] b = Files.readAllBytes(Paths.get(path));
 		run(new String(b, Charset.defaultCharset()));
+		if (hadError) {
+			System.exit(65);
+		}
 	}
 
 	private void runPrompt() throws IOException {
@@ -43,10 +48,11 @@ public class Lox {
 		while (true) {
 			System.out.print("> ");
 			String line = reader.readLine();
-			System.out.println(line);
 			if (line.isEmpty()) {
 				break;
 			}
+			run(line);
+			hadError = false;
 		}
 	}
 
@@ -56,12 +62,13 @@ public class Lox {
 		System.out.println(tokens);
 	}
 
-	private void error(int line, String message) {
+	static void error(int line, String message) {
 		report(line, "", message);
 	}
 
-	private void report(int line, String where, String message) {
+	private static void report(int line, String where, String message) {
 		String template = "[line: %d] Error%s: %s";
 		System.err.println(String.format(template, line, where, message));
+		hadError = true;
 	}
 }
