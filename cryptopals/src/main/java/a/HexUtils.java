@@ -16,7 +16,7 @@ public class HexUtils {
 		return e.encodeToString(bytes);
 	}
 
-	private static byte[] getBytesFromHexString(String s) {
+	public static byte[] getBytesFromHexString(String s) {
 		byte[] bytes = new byte[s.length() / 2];
 		for (int i = 0; i < s.length(); i += 2) {
 			int x = Character.getNumericValue(s.charAt(i));
@@ -26,7 +26,7 @@ public class HexUtils {
 		return bytes;
 	}
 
-	private static String getHexStringFromBytes(byte[] bytes) {
+	public static String getHexStringFromBytes(byte[] bytes) {
 		StringBuilder sb = new StringBuilder();
 		for (byte b : bytes) {
 			sb.append(String.format("%02x", b));
