@@ -1,9 +1,13 @@
 package a;
 
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
-public class Day5Test extends TestCase {
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+public class Day5Test {
+
+	@Test
 	public void testIsNice() {
 		Day5 d = new Day5();
 		assertTrue(d.isNice("qjhvhtzxzqqjkmpb"));

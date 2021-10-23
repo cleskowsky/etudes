@@ -1,12 +1,12 @@
 package a;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import a.Day6.Action;
 import a.Day6.Input;
 import a.Day6.Instruction;
 import a.Day6.Point;
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day6Test {
 
