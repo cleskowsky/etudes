@@ -1,0 +1,60 @@
+<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	  xmlns:th="http://www.thymeleaf.org"
+	  lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport"
+		  content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="stylesheet" th:href="@{/css/site.css}">
+	<title>Fun with forms</title>
+</head>
+<body>
+
+<!-- Try to copy simple "Create an incident" dialog from: https://incident.io/ -->
+
+<div class="max-w-md bg-sky-200 rounded-xl shadow-lg mx-auto m-6">
+	<!-- heading -->
+	<div class="p-6 flex space-x-4 item-center">
+		<div class="shrink-0">
+			<img class="h-10 w-10" src="/img/flame.png" alt="Company Logo">
+		</div>
+		<div>
+			<p>Create an Incident</p>
+		</div>
+	</div>
+
+	<!-- form -->
+	<form>
+		<!-- description -->
+		<label class="block px-6 pb-6">
+			What's going on? <span>(optional)</span>
+			<input type="email" name="description"
+				   class="mt-1 px-3 py-2 border shadow-sm border-gray-300 focus:outline-none focus:border-sky-500 focus:ring-sky-500 w-full rounded-md"
+				   placeholder="you@example.com">
+			<p class="mt-1 text-sm text-gray-500">Give a short, punchy description of what is happening. If you're like
+				to, you can leave it blank and change it later.</p>
+		</label>
+
+		<!-- severity -->
+		<label class="block px-6 pb-6">
+			Severity
+			<select name="severity" class="mt-1 px-3 py-2 border shadow-sm border-gray-300 focus:outline-none focus:border-sky-500 focus:ring-sky-500 w-full">
+				<option value="major">Major</option>
+				<option value="major">Minor</option>
+				<option value="major">Critical</option>
+			</select>
+			<p class="mt-1 text-sm text-gray-500">Your best guess at the severity of the situation. You can always change later.</p>
+		</label>
+
+		<!-- buttons -->
+		<div class="px-6 pb-6">
+			<button>Cancel</button>
+			<button>Create</button>
+		</div>
+	</form>
+</div>
+
+</body>
+</html>
