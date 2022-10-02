@@ -1,187 +1,72 @@
 package a;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class Day14Test {
+class Day14bTest {
 
-    @Test
-    void growPolymer() {
-        Map<String, Character> rules = Map.of(
-                "NN", 'C'
-        );
+    Day14.Input sampleInput;
+    Day14.Input puzzleInput;
 
-        Map<String, String> testTable = Map.of(
-                // Initial polymer, expected polymer after applying pair insertion rules
-                "NN", "NCN",
-                "NNN", "NCNCN"
+    @BeforeEach
+    void setUp() throws Exception {
+        sampleInput = Day14.Input.parse(
+                Files.readString(Path.of("in/14s.txt"))
         );
-        testTable.forEach((initialPolymer, expected) -> {
-            assertEquals(expected, Day14.growPolymer(initialPolymer, rules, 1).toString());
-        });
+        puzzleInput = Day14.Input.parse(
+                Files.readString(Path.of("in/14.txt"))
+        );
     }
 
-
     @Test
-    void parseInput() {
-        String s = """
-                NNCB
-                                
-                CH -> B
-                HH -> N""";
+    void startAndEndWithSameElement() throws Exception {
+        PairCounter pairs = Day14b.getPairs("NCBN");
+        var x = Day14b.pairInsertion(sampleInput.rules, pairs);
 
-        Day14.Input in = Day14.Input.parse(s);
-        assertEquals("NNCB", in.template);
-        assertEquals(2, in.rules.size());
-        assertEquals('B', in.rules.get("CH"));
+        // Expect NBCHBBN
+        // Getting {B=3, C=1, H=1, N=1}
+        // *1 less N than I need
+
+        var letterCount = Day14b.getSingles(x, "NCBN");
+        assertEquals(3, letterCount.get('B'));
+        assertEquals(1, letterCount.get('C'));
+        assertEquals(1, letterCount.get('H'));
+        assertEquals(2, letterCount.get('N'));
     }
 
     @Test
     void sample() {
-        String s = """
-                NNCB
-                                
-                CH -> B
-                HH -> N
-                CB -> H
-                NH -> C
-                HB -> C
-                HC -> B
-                HN -> C
-                NN -> C
-                BH -> H
-                NC -> B
-                NB -> B
-                BN -> B
-                BB -> N
-                BC -> B
-                CC -> N
-                CN -> C""";
-        Day14.Input in = Day14.Input.parse(s);
-        String p = Day14.growPolymer(in.template, in.rules, 10);
-        Day14.Count c = new Day14.Count(p);
-        assertEquals(1588, c.max() - c.min());
+        var pairs = Day14b.getPairs(sampleInput.template);
+        for (int i = 0; i < 10; i++) {
+            pairs = Day14b.pairInsertion(sampleInput.rules, pairs);
+        }
+        var letterCnt = Day14b.getSingles(pairs, sampleInput.template);
+        assertEquals(1588, letterCnt.max() - letterCnt.min());
     }
 
     @Test
     void partA() {
-        String s = """
-                HBHVVNPCNFPSVKBPPCBH
-                                
-                HV -> B
-                KS -> F
-                NH -> P
-                OP -> K
-                OV -> C
-                HN -> O
-                FF -> K
-                CP -> O
-                NV -> F
-                VB -> C
-                KC -> F
-                CS -> H
-                VC -> F
-                HF -> V
-                NK -> H
-                CF -> O
-                HH -> P
-                FP -> O
-                OH -> K
-                NN -> C
-                VK -> V
-                FB -> F
-                VP -> N
-                FC -> P
-                SV -> F
-                NO -> C
-                VN -> S
-                CH -> N
-                FN -> N
-                FV -> P
-                CN -> H
-                PS -> S
-                VF -> K
-                BN -> S
-                FK -> C
-                BB -> H
-                VO -> P
-                KN -> N
-                ON -> C
-                BO -> S
-                VS -> O
-                PK -> C
-                SK -> P
-                KF -> K
-                CK -> O
-                PB -> H
-                PF -> O
-                KB -> V
-                CC -> K
-                OK -> B
-                CV -> P
-                PO -> O
-                SH -> O
-                NP -> F
-                CO -> F
-                SS -> P
-                FO -> K
-                NS -> O
-                PN -> H
-                PV -> V
-                KP -> C
-                BK -> B
-                BP -> F
-                NB -> C
-                OF -> O
-                OC -> O
-                HO -> C
-                SC -> K
-                HC -> C
-                HS -> B
-                KH -> N
-                FS -> N
-                PH -> O
-                PC -> V
-                BS -> O
-                KO -> F
-                SP -> K
-                OB -> O
-                SF -> K
-                KV -> F
-                NC -> B
-                SO -> C
-                CB -> S
-                VH -> V
-                FH -> F
-                SN -> V
-                SB -> P
-                PP -> B
-                BF -> K
-                HB -> O
-                OO -> V
-                HP -> H
-                KK -> O
-                BV -> K
-                BH -> B
-                HK -> H
-                BC -> C
-                VV -> S
-                OS -> F
-                NF -> B""";
-        Day14.Input in = Day14.Input.parse(s);
-        String p = Day14.growPolymer(in.template, in.rules, 10);
-        Day14.Count c = new Day14.Count(p);
-        System.out.println(c.max() - c.min());
+        var pairs = Day14b.getPairs(puzzleInput.template);
+        for (int i = 0; i < 10; i++) {
+            pairs = Day14b.pairInsertion(puzzleInput.rules, pairs);
+        }
+        var letterCnt = Day14b.getSingles(pairs, puzzleInput.template);
+        assertEquals(4244, letterCnt.max() - letterCnt.min());
     }
 
     @Test
-    void counter() {
-        String s= "ABBC";
-        Day14.Count c = new Day14.Count(s);
-        assertEquals(1, c.occurences('A'));
-        assertEquals(2, c.occurences('B'));
+    void partB() {
+        var pairs = Day14b.getPairs(puzzleInput.template);
+        for (int i = 0; i < 40; i++) {
+            pairs = Day14b.pairInsertion(puzzleInput.rules, pairs);
+        }
+        var letterCnt = Day14b.getSingles(pairs, puzzleInput.template);
+        System.out.println(letterCnt.max() - letterCnt.min());
+        assertEquals(4807056953866L, letterCnt.max() - letterCnt.min());
     }
 }
