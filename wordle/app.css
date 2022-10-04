@@ -1,16 +1,20 @@
 html, body {
     height: 100%;
+    background: #343434;
 }
 
 body {
     display: grid;
     place-items: center;
+    color: white;
+    font-family: sans-serif;
 }
 
 #game {
-    background: red;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+}
+
+.row {
+    display: flex;
 }
 
 .tile {
@@ -19,5 +23,5 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    outline: 1px solid black;
+    outline: 1px solid white;
 }
