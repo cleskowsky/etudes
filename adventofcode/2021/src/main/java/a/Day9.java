@@ -111,9 +111,6 @@ class HeightMap {
 	}
 }
 
-record Point(int x, int y) {
-}
-
 class InputParser {
 	public static HeightMap readFromFile(String fileName) throws IOException {
 		HeightMap heightMap = new HeightMap();

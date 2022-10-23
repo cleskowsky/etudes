@@ -5,10 +5,10 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>a</groupId>
-  <artifactId>2021java</artifactId>
+  <artifactId>2021</artifactId>
   <version>1.0-SNAPSHOT</version>
 
-  <name>2021java</name>
+  <name>2021</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
 
