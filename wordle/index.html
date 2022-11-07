@@ -16,15 +16,14 @@
 
 <div
         id="game"
-        x-data="{ guessesAllowed: 4, wordLength: 3 }"
+        x-data="game"
+        @keyup.window="onKeyPress($event.key)"
 >
-    <!--    A game has rows -->
-    <!--    A row has tiles -->
 
-    <template x-for="row in Array.from({ length: guessesAllowed })">
+    <template x-for="row in board">
         <div class="row">
-            <template x-for="tile in Array.from({ length: wordLength })">
-                <div class="tile"></div>
+            <template x-for="tile in row">
+                <div class="tile" x-text="tile"></div>
             </template>
         </div>
     </template>
