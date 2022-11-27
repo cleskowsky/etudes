@@ -2,41 +2,51 @@ import Tile from './tile.js';
 
 export default {
     guessesAllowed: 3,
-    wordLength: 3,
+    theWord: 'cat',
     currentRowIndex: 0,
 
     init() {
-        console.log('Init called');
         this.board = Array.from({length: this.guessesAllowed}, () => {
-            return Array.from({length: this.wordLength}, () => new Tile);
+            return Array.from({length: this.theWord.length}, () => new Tile);
         });
     },
 
     onKeyPress(key) {
         if (/^[A-z]$/.test(key)) {
             this.fillTile(key);
+        } else if (key === 'Enter') {
+            this.submitGuess();
         }
     },
 
     fillTile(key) {
-        console.log('fillTile called');
-
-        for (let tile of this.currentRow()) {
+        for (let tile of this.currentRow) {
             if (!tile.letter) {
                 tile.letter = key;
                 break;
             }
         }
-
-        // if (this.currentTileIndex === this.wordLength - 1) {
-        //     this.currentRowIndex++;
-        //     this.currentTileIndex = 0;
-        // } else {
-        //     this.currentTileIndex++;
-        // }
     },
 
-    currentRow() {
+    get currentRow() {
         return this.board[this.currentRowIndex];
+    },
+
+    submitGuess() {
+        let guess = this.currentGuess;
+        if (guess.length < this.theWord.length) {
+            return;
+        }
+
+        if (guess === 'cat') {
+            console.log('win');
+        } else {
+            console.log('nope');
+            this.currentRowIndex++;
+        }
+    },
+
+    get currentGuess() {
+        return this.currentRow.map(tile => tile.letter).join('');
     }
 }
