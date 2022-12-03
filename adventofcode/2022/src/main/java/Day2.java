@@ -39,7 +39,7 @@ public class Day2 {
 
         if (PART_B) {
             // For part b we need to set me for a particular
-            // as specified by the value in r.me()
+            // directive as specified by the value in r.me()
             // X -> I should lose
             // Y -> I should draw
             // Z -> I should win
@@ -49,7 +49,7 @@ public class Day2 {
                 case 'X' -> (them + 2) % 3;
                 case 'Y' -> them;
                 case 'Z' -> winningShape;
-                default -> throw new RuntimeException("Unknown shape");
+                default -> throw new RuntimeException("Unknown directive");
             };
         }
 
