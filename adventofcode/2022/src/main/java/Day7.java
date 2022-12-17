@@ -3,54 +3,66 @@ import java.util.Collections;
 import java.util.List;
 
 public class Day7 {
+    public static final int TOTAL_DISK = 70000000;
+    public static final int UPGRADE_SIZE = 30000000;
+
     public static void main(String[] args) {
-        System.out.println(1);
+//        File root = filesystem("in/day7_sample.txt");
+        File root = filesystem("in/day7.txt");
 
-        // Need a representation of the file system in my program
-        File root = new File("root", null);
-        File cwd = null;
+        // Part 1
+        System.out.println(directories(root).stream()
+                .map(Day7::size)
+                .filter(x -> x <= 100000)
+                .reduce(0, Integer::sum));
 
-        for (String s : FileUtils.readLines("in/day7_sample.txt")) {
+        // Part 2
+        var used = size(root);
+        var avail = TOTAL_DISK - used;
+        var need = UPGRADE_SIZE - avail;
 
-            s = s.trim();
+        System.out.println(directories(root).stream()
+                .map(Day7::size)
+                .filter(x -> x >= need)
+                .sorted()
+                .findFirst());
+    }
 
-            // Handle change directory /
-            // Handle change directory ..
-            // Handle change directory [dirname]
-            //   What happens when you try to cd into a file?
-            if (s.startsWith("$ cd")) {
-                var dirName = s.split(" ")[2];
-                if (dirName.equals("/")) {
-                    cwd = root;
-                } else {
-                    cwd = cwd.cd(dirName);
-                }
+    /**
+     * Return a list of directories in the filesystem
+     */
+    public static List<File> directories(File root) {
+        var ret = new ArrayList<File>();
+        ret.add(root);
+        for (File f : root.children) {
+            if (f.children.isEmpty()) {
+                continue;
             }
-
-            // Handle list files
-            if (s.startsWith("$ ls")) {
-                // nothing to do here
-            }
-
-            // Handle file
-            // Handle directory
-            // Sum directories with size < 100,000 bytes
-
-            if (s.startsWith("$")) {
-
-            }
+            ret.addAll(directories(f));
         }
+        return ret;
+    }
+
+    /**
+     * Return size of filesystem tree at root
+     */
+    public static int size(File root) {
+        int sum = root.size;
+        for (File f : root.children) {
+            sum += size(f);
+        }
+        return sum;
     }
 
     public static class File {
-
         private final String name;
+        private final int size;
         private final File parent;
         private List<File> children = new ArrayList<>();
-        private int size;
 
-        public File(String name, File parent) {
+        public File(String name, int size, File parent) {
             this.name = name;
+            this.size = size;
             this.parent = parent;
         }
 
@@ -67,9 +79,8 @@ public class Day7 {
                     return f;
                 }
             }
-            var f = new File(s, this);
-            children.add(f);
-            return f;
+
+            throw new RuntimeException("Couldn't find directory");
         }
 
         /**
@@ -81,17 +92,51 @@ public class Day7 {
             return Collections.unmodifiableList(children);
         }
 
+        /**
+         * Adds a file to filesystem
+         */
+        public void addFile(String s, int size) {
+            children.add(new File(s, size, this));
+        }
+
+        /**
+         * Adds a directory to filesystem
+         */
+        public void addDirectory(String s) {
+            var d = new File(s, 0, this);
+            children.add(d);
+        }
+
         public String getName() {
             return name;
         }
+    }
 
-        @Override
-        public String toString() {
-            return "File{" +
-                    "parent=" + parent +
-                    ", children=" + children +
-                    ", size=" + size +
-                    '}';
+    public static File filesystem(String fileName) {
+        File root = new File("root", 0, null);
+        File cwd = root;
+
+        for (String s : FileUtils.readLines(fileName)) {
+
+            s = s.trim();
+
+            if (s.startsWith("$ cd")) {
+                var dirName = s.split(" ")[2];
+                if (dirName.equals("/")) {
+                    cwd = root;
+                } else {
+                    cwd = cwd.cd(dirName);
+                }
+            } else if (s.startsWith("$ ls")) {
+                // no-op
+            } else if (s.startsWith("dir")) {
+                cwd.addDirectory(s.split(" ")[1]);
+            } else {
+                var split = s.split(" ");
+                cwd.addFile(split[1], Integer.parseInt(split[0]));
+            }
         }
+
+        return root;
     }
 }

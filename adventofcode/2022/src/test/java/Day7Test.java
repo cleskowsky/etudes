@@ -5,30 +5,28 @@ import static org.junit.jupiter.api.Assertions.*;
 class Day7Test {
 
     @Test
-    void cd() {
-        // Given a dir file
-        Day7.File f = new Day7.File("root", null);
-
-        // When dir doesn't exist in that file
-        var ret = f.cd("test");
-
-        // Create and return it
-        assertEquals("test", ret.getName());
-        assertEquals(1, f.ls().size());
-        assertEquals("test", f.ls().get(0).getName());
-    }
-
-    @Test
     void cdDotDot() {
-        // Given a dir file with parent
-        Day7.File root = new Day7.File("root", null);
-        Day7.File f = new Day7.File("test", root);
+        // Given a directory with a parent directory
+        Day7.File root = new Day7.File("root", 0, null);
+        Day7.File dir = new Day7.File("test", 0, root);
 
         // When "cd .." is received
         // Then return parent
-        assertEquals("root", f.cd("..").getName());
+        assertEquals("root", dir.cd("..").getName());
 
-        // What happens when dir file is root?
+        // What happens when directory is root?
         assertEquals("root", root.cd("..").getName());
+    }
+
+    @Test
+    void addFileToDirectory() {
+        // Given a data file and a directory
+        Day7.File dir = new Day7.File("root", 0, null);
+
+        // When a file is added to the directory
+        dir.addFile("a.txt", 1);
+
+        // Then the file is returned by ls
+        assertEquals(1, dir.ls().size());
     }
 }
