@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class Day7 {
@@ -8,7 +7,7 @@ public class Day7 {
 
     public static void main(String[] args) {
 //        File root = filesystem("in/day7_sample.txt");
-        File root = filesystem("in/day7.txt");
+        File root = parseInput("in/day7.txt");
 
         // Part 1
         System.out.println(directories(root).stream()
@@ -55,85 +54,40 @@ public class Day7 {
     }
 
     public static class File {
-        private final String name;
         private final int size;
         private final File parent;
-        private List<File> children = new ArrayList<>();
+        private final List<File> children = new ArrayList<>();
 
-        public File(String name, int size, File parent) {
-            this.name = name;
+        public File(int size, File parent) {
             this.size = size;
             this.parent = parent;
         }
-
-        /**
-         * Find or create and return dir in this file
-         */
-        public File cd(String s) {
-            if (s.equals("..")) {
-                return parent == null ? this : parent;
-            }
-
-            for (File f : children) {
-                if (f.name.equals(s)) {
-                    return f;
-                }
-            }
-
-            throw new RuntimeException("Couldn't find directory");
-        }
-
-        /**
-         * Return this file's children
-         * Notes:
-         * - Only directories have children
-         */
-        public List<File> ls() {
-            return Collections.unmodifiableList(children);
-        }
-
-        /**
-         * Adds a file to filesystem
-         */
-        public void addFile(String s, int size) {
-            children.add(new File(s, size, this));
-        }
-
-        /**
-         * Adds a directory to filesystem
-         */
-        public void addDirectory(String s) {
-            var d = new File(s, 0, this);
-            children.add(d);
-        }
-
-        public String getName() {
-            return name;
-        }
     }
 
-    public static File filesystem(String fileName) {
-        File root = new File("root", 0, null);
+    public static File parseInput(String fileName) {
+        File root = new File(0, null);
         File cwd = root;
 
         for (String s : FileUtils.readLines(fileName)) {
-
-            s = s.trim();
-
             if (s.startsWith("$ cd")) {
                 var dirName = s.split(" ")[2];
-                if (dirName.equals("/")) {
-                    cwd = root;
+                if (dirName.equals("..")) {
+                    cwd = cwd.parent;
                 } else {
-                    cwd = cwd.cd(dirName);
+                    var f = new File(0, cwd);
+                    cwd.children.add(f);
+                    cwd = f;
                 }
             } else if (s.startsWith("$ ls")) {
                 // no-op
             } else if (s.startsWith("dir")) {
-                cwd.addDirectory(s.split(" ")[1]);
+                // no-op
+                // created when we change to it
             } else {
                 var split = s.split(" ");
-                cwd.addFile(split[1], Integer.parseInt(split[0]));
+                cwd.children.add(new File(
+                        Integer.parseInt(split[0]), cwd
+                ));
             }
         }
 
