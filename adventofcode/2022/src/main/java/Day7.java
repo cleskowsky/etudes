@@ -2,66 +2,61 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day7 {
-    public static final int TOTAL_DISK = 70000000;
-    public static final int UPGRADE_SIZE = 30000000;
-
     public static void main(String[] args) {
 //        File root = filesystem("in/day7_sample.txt");
         File root = parseInput("in/day7.txt");
 
         // Part 1
-        System.out.println(directories(root).stream()
-                .map(Day7::size)
-                .filter(x -> x <= 100000)
-                .reduce(0, Integer::sum));
+        var part1 = new FileVisitor() {
+            int total;
+
+            @Override
+            public void visit(File f) {
+                if (f.size <= 100000) {
+                    total += f.size;
+                }
+            }
+        };
+        root.walk(part1);
+        System.out.println(part1.total);
 
         // Part 2
-        var used = size(root);
-        var avail = TOTAL_DISK - used;
-        var need = UPGRADE_SIZE - avail;
+        var part2 = new FileVisitor() {
+            int min;
 
-        System.out.println(directories(root).stream()
-                .map(Day7::size)
-                .filter(x -> x >= need)
-                .sorted()
-                .findFirst());
-    }
-
-    /**
-     * Return a list of directories in the filesystem
-     */
-    public static List<File> directories(File root) {
-        var ret = new ArrayList<File>();
-        ret.add(root);
-        for (File f : root.children) {
-            if (f.children.isEmpty()) {
-                continue;
+            @Override
+            public void visit(File f) {
+                if (root.size - f.size < 70000000 - 30000000) {
+                    if (min == 0 || f.size < min) {
+                        min = f.size;
+                    }
+                }
             }
-            ret.addAll(directories(f));
-        }
-        return ret;
-    }
-
-    /**
-     * Return size of filesystem tree at root
-     */
-    public static int size(File root) {
-        int sum = root.size;
-        for (File f : root.children) {
-            sum += size(f);
-        }
-        return sum;
+        };
+        root.walk(part2);
+        System.out.println(part2.min);
     }
 
     public static class File {
-        private final int size;
-        private final File parent;
-        private final List<File> children = new ArrayList<>();
+        private int size;
+        private File parent;
+        private List<File> children = new ArrayList<>();
 
         public File(int size, File parent) {
             this.size = size;
             this.parent = parent;
         }
+
+        public void walk(FileVisitor v) {
+            v.visit(this);
+            for (File f : this.children) {
+                f.walk(v);
+            }
+        }
+    }
+
+    interface FileVisitor {
+        void visit(File f);
     }
 
     public static File parseInput(String fileName) {
@@ -84,10 +79,12 @@ public class Day7 {
                 // no-op
                 // created when we change to it
             } else {
-                var split = s.split(" ");
-                cwd.children.add(new File(
-                        Integer.parseInt(split[0]), cwd
-                ));
+                var size = Integer.parseInt(s.split(" ")[0]);
+                var f = cwd;
+                while (f != null) {
+                    f.size += size;
+                    f = f.parent;
+                }
             }
         }
 
