@@ -1,10 +1,12 @@
+package aoc;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
 public class FileUtils {
-    static List<String> readLines(String fileName) {
+    public static List<String> readLines(String fileName) {
         try {
             return Arrays.stream(
                             Files.readString(Path.of(fileName)).trim().split("\n"))
@@ -14,7 +16,7 @@ public class FileUtils {
         }
     }
 
-    static String readAll(String fileName) {
+    public static String readAll(String fileName) {
         try {
             return Files.readString(Path.of(fileName));
         } catch (Exception e) {
