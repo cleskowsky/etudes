@@ -1,9 +1,12 @@
 package aoc;
 
-import aoc.Day8.HEADING;
-
 public record Point(int x, int y) {
-    public Point plus(HEADING h) {
-        return new Point(x + h.p.x, y + h.p.y);
+
+    public Point add(int x, int y) {
+        return new Point(this.x + x, this.y + y);
+    }
+
+    public Point sub(int x, int y) {
+        return new Point(this.x - x, this.y - y);
     }
 }

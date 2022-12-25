@@ -3,7 +3,6 @@ package aoc;
 import aoc.Day8.Forest;
 import org.junit.jupiter.api.Test;
 
-import static aoc.Day8.HEADING.EAST;
 import static aoc.Day8.visibleFromDir;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -21,6 +20,6 @@ class Day8Test {
 
         // When all other trees in a dir are shorter than t
         // Then t is visible
-        assertTrue(visibleFromDir(t, f, EAST));
+        assertTrue(visibleFromDir(t, f, Heading.E));
     }
 }

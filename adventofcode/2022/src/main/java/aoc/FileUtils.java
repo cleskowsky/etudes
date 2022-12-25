@@ -6,6 +6,10 @@ import java.util.Arrays;
 import java.util.List;
 
 public class FileUtils {
+    public static List<String> readLines(int n) {
+        return readLines("in/day" + n + ".txt");
+    }
+
     public static List<String> readLines(String fileName) {
         try {
             return Arrays.stream(

@@ -38,15 +38,15 @@ public class Day8 {
         for (Point tree : f.keySet()) {
             int score = 1;
 
-            for (HEADING h : HEADING.values()) {
+            for (Heading h : Heading.values()) {
                 var seen = 0;
-                var curr = tree.plus(h);
+                var curr = tree.add(h.p.x(), h.p.y());
                 while (f.get(curr) != null) {
                     seen++;
                     if (f.get(curr) >= f.get(tree)) {
                         break;
                     }
-                    curr = curr.plus(h);
+                    curr = curr.add(h.p.x(), h.p.y());
                 }
                 score = score * seen;
             }
@@ -58,21 +58,8 @@ public class Day8 {
         return max;
     }
 
-    static enum HEADING {
-        NORTH(new Point(0, -1)),
-        EAST(new Point(1, 0)),
-        SOUTH(new Point(0, 1)),
-        WEST(new Point(-1, 0));
-
-        Point p;
-
-        HEADING(Point p) {
-            this.p = p;
-        }
-    }
-
     static boolean visible(Point tree, Forest f) {
-        for (HEADING h : HEADING.values()) {
+        for (Heading h : Heading.values()) {
             if (visibleFromDir(tree, f, h)) {
                 return true;
             }
@@ -80,10 +67,10 @@ public class Day8 {
         return false;
     }
 
-    static public boolean visibleFromDir(Point tree, Forest f, HEADING h) {
+    static public boolean visibleFromDir(Point tree, Forest f, Heading h) {
         int min = f.get(tree);
 
-        var nextTree = tree.plus(h);
+        var nextTree = tree.add(h.p.x(), h.p.y());
         if (nextTree == null) {
             // Edge trees are trivially visible
             return true;
@@ -93,7 +80,7 @@ public class Day8 {
             if (f.get(nextTree) >= min) {
                 return false;
             }
-            nextTree = nextTree.plus(h);
+            nextTree = nextTree.add(h.p.x(), h.p.y());
         }
 
         return true;
