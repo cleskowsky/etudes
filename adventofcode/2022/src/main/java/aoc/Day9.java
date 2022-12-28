@@ -18,8 +18,8 @@ public class Day9 {
         System.out.println(moveRope(List.of("R 5", "U 8", "L 8", "D 3", "R 17", "D 10", "L 25", "U 20"), 10));
 
         // Puzzle input
-        System.out.println(moveRope(FileUtils.readLines(9), 2));
-        System.out.println(moveRope(FileUtils.readLines(9), 10));
+        System.out.println(moveRope(FileUtils.readLines("9"), 2));
+        System.out.println(moveRope(FileUtils.readLines("9"), 10));
     }
 
     static int moveRope(List<String> moves, int knots) {
