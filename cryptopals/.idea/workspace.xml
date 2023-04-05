@@ -4,9 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="6d89d2fd-a3a5-40d3-a7f7-779ff5cd0993" name="Changes" comment="Cryptopals">
+    <list default="true" id="6d89d2fd-a3a5-40d3-a7f7-779ff5cd0993" name="Changes" comment="Fixed comment">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/a/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/a/App.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,29 +16,32 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2NtXQ4LAP8FG1nOMswqmPHIDNuT" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.24511173",
-    "project.structure.side.proportion": "0.36062557",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.24511173&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.36062557&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -48,7 +50,9 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1680484332611</updated>
-      <workItem from="1680484333611" duration="2652000" />
+      <workItem from="1680484333611" duration="3658000" />
+      <workItem from="1680662928557" duration="168000" />
+      <workItem from="1680663103247" duration="708000" />
     </task>
     <task id="LOCAL-00001" summary="Cryptopals">
       <created>1680484558053</created>
@@ -57,7 +61,28 @@
       <option name="project" value="LOCAL" />
       <updated>1680484558053</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Challenge 1, set 1">
+      <created>1680487162025</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1680487162025</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Added readme.md to cryptopals puzzle set">
+      <created>1680487345739</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680487345739</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Fixed comment">
+      <created>1680487415499</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680487415499</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -76,6 +101,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Cryptopals" />
-    <option name="LAST_COMMIT_MESSAGE" value="Cryptopals" />
+    <MESSAGE value="Challenge 1, set 1" />
+    <MESSAGE value="Added readme.md to cryptopals puzzle set" />
+    <MESSAGE value="Fixed comment" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed comment" />
   </component>
 </project>
