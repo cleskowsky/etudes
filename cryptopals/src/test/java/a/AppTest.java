@@ -1,0 +1,23 @@
+package a;
+
+import org.junit.jupiter.api.Test;
+
+class AppTest {
+
+    @Test
+    void set1Challenge3() {
+        var bytes = App.hexToBytes(
+                "1b37373331363f78151b7f2b783431333d78397828372d363c78373e783a393b3736");
+
+        for (int i = 0; i < 255; i++) {
+            var x = bytes.clone();
+            for (int j = 0; j < bytes.length; j++) {
+                x[j] = (byte) (x[j] ^ i);
+            }
+            var s = new String(x);
+            if (App.maybeEnglish(s)) {
+                System.out.println(s);
+            }
+        }
+    }
+}

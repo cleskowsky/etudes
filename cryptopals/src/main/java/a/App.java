@@ -2,12 +2,27 @@ package a;
 
 import com.google.common.io.BaseEncoding;
 
+import java.io.IOException;
 import java.util.Base64;
+import java.util.logging.LogManager;
+import java.util.logging.Logger;
 
 /**
  * Hello world!
  */
 public class App {
+
+    static {
+        try {
+            LogManager.getLogManager().readConfiguration(
+                    App.class.getResourceAsStream("/logging.properties")
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    static Logger logger = Logger.getLogger(App.class.getName());
 
     static byte[] hexToBytes(String s) {
         return BaseEncoding.base16().decode(s.toUpperCase());
@@ -40,5 +55,22 @@ public class App {
                 hexToBytes("686974207468652062756c6c277320657965")
         );
         System.out.println(bytesToHex(x));
+    }
+
+    public static boolean maybeEnglish(String s) {
+        String shrdlu = "etaoin shrdlu";
+
+        var count = 0;
+        for (var c : s.toLowerCase().toCharArray()) {
+            if (shrdlu.indexOf(c) >= 0) {
+                count++;
+            } else if (!Character.isAlphabetic(c)) {
+                count--;
+            }
+        }
+
+        logger.finest("String: " + s + ", score: " + count);
+
+        return count > 15;
     }
 }
