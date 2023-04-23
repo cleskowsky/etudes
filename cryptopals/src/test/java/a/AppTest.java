@@ -2,6 +2,8 @@ package a;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.fail;
+
 class AppTest {
 
     @Test
@@ -19,5 +21,8 @@ class AppTest {
                 System.out.println(s);
             }
         }
+
+        // todo: Add assertions here for the challenge and number of successful matches
+        fail();
     }
 }
