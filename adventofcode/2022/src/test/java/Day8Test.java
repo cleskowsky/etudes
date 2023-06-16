@@ -1,5 +1,7 @@
 import Day8.Forest;
 import org.junit.jupiter.api.Test;
+import util.Heading;
+import util.Point;
 
 import static Day8.visibleFromDir;
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,3 +1,5 @@
+import util.FileUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +10,7 @@ public class Day5 {
     public static boolean PART_A = false;
 
     public static void main(String[] args) {
-//        var s = FileUtils.readAll("in/day5_sample.txt");
+//        var s = util.FileUtils.readAll("in/day5_sample.txt");
         var s = FileUtils.readAll("in/day5.txt");
 
         var stacks = stacks(s);

@@ -1,3 +1,7 @@
+import util.FileUtils;
+import util.Heading;
+import util.Point;
+
 import java.util.HashMap;
 
 public class Day8 {

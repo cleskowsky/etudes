@@ -1,3 +1,5 @@
+import util.FileUtils;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -36,9 +38,9 @@ class Day11 {
         };
 
 //        System.out.println(
-//                keepAway(parse(FileUtils.readLines("11s")), 1000));
+//                keepAway(parse(util.FileUtils.readLines("11s")), 1000));
 //        System.out.println(
-//                keepAway(parse(FileUtils.readLines("11")), 10000));
+//                keepAway(parse(util.FileUtils.readLines("11")), 10000));
     }
 
     interface WorryReducer {

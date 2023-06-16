@@ -1,3 +1,5 @@
+import util.FileUtils;
+
 import java.util.List;
 
 public class Day2 {
@@ -10,7 +12,7 @@ public class Day2 {
         List.of("in/day2_sample.txt",
                 "in/day2.txt").forEach(in -> {
 //            var sum = 0;
-//            for (String s : FileUtils.readLines(in)) {
+//            for (String s : util.FileUtils.readLines(in)) {
 //                sum += d.score(new Round(s));
 //            }
 //            System.out.println(sum);
