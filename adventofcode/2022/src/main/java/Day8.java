@@ -1,5 +1,3 @@
-package aoc;
-
 import java.util.HashMap;
 
 public class Day8 {

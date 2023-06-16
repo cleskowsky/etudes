@@ -1,5 +1,3 @@
-package aoc;
-
 enum Heading {
     N(new Point(0, -1)),
     E(new Point(1, 0)),

@@ -1,9 +1,7 @@
-package aoc;
-
-import aoc.Day8.Forest;
+import Day8.Forest;
 import org.junit.jupiter.api.Test;
 
-import static aoc.Day8.visibleFromDir;
+import static Day8.visibleFromDir;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class Day8Test {

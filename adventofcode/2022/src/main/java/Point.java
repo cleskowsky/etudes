@@ -1,5 +1,3 @@
-package aoc;
-
 public record Point(int x, int y) {
 
     public Point add(int x, int y) {

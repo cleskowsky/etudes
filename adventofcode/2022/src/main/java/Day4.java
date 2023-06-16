@@ -1,10 +1,8 @@
-import aoc.FileUtils;
-
 import java.util.List;
 
 public class Day4 {
     public static void main(String[] args) {
-//        var n = aoc.FileUtils.readLines("in/day4_sample.txt")
+//        var n = FileUtils.readLines("in/day4_sample.txt")
         var n = FileUtils.readLines("in/day4.txt")
                 .stream()
 //                .map(x -> part1(parseInput(x)))
