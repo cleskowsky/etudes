@@ -14,10 +14,12 @@ calories = """\
 
 10000"""
 
-calories = open('day1.txt').read()
+# calories = open('day1.txt').read()
+
 
 def mapt(f, *seq):
     return tuple(map(f, *seq))
+
 
 # parse
 a = [mapt(int, x.split()) for x in calories.split('\n\n')]
