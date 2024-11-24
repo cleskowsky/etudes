@@ -79,7 +79,7 @@ def first_digit(s: str):
     return val
 
 
-# today I learned python truthy ...
+# today I learned python truthy-ness ...
 print(bool(-1))  # True
 print(bool(0))  # False
 print(bool(1))  # True
