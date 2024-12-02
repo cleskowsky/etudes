@@ -16,7 +16,7 @@ function parseInput(file: string) {
 }
 
 // const locations = parseInput("day1_sample.txt");
-const {left, right} = parseInput("day1_in.txt");
+const { left, right } = parseInput("day1_in.txt");
 
 function sumDistances(left: number[], right: number[]) {
   let sum = 0;
@@ -29,7 +29,7 @@ function sumDistances(left: number[], right: number[]) {
 }
 console.log(sumDistances(left, right));
 
-const frequencies = new Map()
+const frequencies = new Map();
 for (const x of right) {
   frequencies.set(x, frequencies.get(x) + 1 || 1);
 }
