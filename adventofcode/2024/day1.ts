@@ -15,9 +15,6 @@ function parseInput(file: string) {
   };
 }
 
-// const locations = parseInput("day1_sample.txt");
-const { left, right } = parseInput("day1_in.txt");
-
 // Part 1
 
 function totalDistance(left: number[], right: number[]) {
@@ -27,20 +24,26 @@ function totalDistance(left: number[], right: number[]) {
   }
   return sum;
 }
-console.log(totalDistance(left, right));
 
 // Part 2
 
-const frequencies = new Map();
-for (const x of right) {
-  frequencies.set(x, frequencies.get(x) + 1 || 1);
-}
+function similarityScore(left: number[], right: number[]) {
+  const frequencies = new Map();
+  for (const x of right) {
+    frequencies.set(x, frequencies.get(x) + 1 || 1);
+  }
 
-function similarityScore(left: number[]) {
   let sum = 0;
   for (let i = 0; i < left.length; i++) {
     sum += left[i] * frequencies.get(left[i]) || 0;
   }
   return sum;
 }
-console.log(similarityScore(left));
+
+const { left: l1, right: r1 } = parseInput("day1_sample.txt");
+console.log(totalDistance(l1, r1));
+console.log(similarityScore(l1, r1));
+
+const { left: l2, right: r2 } = parseInput("day1_in.txt");
+console.log(totalDistance(l2, r2));
+console.log(similarityScore(l2, r2));
