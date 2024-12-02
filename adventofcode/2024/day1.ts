@@ -28,3 +28,19 @@ function sumDistances(left: number[], right: number[]) {
   return sum;
 }
 console.log(sumDistances(locations.left, locations.right));
+
+function sumSimilarity(left: number[], right: number[]) {
+  let sum = 0;
+  for (let i = 0; i < left.length; i++) {
+    const x = left[i];
+    let occurences = 0;
+    for (let j = 0; j < left.length; j++) {
+      if (right[j] === x) {
+        occurences += 1;
+      }
+    }
+    sum += x * occurences;
+  }
+  return sum;
+}
+console.log(sumSimilarity(locations.left, locations.right));
