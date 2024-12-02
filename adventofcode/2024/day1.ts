@@ -5,8 +5,8 @@ function parseInput(file: string) {
   const lines = Deno.readTextFileSync(file);
   for (const line of lines.split("\n")) {
     const split = line.split(/\s+/);
-    left.push(split[0]);
-    right.push(split[1]);
+    left.push(parseInt(split[0]));
+    right.push(parseInt(split[1]));
   }
 
   return {
@@ -16,31 +16,30 @@ function parseInput(file: string) {
 }
 
 // const locations = parseInput("day1_sample.txt");
-const locations = parseInput("day1_in.txt");
+const {left, right} = parseInput("day1_in.txt");
 
-function sumDistances(left: string[], right: string[]) {
+function sumDistances(left: number[], right: number[]) {
   let sum = 0;
   for (let i = 0; i < left.length; i++) {
-    const x = parseInt(left[i]);
-    const y = parseInt(right[i]);
+    const x = left[i];
+    const y = right[i];
     sum += Math.abs(y - x);
   }
   return sum;
 }
-console.log(sumDistances(locations.left, locations.right));
+console.log(sumDistances(left, right));
 
 const frequencies = new Map()
-for (const x of locations.right) {
+for (const x of right) {
   frequencies.set(x, frequencies.get(x) + 1 || 1);
 }
 console.log(frequencies);
 
-function sumSimilarity(left: string[]) {
+function sumSimilarity(left: number[]) {
   let sum = 0;
   for (let i = 0; i < left.length; i++) {
-    const x = parseInt(left[i]);
-    sum += x * frequencies.get(left[i]) || 0;
+    sum += left[i] * frequencies.get(left[i]) || 0;
   }
   return sum;
 }
-console.log(sumSimilarity(locations.left));
+console.log(sumSimilarity(left));
