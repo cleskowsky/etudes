@@ -1,41 +1,62 @@
-from enum import Enum
-from idlelib.debugobj import ObjectTreeItem
-from wsgiref.util import request_uri
-
-print(1)
-
-report = '7 6 4 2 1'
-levels = report.split(' ')
-print(levels)
-levels = list(map(int, levels))
-print(levels)
-
-
-class Direction(Enum):
-    UP = 1
-    DOWN = 2
-
-
-def direction(report):
-    if report[1] - report[0] >= 0:
-        return Direction.UP
-
-    return Direction.DOWN
-
-
-print(direction(levels))
-
-
-# given a report with gradual, increasing levels
-
 class Report:
     def __init__(self, levels):
         self.levels = levels
 
+    def __repr__(self):
+        return 'Record: [' + ', '.join(map(str, self.levels)) + ']'
 
-#   when we validate the report
-#   then we should label it safe
 
-def is_report_safe(report):
-    levels = levels(report)
-    pass
+def increasing(r):
+    for i in range(len(r.levels) - 1):
+        if r.levels[i] > r.levels[i + 1]:
+            return False
+
+    return True
+
+
+def decreasing(r):
+    for i in range(len(r.levels) - 1):
+        if r.levels[i] < r.levels[i + 1]:
+            return False
+
+    return True
+
+
+def safe_report(r):
+    if increasing(r) or decreasing(r):
+        for i in range(len(r.levels) - 1):
+            step = abs(r.levels[i + 1] - r.levels[i])
+            if step < 1 or step > 3:
+                return False
+
+        return True
+
+    return False
+
+
+assert not safe_report(Report([1, 2, 7, 8, 9]))
+assert safe_report(Report([1, 3, 6, 7, 9]))
+
+
+def parse_input(filename):
+    records = []
+
+    lines = open(filename).read().splitlines()
+    for line in lines:
+        levels = line.split(' ')
+        levels = list(map(int, levels))
+        records.append(Report(levels))
+
+    return records
+
+
+x = parse_input('day2.txt')
+print(x)
+
+n = 0
+for r in x:
+    print(r)
+    if safe_report(r):
+        n += 1
+
+print(n)
