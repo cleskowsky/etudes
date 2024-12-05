@@ -1,3 +1,6 @@
+from runpy import run_path
+
+
 class Report:
     def __init__(self, levels):
         self.levels = levels
@@ -50,13 +53,25 @@ def parse_input(filename):
     return records
 
 
+# x = parse_input('day2_sample.txt')
 x = parse_input('day2.txt')
 print(x)
 
 n = 0
 for r in x:
-    print(r)
     if safe_report(r):
+        print('safe report')
+        print(r)
         n += 1
+    else:
+        print('unsafe report found')
+        print(r)
+        for i in range(len(r.levels)):
+            print(r.levels)
+            r2 = Report(r.levels.copy())
+            del r2.levels[i]
+            if safe_report(r2):
+                n += 1
+                break
 
 print(n)
