@@ -1,12 +1,15 @@
+import argparse
 import re
 
 
-def recover_prog(s):
+def recover_prog(s, part_b = False):
     stmt_finders = [
-        r"mul\([0-9]+,[0-9]+\)",
-        r"do\(\)",
-        r"don't\(\)"
+        r"mul\([0-9]+,[0-9]+\)"
     ]
+    if part_b:
+        stmt_finders.append(r"do\(\)")
+        stmt_finders.append(r"don't\(\)")
+
     stmts = re.findall(('|').join(stmt_finders), s)
 
     recovered_prog = []
@@ -20,7 +23,6 @@ def recover_prog(s):
             if not drop:
                 recovered_prog.append(val)
 
-    print(recovered_prog)
     return recovered_prog
 
 
@@ -29,8 +31,8 @@ def mult(s):
     return lhs * rhs
 
 
-def compute(prog):
-    statements = recover_prog(prog)
+def compute(prog, part_b = False):
+    statements = recover_prog(prog, part_b)
     return sum(mult(s) for s in statements)
 
 
@@ -45,14 +47,13 @@ assert compute(part1_input) == 179571322
 
 # Part 2
 
-
 recovered_prog = [
     'mul(2,4)',
     'mul(8,5)'
 ]
-assert recover_prog("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))") == recovered_prog
+assert recover_prog("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))", True) == recovered_prog
 
 part2_input = open('day3.txt').read()
-print(compute(part2_input))
+print(compute(part2_input, True))
 
-assert compute(part2_input) == 103811193
+assert compute(part2_input, True) == 103811193
