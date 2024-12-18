@@ -40,7 +40,7 @@ assert compute("xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mu
 
 # Part 1
 
-part1_input = open('day3.txt').read()
+part1_input = open('inputs/day3.txt').read()
 print(compute(part1_input))
 
 assert compute(part1_input) == 179571322
@@ -53,7 +53,7 @@ recovered_prog = [
 ]
 assert recover_prog("xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))", True) == recovered_prog
 
-part2_input = open('day3.txt').read()
+part2_input = open('inputs/day3.txt').read()
 print(compute(part2_input, True))
 
 assert compute(part2_input, True) == 103811193

@@ -71,7 +71,7 @@ def recover_report(r):
 
 
 # x = parse_input('day2_sample.txt')
-x = parse_input('day2.txt')
+x = parse_input('inputs/day2.txt')
 print(x)
 
 safe_reports = 0
