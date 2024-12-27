@@ -24,7 +24,8 @@ def parse_grid(s):
 
 def parse_row(s, row_number, g):
     """Add row to grid"""
-    print(s)
+    for i, val in enumerate(s):
+        g[(i, row_number)] = val
 
 
 g = parse_grid(sample_input)
