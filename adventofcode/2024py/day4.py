@@ -26,7 +26,8 @@ def parse_row(s, row_number, g):
         g[(i, row_number)] = val
 
 
-g = parse_grid(sample_input)
+g = parse_grid(open('inputs/day4.txt').read())
+# g = parse_grid(sample_input)
 print(g)
 
 # NW, N, NE
