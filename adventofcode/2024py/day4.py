@@ -67,14 +67,24 @@ print(x)
 x = 0
 for k, v in g.items():
     if v == 'A':
+        # Looking for
+        # M   or  S
+        #  A       A
+        #   S       M
         stroke_1 = any([
             find_word((k[0] - 1, k[1] - 1), (1, 1), g, 'MAS'),
             find_word((k[0] - 1, k[1] - 1), (1, 1), g, 'SAM')
         ])
+
+        # Looking for
+        #   S or    M
+        #  A       A
+        # M       S
         stroke_2 = any([
             find_word((k[0] - 1, k[1] + 1), (1, -1), g, 'MAS'),
             find_word((k[0] - 1, k[1] + 1), (1, -1), g, 'SAM')
         ])
+
         if stroke_1 and stroke_2:
             x += 1
 print(x)
