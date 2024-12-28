@@ -40,16 +40,16 @@ headings = [
 ]
 
 
-def find_xmas(pt, h, g):
+def find_word(pt, dir, g, word='XMAS'):
     s = ''
     try:
-        for i in range(0, 4):
-            next_char = g[(pt[0] + h[0] * i,
-                           pt[1] + h[1] * i)]
+        for i in range(0, len(word)):
+            next_char = g[(pt[0] + dir[0] * i,
+                           pt[1] + dir[1] * i)]
             s = s + next_char
     except KeyError:
         return False
-    return s == 'XMAS'
+    return s == word
 
 
 # part 1
@@ -58,31 +58,23 @@ x = 0
 for k, v in g.items():
     if v == 'X':
         for h in headings:
-            if find_xmas(k, h, g):
+            if find_word(k, h, g):
                 x += 1
 print(x)
 
-
 # part 2
-
-def find_mas(pt, h, g):
-    # look for SAM or MAX from top left to bottom right
-    s = ''
-    try:
-        for i in range(0, 3):
-            next_char = g[(pt[0] + h[0] * i,
-                           pt[1] + h[1] * i)]
-            s = s + next_char
-    except KeyError:
-        return False
-    return s == 'MAS' or s == 'SAM'
-
 
 x = 0
 for k, v in g.items():
     if v == 'A':
-        top_left = (k[0] - 1, k[1] - 1)
-        bottom_left = (k[0] - 1, k[1] + 1)
-        if find_mas(top_left, (1, 1), g) and find_mas(bottom_left, (1, -1), g):
+        stroke_1 = any([
+            find_word((k[0] - 1, k[1] - 1), (1, 1), g, 'MAS'),
+            find_word((k[0] - 1, k[1] - 1), (1, 1), g, 'SAM')
+        ])
+        stroke_2 = any([
+            find_word((k[0] - 1, k[1] + 1), (1, -1), g, 'MAS'),
+            find_word((k[0] - 1, k[1] + 1), (1, -1), g, 'SAM')
+        ])
+        if stroke_1 and stroke_2:
             x += 1
 print(x)
