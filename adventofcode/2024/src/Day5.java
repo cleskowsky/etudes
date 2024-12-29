@@ -11,9 +11,9 @@ public class Day5 {
 //        var result = new Parser().parse(Files.readString(Path.of("inputs/day5_sample.txt")));
 
         var sum = 0;
-        for (Update update: result.updates()) {
+        for (Update update : result.updates()) {
             boolean valid = true;
-            for (PageOrderRule rule: result.pageOrderRules()) {
+            for (PageOrderRule rule : result.pageOrderRules()) {
                 if (rule.validates(update)) {
                     continue;
                 } else {
@@ -34,7 +34,7 @@ public class Day5 {
          */
         public boolean validates(Update update) {
             var foundRhs = false;
-            for (int page: update.pages) {
+            for (int page : update.pages) {
                 if (page == rhs) {
                     foundRhs = true;
                 }
