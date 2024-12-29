@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Day5 {
@@ -5,18 +7,63 @@ public class Day5 {
         System.out.println(1);
     }
 
-    static record PageOrderRule(int lhs, int rhs) {
+    record PageOrderRule(int lhs, int rhs) {
+        /**
+         * Return false if lhs appears in update after rhs
+         */
+        public boolean validates(Update update) {
+            var foundRhs = false;
+            for (int page: update.pages) {
+                if (page == rhs) {
+                    foundRhs = true;
+                }
+                if (foundRhs && page == lhs) {
+                    System.out.println("Update failed validation");
+                    System.out.println(update);
+                    System.out.println(this);
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
-    static record Update(List<Integer> pages) {
+    record Update(List<Integer> pages) {
     }
 
     static class Parser {
-        ParserResult parse(String s) {
-            return null;
+        record ParserResult(List<PageOrderRule> pageOrderRules, List<Update> updates) {
         }
 
-        record ParserResult(List<PageOrderRule> pageOrderRules, List<Update> updates) {
+        public ParserResult parse(String s) {
+            var split = s.split("\n\n");
+            return new ParserResult(
+                    parsePageOrderRules(split[0]),
+                    parseUpdates(split[1])
+            );
+        }
+
+        private List<PageOrderRule> parsePageOrderRules(String s) {
+            var rules = new ArrayList<PageOrderRule>();
+            for (String rule : s.split("\n")) {
+                var split = rule.split("\\|");
+                rules.add(new PageOrderRule(
+                        Integer.parseInt(split[0]),
+                        Integer.parseInt(split[1]))
+                );
+            }
+            return rules;
+        }
+
+        private List<Update> parseUpdates(String s) {
+            var updates = new ArrayList<Update>();
+            for (String update : s.split("\n")) {
+                var pages = Arrays.stream(update.split(","))
+                        .map(Integer::parseInt)
+                        .toList();
+                updates.add(new Update(pages));
+            }
+            return updates;
         }
     }
 }
