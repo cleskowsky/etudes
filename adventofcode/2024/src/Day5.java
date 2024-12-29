@@ -1,10 +1,31 @@
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Day5 {
-    public static void main(String[] args) {
-        System.out.println(1);
+    public static void main(String[] args) throws IOException {
+        var result = new Parser().parse(Files.readString(Path.of("inputs/day5.txt")));
+//        var result = new Parser().parse(Files.readString(Path.of("inputs/day5_sample.txt")));
+
+        var sum = 0;
+        for (Update update: result.updates()) {
+            boolean valid = true;
+            for (PageOrderRule rule: result.pageOrderRules()) {
+                if (rule.validates(update)) {
+                    continue;
+                } else {
+                    valid = false;
+                }
+            }
+            if (valid) {
+                int mid = update.pages().size() / 2;
+                sum += update.pages.get(mid);
+            }
+        }
+        System.out.println(sum);
     }
 
     record PageOrderRule(int lhs, int rhs) {
@@ -18,9 +39,9 @@ public class Day5 {
                     foundRhs = true;
                 }
                 if (foundRhs && page == lhs) {
-                    System.out.println("Update failed validation");
-                    System.out.println(update);
-                    System.out.println(this);
+//                    System.out.println("Update failed validation");
+//                    System.out.println(update);
+//                    System.out.println(this);
                     return false;
                 }
             }
