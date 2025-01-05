@@ -6,26 +6,32 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Day5 {
+    public static boolean validUpdate(Update u, List<PageOrderRule> rules) {
+        for (PageOrderRule r : rules) {
+            if (!r.validates(u)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static void main(String[] args) throws IOException {
         var result = new Parser().parse(Files.readString(Path.of("inputs/day5.txt")));
 //        var result = new Parser().parse(Files.readString(Path.of("inputs/day5_sample.txt")));
 
+        // Part 1
+
         var sum = 0;
-        for (Update update : result.updates()) {
-            boolean valid = true;
-            for (PageOrderRule rule : result.pageOrderRules()) {
-                if (rule.validates(update)) {
-                    continue;
-                } else {
-                    valid = false;
-                }
-            }
-            if (valid) {
-                int mid = update.pages().size() / 2;
-                sum += update.pages.get(mid);
+        for (Update u : result.updates()) {
+            if (validUpdate(u, result.pageOrderRules())) {
+                int mid = u.pages().size() / 2;
+                sum += u.pages.get(mid);
             }
         }
         System.out.println(sum);
+
+        // Part 2
+
     }
 
     record PageOrderRule(int lhs, int rhs) {
@@ -33,16 +39,15 @@ public class Day5 {
          * Return false if lhs appears in update after rhs
          */
         public boolean validates(Update update) {
-            var foundRhs = false;
-            for (int page : update.pages) {
-                if (page == rhs) {
-                    foundRhs = true;
-                }
-                if (foundRhs && page == lhs) {
-//                    System.out.println("Update failed validation");
-//                    System.out.println(update);
-//                    System.out.println(this);
-                    return false;
+            for (int i = 0; i < update.pages().size(); i++) {
+                var p1 = update.pages().get(i);
+                if (p1 == rhs) {
+                    for (int j = i; j < update.pages().size(); j++) {
+                        var p2 = update.pages().get(j);
+                        if (p2 == lhs) {
+                            return false;
+                        }
+                    }
                 }
             }
             return true;
