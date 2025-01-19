@@ -17,10 +17,8 @@ public class Day5 {
 
     public static void main(String[] args) throws IOException {
         var result = new Parser().parse(Files.readString(Path.of("inputs/day5.txt")));
-//        var result = new Parser().parse(Files.readString(Path.of("inputs/day5_sample.txt")));
 
         // Part 1
-
         var sum = 0;
         for (Update u : result.updates()) {
             if (validUpdate(u, result.pageOrderRules())) {
@@ -29,12 +27,9 @@ public class Day5 {
             }
         }
         System.out.println(sum);
-
-        // Part 2
-
     }
 
-    record PageOrderRule(int lhs, int rhs) {
+    public record PageOrderRule(int lhs, int rhs) {
         /**
          * Return false if lhs appears in update after rhs
          */
@@ -54,10 +49,11 @@ public class Day5 {
         }
     }
 
-    record Update(List<Integer> pages) {
-        Update(List<Integer> pages) {
+    public record Update(List<Integer> pages) {
+        // copy constructor avoids modifying source page list
+        public Update(List<Integer> pages) {
             // deep copy
-            this.pages = new ArrayList<Integer>(pages);
+            this.pages = new ArrayList<>(pages);
         }
     }
 
