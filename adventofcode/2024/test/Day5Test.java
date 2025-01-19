@@ -73,4 +73,21 @@ class Day5Test {
             fixUpdate(t.getKey(), t.getValue());
         }
     }
+
+    @Test
+    public void part2() throws IOException {
+        var input = new Day5.Parser().parse(Files.readString(Path.of("inputs/day5.txt")));
+
+        var day5 = new Day5();
+        var sum = 0;
+        for (Day5.Update u : input.updates()) {
+            if (Day5.validUpdate(u, input.pageOrderRules())) {
+                continue;
+            }
+            var fixed = day5.fixUpdate(u, input.pageOrderRules());
+            int mid = fixed.pages().size() / 2;
+            sum += fixed.pages().get(mid);
+        }
+        System.out.println(sum);
+    }
 }
