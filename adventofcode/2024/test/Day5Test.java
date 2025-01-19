@@ -3,6 +3,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +38,6 @@ class Day5Test {
         var valid = true;
         for (var rule : parserResult.pageOrderRules()) {
             if (rule.validates(update)) {
-                continue;
             } else {
                 valid = false;
             }
@@ -50,6 +51,26 @@ class Day5Test {
             return parser.parse(Files.readString(Path.of("inputs/day5_sample.txt")));
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void fixUpdate(Day5.Update bad, Day5.Update fixed) {
+        var input = parseSampleInput();
+        var d = new Day5();
+        assertEquals(fixed, d.fixUpdate(bad, input.pageOrderRules()));
+    }
+
+    @Test
+    public void shouldFixBadUpdates() {
+        var tt = Map.of(
+                // table of update repair tests
+                // bad update, fixed update
+                new Day5.Update(List.of(75, 97, 47, 61, 53)), new Day5.Update(List.of(97, 75, 47, 61, 53)),
+                new Day5.Update(List.of(61, 13, 29)), new Day5.Update(List.of(61, 29, 13)),
+                new Day5.Update(List.of(97, 13, 75, 29, 47)), new Day5.Update(List.of(97, 75, 47, 29, 13))
+        );
+        for (var t : tt.entrySet()) {
+            fixUpdate(t.getKey(), t.getValue());
         }
     }
 }

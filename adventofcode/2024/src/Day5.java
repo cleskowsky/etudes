@@ -55,6 +55,10 @@ public class Day5 {
     }
 
     record Update(List<Integer> pages) {
+        Update(List<Integer> pages) {
+            // deep copy
+            this.pages = new ArrayList<Integer>(pages);
+        }
     }
 
     static class Parser {
@@ -91,5 +95,25 @@ public class Day5 {
             }
             return updates;
         }
+    }
+
+    public Update fixUpdate(Update u, List<PageOrderRule> rules) {
+        var fixed = new Update(u.pages());
+        for (PageOrderRule r : rules) {
+            for (int i = 0; i < fixed.pages().size(); i++) {
+                int p1 = fixed.pages().get(i);
+                if (r.rhs() == p1) {
+                    for (int j = i + 1; j < u.pages().size(); j++) {
+                        int p2 = fixed.pages().get(j);
+                        if (r.lhs() == p2) {
+                            // swap pages
+                            fixed.pages().set(i, p2);
+                            fixed.pages().set(j, p1);
+                        }
+                    }
+                }
+            }
+        }
+        return fixed;
     }
 }
