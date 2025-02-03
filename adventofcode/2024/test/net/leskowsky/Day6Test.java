@@ -46,6 +46,23 @@ class Day6Test {
     }
 
     // turns right to avoid obstacles
+    @Test
+    void guardTurnsRightToAvoidObstacle() {
+        // Given an obstacle in front of the guard
+        var s = """
+                #.
+                ^.""";
+        var lab = InputParser.parse(s);
+        var g = new Guard(lab);
+
+        // When the guard steps
+        g.step();
+
+        // He turns right then moves
+        assertEquals(new Point(1, 1), g.getPos());
+        assertEquals(new Point(1, 0), g.getDir());
+    }
+
     // walks outside mapped area
     // remembers path taken
 
