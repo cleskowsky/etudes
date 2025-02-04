@@ -1,7 +1,6 @@
 package net.leskowsky;
 
 import lombok.Data;
-import lombok.Getter;
 
 import java.util.Map;
 
@@ -11,9 +10,6 @@ public class Day6 {
     }
 
     // Lab
-    static record Point(int x, int y) {
-    }
-
     static record Lab(Map<Point, Boolean> floor) {
         public boolean isBlocked(int x, int y) {
             return floor.get(new Point(x, y));

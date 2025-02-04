@@ -8,7 +8,6 @@ import java.util.HashMap;
 import static net.leskowsky.Day6.Direction;
 import static net.leskowsky.Day6.Guard;
 import static net.leskowsky.Day6.Lab;
-import static net.leskowsky.Day6.Point;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
