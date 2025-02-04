@@ -1,5 +1,8 @@
 package net.leskowsky;
 
+import lombok.Data;
+import lombok.Getter;
+
 import java.util.Map;
 
 public class Day6 {
@@ -15,45 +18,45 @@ public class Day6 {
         public boolean isBlocked(int x, int y) {
             return floor.get(new Point(x, y));
         }
+
+        public boolean contains(Point point) {
+            return floor.get(point) != null;
+        }
+    }
+
+    enum Direction {
+        UP(0, -1),
+        RIGHT(1, 0),
+        DOWN(0, 1),
+        LEFT(-1, 0);
+
+        final int x;
+        final int y;
+
+        Direction(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     // Guard
+    @Data
     static class Guard {
-        Lab lab;
         Point pos;
         Direction dir;
 
-        enum Direction {
-            UP(0, -1),
-            RIGHT(1, 0),
-            DOWN(0, 1),
-            LEFT(-1, 0);
-
-            final int x;
-            final int y;
-
-            Direction(int x, int y) {
-                this.x = x;
-                this.y = y;
-            }
+        public Guard(Point pos, Direction dir) {
+            this.pos = pos;
+            this.dir = dir;
         }
 
-        public Guard(Lab lab) {
-            this.lab = lab;
-            this.pos = new Point(0, 1);
-            this.dir = Direction.UP;
-        }
-
-        public Point getPos() {
-            return pos;
-        }
-
-        public Direction getDir() {
-            return dir;
-        }
-
-        public void step() {
+        public void step(Lab lab) {
             var next = new Point(pos.x() + dir.x, pos.y() + dir.y);
+
+            if (!lab.contains(next)) {
+                return;
+            }
+
             if (lab.isBlocked(next.x(), next.y())) {
                 turn();
                 next = new Point(pos.x() + dir.x, pos.y() + dir.y);
@@ -75,8 +78,6 @@ public class Day6 {
                 case LEFT:
                     dir = Direction.UP;
                     break;
-                default:
-                    throw new RuntimeException("Bad direction");
             }
         }
     }
