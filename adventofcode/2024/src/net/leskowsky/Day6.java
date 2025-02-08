@@ -31,6 +31,9 @@ public class Day6 {
             }
         }
 
+        /**
+         * Return number of blocked squares in lab
+         */
         public List<Point> blocked() {
             var result = new ArrayList<Point>();
             for (var entry : floor.entrySet()) {
@@ -39,6 +42,10 @@ public class Day6 {
                 }
             }
             return result;
+        }
+
+        public void obstruct(Point p) {
+            floor.put(p, true);
         }
     }
 

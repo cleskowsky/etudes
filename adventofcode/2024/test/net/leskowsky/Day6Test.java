@@ -159,7 +159,7 @@ class Day6Test {
 
             // add obstruction
             var newLab = new Lab(lab);
-            newLab.floor().put(p, true);
+            newLab.obstruct(p);
 
             // reset guard and simulate guard movement
             var g = new Guard(
