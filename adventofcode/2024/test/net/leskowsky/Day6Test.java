@@ -144,8 +144,7 @@ class Day6Test {
 
     @Test
     void part2() throws IOException {
-//        var result = InputParser.parseFile("inputs/day6.txt");
-        var result = InputParser.parseFile("inputs/day6_sample.txt");
+        var result = InputParser.parseFile("inputs/day6.txt");
 
         int cnt = 0;
 
