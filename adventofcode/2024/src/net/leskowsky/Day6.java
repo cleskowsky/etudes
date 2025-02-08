@@ -36,36 +36,54 @@ public class Day6 {
         }
     }
 
+    static record SeenFacing(Point pos, Direction dir) {
+    }
+
     // Guard
     @Data
     static class Guard {
         Point pos;
         Direction dir;
+
         Set<Point> seen;
+        boolean leftLab;
+
+        Set<SeenFacing> seenFacings;
+        boolean looped;
 
         public Guard(Point pos, Direction dir) {
             this.pos = pos;
             this.dir = dir;
-            this.seen = new HashSet<>();
+
+            seen = new HashSet<>();
             seen.add(pos);
+            leftLab = false;
+
+            seenFacings = new HashSet<>();
+            looped = false;
         }
 
-        public Point step(Lab lab) {
+        public void step(Lab lab) {
             var next = new Point(pos.x() + dir.x, pos.y() + dir.y);
 
-            if (!lab.contains(next)) {
-                return next;
+            if (lab.contains(next)) {
+                if (lab.isBlocked(next.x(), next.y())) {
+                    turn();
+                    next = new Point(pos.x() + dir.x, pos.y() + dir.y);
+                }
+
+                var seenFacing = new SeenFacing(next, dir);
+                if (seenFacings.contains(seenFacing)) {
+                    looped = true;
+                } else {
+                    seenFacings.add(seenFacing);
+                }
+
+                pos = next;
+                seen.add(next);
+            } else {
+                leftLab = true;
             }
-
-            if (lab.isBlocked(next.x(), next.y())) {
-                turn();
-                next = new Point(pos.x() + dir.x, pos.y() + dir.y);
-            }
-
-            pos = next;
-            seen.add(next);
-
-            return pos;
         }
 
         private void turn() {

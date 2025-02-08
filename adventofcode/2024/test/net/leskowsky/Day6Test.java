@@ -100,8 +100,8 @@ class Day6Test {
 
         // When the guard takes a step
         while (true) {
-            var x = g.step(result.getLab());
-            if (result.getLab().contains(x)) {
+            g.step(result.getLab());
+            if (g.isLeftLab()) {
                 continue;
             }
             break;
@@ -117,8 +117,8 @@ class Day6Test {
 
         var g = result.getGuard();
         while (true) {
-            var x = g.step(result.getLab());
-            if (result.getLab().contains(x)) {
+            g.step(result.getLab());
+            if (g.isLeftLab()) {
                 continue;
             }
             break;
@@ -133,14 +133,49 @@ class Day6Test {
 
         var g = result.getGuard();
         while (true) {
-            var x = g.step(result.getLab());
-            if (result.getLab().contains(x)) {
-                continue;
+            g.step(result.getLab());
+            if (g.isLeftLab()) {
+                break;
             }
-            break;
         }
 
-        System.out.println(g.getSeen().size());
+        assertEquals(5404, g.getSeen().size());
+    }
+
+    @Test
+    void part2() throws IOException {
+        var result = InputParser.parseFile("inputs/day6.txt");
+
+        // for each open square
+        var lab = result.getLab();
+        for (Point p : lab.floor().keySet()) {
+            if (lab.isBlocked(p.x(), p.y())) {
+                // skip already obstructed square
+                continue;
+            }
+
+            // add obstruction
+            lab.floor().put(p, true);
+
+            // simulate guard movement
+            var g = result.getGuard();
+            while (true) {
+                g.step(result.getLab());
+
+                // if we exit map, stop
+                // if we get a seenFacing we've seen before we have a loop
+                if (g.isLeftLab()) {
+                    continue;
+//                } else if (g.) {
+
+                }
+                break;
+            }
+        }
+
+
+
+//        System.out.println(g.getSeen().size());
     }
 
     static class InputParser {
