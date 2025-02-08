@@ -2,7 +2,10 @@ package net.leskowsky;
 
 import lombok.Data;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -18,6 +21,24 @@ public class Day6 {
 
         public boolean contains(Point point) {
             return floor.get(point) != null;
+        }
+
+        // Copy constructor
+        public Lab(Lab lab) {
+            this(new HashMap<>());
+            for (Point p : lab.floor().keySet()) {
+                floor.put(p, lab.floor().get(p));
+            }
+        }
+
+        public List<Point> blocked() {
+            var result = new ArrayList<Point>();
+            for (var entry : floor.entrySet()) {
+                if (floor.get(entry.getKey())) {
+                    result.add(entry.getKey());
+                }
+            }
+            return result;
         }
     }
 

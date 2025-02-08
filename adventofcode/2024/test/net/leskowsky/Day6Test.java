@@ -144,7 +144,10 @@ class Day6Test {
 
     @Test
     void part2() throws IOException {
-        var result = InputParser.parseFile("inputs/day6.txt");
+//        var result = InputParser.parseFile("inputs/day6.txt");
+        var result = InputParser.parseFile("inputs/day6_sample.txt");
+
+        int cnt = 0;
 
         // for each open square
         var lab = result.getLab();
@@ -155,27 +158,29 @@ class Day6Test {
             }
 
             // add obstruction
-            lab.floor().put(p, true);
+            var newLab = new Lab(lab);
+            newLab.floor().put(p, true);
 
-            // simulate guard movement
-            var g = result.getGuard();
+            // reset guard and simulate guard movement
+            var g = new Guard(
+                    new Point(result.getGuard().getPos()),
+                    Direction.UP
+            );
             while (true) {
-                g.step(result.getLab());
-
-                // if we exit map, stop
-                // if we get a seenFacing we've seen before we have a loop
+                g.step(newLab);
                 if (g.isLeftLab()) {
-                    continue;
-//                } else if (g.) {
-
+                    // if we exit map, stop
+                    break;
+                } else if (g.isLooped()) {
+                    // if we've been here before we found a loop
+                    cnt++;
+                    break;
                 }
-                break;
             }
         }
 
-
-
-//        System.out.println(g.getSeen().size());
+        // 1959 is too low
+        assertEquals(6, cnt);
     }
 
     static class InputParser {
