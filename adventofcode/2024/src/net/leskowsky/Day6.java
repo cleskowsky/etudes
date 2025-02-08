@@ -2,11 +2,12 @@ package net.leskowsky;
 
 import lombok.Data;
 
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Day6 {
     public static void main(String[] args) {
-        System.out.println("hello, world");
     }
 
     // Lab
@@ -40,24 +41,31 @@ public class Day6 {
     static class Guard {
         Point pos;
         Direction dir;
+        Set<Point> seen;
 
         public Guard(Point pos, Direction dir) {
             this.pos = pos;
             this.dir = dir;
+            this.seen = new HashSet<>();
+            seen.add(pos);
         }
 
-        public void step(Lab lab) {
+        public Point step(Lab lab) {
             var next = new Point(pos.x() + dir.x, pos.y() + dir.y);
 
             if (!lab.contains(next)) {
-                return;
+                return next;
             }
 
             if (lab.isBlocked(next.x(), next.y())) {
                 turn();
                 next = new Point(pos.x() + dir.x, pos.y() + dir.y);
             }
+
             pos = next;
+            seen.add(next);
+
+            return pos;
         }
 
         private void turn() {
@@ -77,6 +85,4 @@ public class Day6 {
             }
         }
     }
-
-    // Tracker
 }

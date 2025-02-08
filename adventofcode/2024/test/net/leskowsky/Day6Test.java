@@ -3,6 +3,9 @@ package net.leskowsky;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 
 import static net.leskowsky.Day6.Direction;
@@ -11,7 +14,6 @@ import static net.leskowsky.Day6.Lab;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 class Day6Test {
 
@@ -88,8 +90,57 @@ class Day6Test {
 
     // remembers path taken
     @Test
-    void remembersPath() {
-        fail();
+    void stepLog() {
+        // Given a guard and a floor
+        String s = """
+                .#
+                ^.""";
+        var result = InputParser.parse(s);
+        var g = result.getGuard();
+
+        // When the guard takes a step
+        while (true) {
+            var x = g.step(result.getLab());
+            if (result.getLab().contains(x)) {
+                continue;
+            }
+            break;
+        }
+
+        // Then a record of squares occupied is kept
+        assertEquals(2, g.getSeen().size());
+    }
+
+    @Test
+    void sample() throws IOException {
+        var result = InputParser.parseFile("inputs/day6_sample.txt");
+
+        var g = result.getGuard();
+        while (true) {
+            var x = g.step(result.getLab());
+            if (result.getLab().contains(x)) {
+                continue;
+            }
+            break;
+        }
+
+        System.out.println(g.getSeen().size());
+    }
+
+    @Test
+    void part1() throws IOException {
+        var result = InputParser.parseFile("inputs/day6.txt");
+
+        var g = result.getGuard();
+        while (true) {
+            var x = g.step(result.getLab());
+            if (result.getLab().contains(x)) {
+                continue;
+            }
+            break;
+        }
+
+        System.out.println(g.getSeen().size());
     }
 
     static class InputParser {
@@ -123,6 +174,12 @@ class Day6Test {
             }
 
             return result;
+        }
+
+        static ParseResult parseFile(String s) throws IOException {
+            return parse(
+                    Files.readString(Path.of(s))
+            );
         }
     }
 }
