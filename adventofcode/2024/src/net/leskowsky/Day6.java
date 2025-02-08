@@ -16,7 +16,7 @@ public class Day6 {
     // Lab
     static record Lab(Map<Point, Boolean> floor) {
         public boolean isBlocked(int x, int y) {
-            return floor.get(new Point(x, y));
+            return isBlocked(new Point(x, y));
         }
 
         public boolean isBlocked(Point p) {

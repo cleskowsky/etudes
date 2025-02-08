@@ -152,11 +152,6 @@ class Day6Test {
         // for each open square
         var lab = result.getLab();
         for (Point p : lab.floor().keySet()) {
-            if (lab.isBlocked(p)) {
-                // skip already obstructed square
-                continue;
-            }
-
             // add obstruction
             var newLab = new Lab(lab);
             newLab.obstruct(p);
@@ -217,9 +212,7 @@ class Day6Test {
         }
 
         static ParseResult parseFile(String s) throws IOException {
-            return parse(
-                    Files.readString(Path.of(s))
-            );
+            return parse(Files.readString(Path.of(s)));
         }
     }
 }
