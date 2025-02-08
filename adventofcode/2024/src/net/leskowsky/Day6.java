@@ -93,13 +93,9 @@ public class Day6 {
             var next = new Point(pos.x() + dir.x, pos.y() + dir.y);
 
             if (lab.contains(next)) {
-                while (true) {
-                    if (lab.isBlocked(next.x(), next.y())) {
-                        turn();
-                        next = new Point(pos.x() + dir.x, pos.y() + dir.y);
-                    } else {
-                        break;
-                    }
+                while (lab.isBlocked(next)) {
+                    turn();
+                    next = new Point(pos.x() + dir.x, pos.y() + dir.y);
                 }
 
                 var seenFacing = new SeenFacing(next, dir);

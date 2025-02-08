@@ -174,7 +174,7 @@ class Day6Test {
         }
 
         // 1959 is too low
-        assertEquals(6, cnt);
+        assertEquals(1984, cnt);
     }
 
     static class InputParser {
