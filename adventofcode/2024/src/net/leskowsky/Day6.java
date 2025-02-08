@@ -19,6 +19,10 @@ public class Day6 {
             return floor.get(new Point(x, y));
         }
 
+        public boolean isBlocked(Point p) {
+            return floor.get(p);
+        }
+
         public boolean contains(Point point) {
             return floor.get(point) != null;
         }
@@ -73,22 +77,16 @@ public class Day6 {
         Point pos;
         Direction dir;
 
-        Set<Point> seen;
+        Set<Point> seen = new HashSet<>();
         boolean leftLab;
 
-        Set<SeenFacing> seenFacings;
+        Set<SeenFacing> seenFacings = new HashSet<>();
         boolean looped;
 
         public Guard(Point pos, Direction dir) {
             this.pos = pos;
             this.dir = dir;
-
-            seen = new HashSet<>();
             seen.add(pos);
-            leftLab = false;
-
-            seenFacings = new HashSet<>();
-            looped = false;
         }
 
         public void step(Lab lab) {

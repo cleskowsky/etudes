@@ -152,7 +152,7 @@ class Day6Test {
         // for each open square
         var lab = result.getLab();
         for (Point p : lab.floor().keySet()) {
-            if (lab.isBlocked(p.x(), p.y())) {
+            if (lab.isBlocked(p)) {
                 // skip already obstructed square
                 continue;
             }
