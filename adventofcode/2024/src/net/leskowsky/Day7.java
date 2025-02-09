@@ -23,7 +23,7 @@ public class Day7 {
         x.solver(List.of("11", "6", "16", "20"), 0, new ArrayList<>(), 292);
     }
 
-    public void solver(List<String> terms, int i, List<String> expr, long answer) {
+    public boolean solver(List<String> terms, int i, List<String> expr, long answer) {
         int x = terms.size() - i;
 
         if (x == 0) {
@@ -48,23 +48,27 @@ public class Day7 {
             // does our result match answer
             if (lhs == answer) {
                 System.out.println("Good equation " + expr);
+                return true;
             }
         } else if (x == 1) {
             // last term
             var addExpr = new ArrayList<>(expr);
             addExpr.add(terms.get(i));
-            solver(terms, i + 1, addExpr, answer);
+            return solver(terms, i + 1, addExpr, answer);
         } else {
             // try add
             var addExpr = new ArrayList<>(expr);
             addExpr.addAll(List.of(terms.get(i), "+"));
-            solver(terms, i + 1, addExpr, answer);
+            if (solver(terms, i + 1, addExpr, answer)) {
+                return true;
+            }
 
             // try mult
             var multExpr = new ArrayList<>(expr);
             multExpr.addAll(List.of(terms.get(i), "*"));
-            solver(terms, i + 1, multExpr, answer);
+            return solver(terms, i + 1, multExpr, answer);
         }
+
+        return false;
     }
 }
-
