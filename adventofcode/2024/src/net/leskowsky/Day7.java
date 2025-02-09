@@ -1,7 +1,5 @@
 package net.leskowsky;
 
-import lombok.extern.java.Log;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -16,26 +14,38 @@ public class Day7 {
         assert x.solver(81, List.of(40, 27), 3267);
         assert !x.solver(16, List.of(10, 13), 161011);
 
-        // sample input
+        // input
 //        String input = Files.readString(Path.of("inputs/day7_sample.txt"));
         String input = Files.readString(Path.of("inputs/day7.txt"));
 
-        long sum = 0;
+        // part 1
+        long sum_a = 0;
 
+        // part 2
+        long sum_b = 0;
         for (String line : input.split("\n")) {
             var split = line.split(": ");
             long answer = Long.parseLong(split[0]);
             List<Integer> terms = Arrays.stream(split[1].split(" "))
                     .map(Integer::parseInt)
                     .toList();
+            if (x.solver(terms.getFirst(),
+                    terms.subList(1, terms.size()),
+                    answer)) {
+                sum_a += answer;
+            }
+
+            // Part 2
             if (x.solver2(terms.getFirst(),
                     terms.subList(1, terms.size()),
                     answer)) {
-                sum += answer;
+                sum_b += answer;
             }
         }
+        System.out.println("Part 1: " + sum_a);
 
-        System.out.println(sum);
+        // Part 2
+        System.out.println("Part 2: " + sum_b);
     }
 
     public boolean solver(long lhs, List<Integer> theRest, long answer) {
