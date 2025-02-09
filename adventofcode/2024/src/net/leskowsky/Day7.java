@@ -27,26 +27,19 @@ public class Day7 {
         if (x == 0) {
             System.out.println(expr);
         } else if (x == 1) {
-            var termsCopy = new ArrayList<>(terms);
-            var t = termsCopy.removeFirst();
-
-            // try add
             var addExpr = new ArrayList<>(expr);
-            addExpr.add(t);
-            solver(termsCopy, addExpr);
+            addExpr.add(terms.get(i));
+            solver(terms, i + 1, addExpr);
         } else {
-            var termsCopy = new ArrayList<>(terms);
-            var t = termsCopy.removeFirst();
-
             // try add
             var addExpr = new ArrayList<>(expr);
-            addExpr.addAll(List.of(t, "+"));
-            solver(termsCopy, addExpr);
+            addExpr.addAll(List.of(terms.get(i), "+"));
+            solver(terms, i + 1, addExpr);
 
             // try mult
             var multExpr = new ArrayList<>(expr);
-            multExpr.addAll(List.of(t, "*"));
-            solver(termsCopy, multExpr);
+            multExpr.addAll(List.of(terms.get(i), "*"));
+            solver(terms, i + 1, multExpr);
         }
     }
 }
