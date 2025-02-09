@@ -1,6 +1,5 @@
 package net.leskowsky;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Day7 {
@@ -20,55 +19,21 @@ public class Day7 {
         var x = new Day7();
 //        x.solver(List.of("10", "19"), 0, new ArrayList<>(), 190);
 //        x.solver(List.of("81", "40", "27"), 0, new ArrayList<>(), 3267);
-        x.solver(List.of("11", "6", "16", "20"), 0, new ArrayList<>(), 292);
+//        x.solver(List.of("11", "6", "16", "20"), 0, new ArrayList<>(), 292);
+
+//        190: 10 19
+//        x.solver(10, List.of(19), 190);
+        x.solver(11, List.of(6, 16, 20), 292);
     }
 
-    public boolean solver(List<String> terms, int i, List<String> expr, long answer) {
-        int x = terms.size() - i;
-
-        if (x == 0) {
-            // final expression to calculate
-            System.out.println(expr);
-
-            // calculate expr
-            int lhs = Integer.parseInt(expr.getFirst());
-
-            for (int j = 1; j < expr.size(); j += 2) {
-                var op = expr.get(j).charAt(0);
-                int rhs = Integer.parseInt(expr.get(j + 1));
-                if (op == '+') {
-                    lhs += rhs;
-                } else if (op == '*') {
-                    lhs *= rhs;
-                }
-            }
-            // accumulated result
-            System.out.println(lhs);
-
-            // does our result match answer
-            if (lhs == answer) {
-                System.out.println("Good equation " + expr);
-                return true;
-            }
-        } else if (x == 1) {
-            // last term
-            var addExpr = new ArrayList<>(expr);
-            addExpr.add(terms.get(i));
-            return solver(terms, i + 1, addExpr, answer);
+    public void solver(long lhs, List<Integer> terms, long answer) {
+        if (terms.isEmpty()) {
+            // is lhs == answer
+            System.out.printf("lhs=%d answer=%d good_eq=%b\n", lhs, answer, lhs==answer);
         } else {
-            // try add
-            var addExpr = new ArrayList<>(expr);
-            addExpr.addAll(List.of(terms.get(i), "+"));
-            if (solver(terms, i + 1, addExpr, answer)) {
-                return true;
-            }
-
-            // try mult
-            var multExpr = new ArrayList<>(expr);
-            multExpr.addAll(List.of(terms.get(i), "*"));
-            return solver(terms, i + 1, multExpr, answer);
+            var t = terms.getFirst();
+            solver(lhs + t, terms.subList(1, terms.size()), answer);
+            solver(lhs * t, terms.subList(1, terms.size()), answer);
         }
-
-        return false;
     }
 }
