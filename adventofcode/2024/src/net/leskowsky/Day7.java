@@ -1,5 +1,7 @@
 package net.leskowsky;
 
+import lombok.extern.java.Log;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +28,7 @@ public class Day7 {
             List<Integer> terms = Arrays.stream(split[1].split(" "))
                     .map(Integer::parseInt)
                     .toList();
-            if (x.solver(terms.getFirst(),
+            if (x.solver2(terms.getFirst(),
                     terms.subList(1, terms.size()),
                     answer)) {
                 sum += answer;
@@ -38,7 +40,6 @@ public class Day7 {
 
     public boolean solver(long lhs, List<Integer> theRest, long answer) {
         if (theRest.isEmpty()) {
-//            System.out.printf("lhs=%d answer=%d\n", lhs, answer);
             // is lhs == answer
             return lhs == answer;
         } else {
@@ -47,6 +48,22 @@ public class Day7 {
             return solver(lhs + t, theRest.subList(1, theRest.size()), answer) ||
                     // try mult
                     solver(lhs * t, theRest.subList(1, theRest.size()), answer);
+        }
+    }
+
+    public boolean solver2(long lhs, List<Integer> theRest, long answer) {
+        if (theRest.isEmpty()) {
+            // is lhs == answer
+            return lhs == answer;
+        } else {
+            var t = theRest.getFirst();
+            var concat = Long.parseLong(String.valueOf(lhs).concat(String.valueOf(t)));
+            // try add
+            return solver2(lhs + t, theRest.subList(1, theRest.size()), answer) ||
+                    // try concat
+                    solver2(concat, theRest.subList(1, theRest.size()), answer) ||
+                    // try mult
+                    solver2(lhs * t, theRest.subList(1, theRest.size()), answer);
         }
     }
 }
