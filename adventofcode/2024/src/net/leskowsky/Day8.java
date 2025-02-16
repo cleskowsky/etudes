@@ -68,4 +68,40 @@ public class Day8 {
 
         return result;
     }
+
+    static Set<Point> findAntinodes2(SignalMap signals) {
+        var result = new HashSet<Point>();
+        signals.keys().forEach(k -> {
+            for (Pair p : pairs(signals.get(k))) {
+                result.addAll(findAntinodes2(p.p1(), p.p2(), signals));
+            }
+        });
+        return result;
+    }
+
+    private static Set<Point> findAntinodes2(Point p1, Point p2, SignalMap signals) {
+        var result = new HashSet<Point>();
+        result.add(p1);
+        result.add(p2);
+
+        int dx = p2.x() - p1.x();
+        int dy = p2.y() - p1.y();
+        Point diff = new Point(dx, dy);
+
+        // get antinodes behind p1
+        var x = p1.sub(diff);
+        while (signals.contains(x)) {
+            result.add(x);
+            x = x.sub(diff);
+        }
+
+        // get antinodes in front of p1
+        x = p1.add(diff);
+        while (signals.contains(x)) {
+            result.add(x);
+            x = x.add(diff);
+        }
+
+        return result;
+    }
 }
