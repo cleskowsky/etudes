@@ -21,11 +21,20 @@ public class Day8 {
 
     Set<Point> antinodes = new HashSet<>();
 
-    static List<Pair> pairs(List<Point> locs) {
-        return List.of();
+    static Set<Pair> pairs(List<Point> locs) {
+        var result = new HashSet<Pair>();
+        for (int i = 0; i < locs.size(); i++) {
+            for (int j = i + 1; j < locs.size(); j++) {
+                if (i == j) {
+                    continue;
+                }
+                result.add(new Pair(locs.get(i), locs.get(j)));
+            }
+        }
+        return result;
     }
 
-    static List<Point> findAntinodesFor(Pair p) {
-        return List.of();
+    static Set<Point> findAntinodesFor(Pair p) {
+        return Set.of();
     }
 }
