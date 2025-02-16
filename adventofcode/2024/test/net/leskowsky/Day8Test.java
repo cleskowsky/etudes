@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static net.leskowsky.Day8.findAntinodesFor;
-import static net.leskowsky.Day8.pairs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -18,18 +16,18 @@ class Day8Test {
         String s = """
                 .a
                 a.""";
-        assertEquals(1, parseMap(s).signals().count());
-        assertEquals(2, parseMap(s).signals().get('a').size());
-        assertEquals(2, parseMap(s).maxX());
-        assertEquals(2, parseMap(s).maxY());
+        assertEquals(1, parse(s).count());
+        assertEquals(2, parse(s).signals().get('a').size());
+        assertEquals(2, parse(s).limitX());
+        assertEquals(2, parse(s).limitY());
     }
 
-    record ParseResult(Day8.SignalMap signals, int maxX, int maxY) {
+    record ParseResult(Day8.SignalMap signals, int limitX, int limitY) {
     }
 
-    private ParseResult parseMap(String s) {
+    private Day8.SignalMap parse(String s) {
         // find signals
-        // find maxX, maxY
+        // find limitX, limitY
         var signals = new HashMap<Character, List<Point>>();
 
         var lines = s.split("\n");
@@ -46,7 +44,23 @@ class Day8Test {
             }
         }
 
-        return new ParseResult(new Day8.SignalMap(signals), lines[0].length(), lines.length);
+        return new Day8.SignalMap(signals, lines[0].length(), lines.length);
+    }
+
+    @Test
+    void pairs() {
+        var s1 = """
+                ..........
+                ...#......
+                #.........
+                ....a...a.
+                ..........
+                ....a...a.
+                ..#.......
+                ......A...
+                ..........
+                ..........""";
+        assertEquals(6, Day8.pairs(parse(s1).signals().get('a')).size());
     }
 
     @Test
@@ -63,10 +77,7 @@ class Day8Test {
                 ..........
                 ..........""";
 
-        var result = parseMap(s);
-        var signalMap = result.signals();
-        var maxX = result.maxX();
-        var maxY = result.maxY();
+        var signalMap = parse(s);
 
         assertEquals(2, signalMap.count());
         assertEquals(new Point(4, 3), signalMap.get('a').get(0));
@@ -74,29 +85,12 @@ class Day8Test {
         assertEquals(new Point(5, 5), signalMap.get('a').get(2));
         assertEquals(new Point(6, 7), signalMap.get('A').get(0));
 
-        assertEquals(3, pairs(signalMap.get('a')).size());
-
-        // i really want one more test in here for finding pairs
-        var s1 = """
-                ..........
-                ...#......
-                #.........
-                ....a...a.
-                ..........
-                ....a...a.
-                ..#.......
-                ......A...
-                ..........
-                ..........""";
-        assertEquals(6, pairs(parseMap(s1).signals().get('a')).size());
+        assertEquals(3, Day8.pairs(signalMap.get('a')).size());
 
         Day8 d8 = new Day8();
         signalMap.signals().forEach((sig, locs) -> {
-            System.out.println(sig);
-            System.out.println(locs);
-
-            for (Day8.Pair p : pairs(locs)) {
-                d8.antinodes.addAll(findAntinodesFor(p));
+            for (Day8.Pair p : Day8.pairs(locs)) {
+                d8.findAntinodesFor(p);
             }
         });
     }

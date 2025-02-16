@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 
 public class Day8 {
-    record SignalMap(Map<Character, List<Point>> signals) {
+    record SignalMap(Map<Character, List<Point>> signals, int limitX, int limitY) {
         int count() {
             return signals.size();
         }
@@ -34,7 +34,7 @@ public class Day8 {
         return result;
     }
 
-    static Set<Point> findAntinodesFor(Pair p) {
-        return Set.of();
+    void findAntinodesFor(Pair p) {
+
     }
 }
