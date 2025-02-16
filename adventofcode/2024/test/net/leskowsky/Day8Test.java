@@ -36,7 +36,7 @@ class Day8Test {
             var line = lines[j];
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);
-                if (c == '.') {
+                if (c == '.' || c == '#') {
                     continue;
                 }
                 var x = signals.getOrDefault(c, new ArrayList<>());
@@ -49,6 +49,27 @@ class Day8Test {
     }
 
     @Test
+    void sample() {
+        var s = """
+                ..........
+                ...#......
+                ..........
+                ....a.....
+                ..........
+                .....a....
+                ..........
+                ......#...
+                ..........
+                ..........""";
+
+        var x = parseMap(s);
+        assertEquals(new Point(4,3), x.signals().get('a').get(0));
+        assertEquals(new Point(5,5), x.signals().get('a').get(1));
+
+        var antinodes = new ArrayList<Point>();
+    }
+
+    @Test
     void part1() {
         // find signals
         // foreach signal
@@ -56,6 +77,6 @@ class Day8Test {
         //   foreach pair
         //     find antinodes
         // count antinodes
-        assertTrue(false);
+        fail();
     }
 }
