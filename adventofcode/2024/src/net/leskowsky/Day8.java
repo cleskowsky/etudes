@@ -53,18 +53,18 @@ public class Day8 {
         Point diff = new Point(dx, dy);
 
         var result = new HashSet<Point>();
-        List.of(p1.add(diff),
-                p2.add(diff),
-                p1.sub(diff),
-                p2.sub(diff)).forEach(x -> {
-            if (x.equals(p1) || x.equals(p2)) {
-                return;
-            }
-            if (!signals.contains(x)) {
-                return;
-            }
+
+        // antinode behind
+        var x = p1.sub(diff);
+        if (signals.contains(x)) {
             result.add(x);
-        });
+        }
+
+        // antinode ahead
+        x = p1.add(diff).add(diff);
+        if (signals.contains(x)) {
+            result.add(x);
+        }
 
         return result;
     }
@@ -88,14 +88,14 @@ public class Day8 {
         int dy = p2.y() - p1.y();
         Point diff = new Point(dx, dy);
 
-        // get antinodes behind p1
+        // antinodes behind
         var x = p1.sub(diff);
         while (signals.contains(x)) {
             result.add(x);
             x = x.sub(diff);
         }
 
-        // get antinodes in front of p1
+        // antinodes ahead
         x = p1.add(diff);
         while (signals.contains(x)) {
             result.add(x);

@@ -64,7 +64,6 @@ class Day8Test {
                 ..........#.
                 ..........#.""";
         signals = parse(s);
-        System.out.println(findAntinodes(signals));
         assertEquals(14, findAntinodes(signals).size());
     }
 
@@ -94,7 +93,7 @@ class Day8Test {
                 ....#.....
                 ..........""";
         var signals = parse(s);
-        System.out.println(findAntinodes2(signals).size());
+        assertEquals(9, findAntinodes2(signals).size());
     }
 
     @Test
