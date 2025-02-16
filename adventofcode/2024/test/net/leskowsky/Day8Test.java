@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static net.leskowsky.Day8.findAntinodesFor;
+import static net.leskowsky.Day8.pairs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -61,11 +63,24 @@ class Day8Test {
                 ..........
                 ..........""";
 
-        var x = parseMap(s);
-        assertEquals(new Point(4,3), x.signals().get('a').get(0));
-        assertEquals(new Point(5,5), x.signals().get('a').get(1));
+        var result = parseMap(s);
+        var signalMap = result.signals();
+        var maxX = result.maxX();
+        var maxY = result.maxY();
 
-        var antinodes = new ArrayList<Point>();
+        assertEquals(new Point(4, 3), signalMap.get('a').get(0));
+        assertEquals(new Point(5, 5), signalMap.get('a').get(1));
+
+        Day8 d8 = new Day8();
+
+        signalMap.signals().forEach((sig, locs) -> {
+            System.out.println(sig);
+            System.out.println(locs);
+
+            for (Day8.Pair p : pairs(locs)) {
+                d8.antinodes.addAll(findAntinodesFor(p));
+            }
+        });
     }
 
     @Test
