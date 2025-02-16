@@ -37,7 +37,17 @@ public class Day8 {
         return result;
     }
 
-    static Set<Point> findAntinodes(Point p1, Point p2, SignalMap signals) {
+    static Set<Point> findAntinodes(SignalMap signals) {
+        var result = new HashSet<Point>();
+        signals.keys().forEach(k -> {
+            for (Pair p : pairs(signals.get(k))) {
+                result.addAll(findAntinodes(p.p1(), p.p2(), signals));
+            }
+        });
+        return result;
+    }
+
+    private static Set<Point> findAntinodes(Point p1, Point p2, SignalMap signals) {
         int dx = p2.x() - p1.x();
         int dy = p2.y() - p1.y();
         Point diff = new Point(dx, dy);
@@ -56,16 +66,6 @@ public class Day8 {
             result.add(x);
         });
 
-        return result;
-    }
-
-    static Set<Point> findAntinodes(SignalMap signals) {
-        var result = new HashSet<Point>();
-        signals.keys().forEach(k -> {
-            for (Pair p : pairs(signals.get(k))) {
-                result.addAll(findAntinodes(p.p1(), p.p2(), signals));
-            }
-        });
         return result;
     }
 }
