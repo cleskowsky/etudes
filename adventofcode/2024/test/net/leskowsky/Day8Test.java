@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class Day8Test {
 
@@ -16,14 +16,13 @@ class Day8Test {
         String s = """
                 .a
                 a.""";
-
-        assertEquals(1, parseMap(s).signals().size());
+        assertEquals(1, parseMap(s).signals().count());
         assertEquals(2, parseMap(s).signals().get('a').size());
-        assertEquals(2, parseMap(s).rows());
-        assertEquals(2, parseMap(s).cols());
+        assertEquals(2, parseMap(s).maxX());
+        assertEquals(2, parseMap(s).maxY());
     }
 
-    record ParseResult(Map<Character, List<Point>> signals, int rows, int cols) {
+    record ParseResult(Day8.SignalMap signals, int maxX, int maxY) {
     }
 
     private ParseResult parseMap(String s) {
@@ -45,7 +44,7 @@ class Day8Test {
             }
         }
 
-        return new ParseResult(signals, lines[0].length(), lines.length);
+        return new ParseResult(new Day8.SignalMap(signals), lines[0].length(), lines.length);
     }
 
     @Test
