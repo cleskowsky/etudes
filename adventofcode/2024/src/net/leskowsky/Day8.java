@@ -7,10 +7,6 @@ import java.util.Set;
 
 public class Day8 {
     record SignalMap(Map<Character, List<Point>> signals, int limitX, int limitY) {
-        int count() {
-            return signals.size();
-        }
-
         List<Point> get(char c) {
             return signals.get(c);
         }
