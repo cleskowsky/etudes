@@ -42,8 +42,8 @@ public class Day8 {
     void addAntinodes(Point p1, Point p2, SignalMap signalMap) {
         var result = new ArrayList<Point>();
 
-        int dx = Math.abs(p2.x() - p1.x());
-        int dy = Math.abs(p2.y() - p1.y());
+        int dx = p2.x() - p1.x();
+        int dy = p2.y() - p1.y();
         Point diff = new Point(dx, dy);
 
         // antinodes for p1
@@ -54,7 +54,7 @@ public class Day8 {
         result.add(p2.add(diff));
         result.add(p2.sub(diff));
 
-        // add antinode if inside our signal map
+        // add if inside signal map
         result.forEach(x -> {
             if (signalMap.contains(x) &&
                     !x.equals(p1) &&

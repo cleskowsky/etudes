@@ -23,9 +23,6 @@ class Day8Test {
         assertEquals(2, parse(s).limitY());
     }
 
-    record ParseResult(Day8.SignalMap signals, int limitX, int limitY) {
-    }
-
     private Day8.SignalMap parse(String s) {
         // find signals
         // find limitX, limitY
@@ -81,13 +78,28 @@ class Day8Test {
         var signals = parse(s);
 
         var d8 = new Day8();
-//        for (Day8.Pair p : pairs(signals.get('a'))) {
-//            d8.addAntinodes(p.p1(), p.p2(), signals);
-//        }
         d8.findAntinodes(signals);
         System.out.println(d8.antinodes);
 
         assertEquals(2, d8.antinodes.size());
+
+        s = """
+                ..........
+                ..........
+                ....a.....
+                ......a...
+                ....a.....
+                ..........
+                ..........
+                ..........""";
+
+        signals = parse(s);
+
+        d8 = new Day8();
+        d8.findAntinodes(signals);
+        System.out.println(d8.antinodes);
+
+        assertEquals(6, d8.antinodes.size());
     }
 
     @Test
