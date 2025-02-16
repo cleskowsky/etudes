@@ -10,18 +10,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 class Day8Test {
-
-    @Test
-    void parseInput() {
-        String s = """
-                .a
-                a.""";
-        assertEquals(1, parse(s).count());
-        assertEquals(2, parse(s).signals().get('a').size());
-        assertEquals(2, parse(s).limitX());
-        assertEquals(2, parse(s).limitY());
-    }
-
     private Day8.SignalMap parse(String s) {
         // find signals
         // find limitX, limitY
@@ -71,11 +59,8 @@ class Day8Test {
                 ..........""";
         signals = parse(s);
         assertEquals(6, Day8.findAntinodes(signals).size());
-    }
 
-    @Test
-    void sample() {
-        var s = """
+        s = """
                 ..........
                 ...#......
                 #.........
@@ -86,14 +71,25 @@ class Day8Test {
                 ......A...
                 ..........
                 ..........""";
+        signals = parse(s);
+        assertEquals(4, Day8.findAntinodes(signals).size());
 
-        var signals = parse(s);
-
-        assertEquals(2, signals.count());
-        assertEquals(new Point(4, 3), signals.get('a').get(0));
-        assertEquals(new Point(8, 4), signals.get('a').get(1));
-        assertEquals(new Point(5, 5), signals.get('a').get(2));
-        assertEquals(new Point(6, 7), signals.get('A').get(0));
+        s = """
+                ......#....#
+                ...#....0...
+                ....#0....#.
+                ..#....0....
+                ....0....#..
+                .#....A.....
+                ...#........
+                #......#....
+                ........A...
+                .........A..
+                ..........#.
+                ..........#.""";
+        signals = parse(s);
+        System.out.println(Day8.findAntinodes(signals));
+        assertEquals(14, Day8.findAntinodes(signals).size());
     }
 
     @Test

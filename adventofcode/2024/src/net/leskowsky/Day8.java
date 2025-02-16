@@ -16,7 +16,12 @@ public class Day8 {
         }
 
         boolean contains(Point p) {
-            return p.x() < limitX && p.y() < limitY;
+            return p.x() >= 0 && p.x() < limitX &&
+                    p.y() >= 0 && p.y() < limitY;
+        }
+
+        Set<Character> keys() {
+            return signals().keySet();
         }
     }
 
@@ -41,7 +46,7 @@ public class Day8 {
         int dy = p2.y() - p1.y();
         Point diff = new Point(dx, dy);
 
-        Set<Point> result = new HashSet<>();
+        var result = new HashSet<Point>();
         List.of(p1.add(diff),
                 p2.add(diff),
                 p1.sub(diff),
@@ -59,10 +64,12 @@ public class Day8 {
     }
 
     static Set<Point> findAntinodes(SignalMap signals) {
-        Set<Point> result = new HashSet<>();
-        for (Day8.Pair p : pairs(signals.get('a'))) {
-            result.addAll(findAntinodes(p.p1(), p.p2(), signals));
-        }
+        var result = new HashSet<Point>();
+        signals.keys().forEach(k -> {
+            for (Pair p : pairs(signals.get(k))) {
+                result.addAll(findAntinodes(p.p1(), p.p2(), signals));
+            }
+        });
         return result;
     }
 }
