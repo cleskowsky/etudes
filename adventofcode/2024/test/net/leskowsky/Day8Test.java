@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static net.leskowsky.Day8.pairs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -43,22 +42,6 @@ class Day8Test {
         }
 
         return new Day8.SignalMap(signals, lines[0].length(), lines.length);
-    }
-
-    @Test
-    void getPairs() {
-        var s1 = """
-                ..........
-                ...#......
-                #.........
-                ....a...a.
-                ..........
-                ....a...a.
-                ..#.......
-                ......A...
-                ..........
-                ..........""";
-        assertEquals(6, pairs(parse(s1).signals().get('a')).size());
     }
 
     @Test
@@ -111,12 +94,6 @@ class Day8Test {
         assertEquals(new Point(8, 4), signals.get('a').get(1));
         assertEquals(new Point(5, 5), signals.get('a').get(2));
         assertEquals(new Point(6, 7), signals.get('A').get(0));
-
-//        signals.signals().forEach((sig, locs) -> {
-//            for (Day8.Pair p : pairs(locs)) {
-//                d8.findAntinodes(p.p1(), p.p2(), signals);
-//            }
-//        });
     }
 
     @Test
