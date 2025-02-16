@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static net.leskowsky.Day8.pairs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -48,7 +49,7 @@ class Day8Test {
     }
 
     @Test
-    void pairs() {
+    void getPairs() {
         var s1 = """
                 ..........
                 ...#......
@@ -60,7 +61,33 @@ class Day8Test {
                 ......A...
                 ..........
                 ..........""";
-        assertEquals(6, Day8.pairs(parse(s1).signals().get('a')).size());
+        assertEquals(6, pairs(parse(s1).signals().get('a')).size());
+    }
+
+    @Test
+    void addAntinodes() {
+        var s = """
+                ..........
+                ..........
+                ..........
+                ....a.....
+                ..........
+                .....a....
+                ..........
+                ..........
+                ..........
+                ..........""";
+
+        var signals = parse(s);
+
+        var d8 = new Day8();
+//        for (Day8.Pair p : pairs(signals.get('a'))) {
+//            d8.addAntinodes(p.p1(), p.p2(), signals);
+//        }
+        d8.findAntinodes(signals);
+        System.out.println(d8.antinodes);
+
+        assertEquals(2, d8.antinodes.size());
     }
 
     @Test
@@ -85,12 +112,12 @@ class Day8Test {
         assertEquals(new Point(5, 5), signalMap.get('a').get(2));
         assertEquals(new Point(6, 7), signalMap.get('A').get(0));
 
-        assertEquals(3, Day8.pairs(signalMap.get('a')).size());
+        assertEquals(3, pairs(signalMap.get('a')).size());
 
         Day8 d8 = new Day8();
         signalMap.signals().forEach((sig, locs) -> {
-            for (Day8.Pair p : Day8.pairs(locs)) {
-                d8.findAntinodesFor(p);
+            for (Day8.Pair p : pairs(locs)) {
+                d8.addAntinodes(p.p1(), p.p2(), signalMap);
             }
         });
     }
