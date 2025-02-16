@@ -1,6 +1,5 @@
 package net.leskowsky;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +23,6 @@ public class Day8 {
     record Pair(Point p1, Point p2) {
     }
 
-    Set<Point> antinodes = new HashSet<>();
-
     static Set<Pair> pairs(List<Point> locs) {
         var result = new HashSet<Pair>();
         for (int i = 0; i < locs.size(); i++) {
@@ -39,34 +36,33 @@ public class Day8 {
         return result;
     }
 
-    void addAntinodes(Point p1, Point p2, SignalMap signalMap) {
-        var result = new ArrayList<Point>();
-
+    static Set<Point> findAntinodes(Point p1, Point p2, SignalMap signals) {
         int dx = p2.x() - p1.x();
         int dy = p2.y() - p1.y();
         Point diff = new Point(dx, dy);
 
-        // antinodes for p1
-        result.add(p1.add(diff));
-        result.add(p1.sub(diff));
-
-        // antinodes for p2
-        result.add(p2.add(diff));
-        result.add(p2.sub(diff));
-
-        // add if inside signal map
-        result.forEach(x -> {
-            if (signalMap.contains(x) &&
-                    !x.equals(p1) &&
-                    !x.equals(p2)) {
-                antinodes.add(x);
+        Set<Point> result = new HashSet<>();
+        List.of(p1.add(diff),
+                p2.add(diff),
+                p1.sub(diff),
+                p2.sub(diff)).forEach(x -> {
+            if (x.equals(p1) || x.equals(p2)) {
+                return;
             }
+            if (!signals.contains(x)) {
+                return;
+            }
+            result.add(x);
         });
+
+        return result;
     }
 
-    void findAntinodes(SignalMap signalMap) {
-        for (Day8.Pair p : pairs(signalMap.get('a'))) {
-            addAntinodes(p.p1(), p.p2(), signalMap);
+    static Set<Point> findAntinodes(SignalMap signals) {
+        Set<Point> result = new HashSet<>();
+        for (Day8.Pair p : pairs(signals.get('a'))) {
+            result.addAll(findAntinodes(p.p1(), p.p2(), signals));
         }
+        return result;
     }
 }

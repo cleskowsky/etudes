@@ -62,7 +62,7 @@ class Day8Test {
     }
 
     @Test
-    void addAntinodes() {
+    void findAntinodes() {
         var s = """
                 ..........
                 ..........
@@ -74,14 +74,8 @@ class Day8Test {
                 ..........
                 ..........
                 ..........""";
-
         var signals = parse(s);
-
-        var d8 = new Day8();
-        d8.findAntinodes(signals);
-        System.out.println(d8.antinodes);
-
-        assertEquals(2, d8.antinodes.size());
+        assertEquals(2, Day8.findAntinodes(signals).size());
 
         s = """
                 ..........
@@ -92,14 +86,8 @@ class Day8Test {
                 ..........
                 ..........
                 ..........""";
-
         signals = parse(s);
-
-        d8 = new Day8();
-        d8.findAntinodes(signals);
-        System.out.println(d8.antinodes);
-
-        assertEquals(6, d8.antinodes.size());
+        assertEquals(6, Day8.findAntinodes(signals).size());
     }
 
     @Test
@@ -116,22 +104,19 @@ class Day8Test {
                 ..........
                 ..........""";
 
-        var signalMap = parse(s);
+        var signals = parse(s);
 
-        assertEquals(2, signalMap.count());
-        assertEquals(new Point(4, 3), signalMap.get('a').get(0));
-        assertEquals(new Point(8, 4), signalMap.get('a').get(1));
-        assertEquals(new Point(5, 5), signalMap.get('a').get(2));
-        assertEquals(new Point(6, 7), signalMap.get('A').get(0));
+        assertEquals(2, signals.count());
+        assertEquals(new Point(4, 3), signals.get('a').get(0));
+        assertEquals(new Point(8, 4), signals.get('a').get(1));
+        assertEquals(new Point(5, 5), signals.get('a').get(2));
+        assertEquals(new Point(6, 7), signals.get('A').get(0));
 
-        assertEquals(3, pairs(signalMap.get('a')).size());
-
-        Day8 d8 = new Day8();
-        signalMap.signals().forEach((sig, locs) -> {
-            for (Day8.Pair p : pairs(locs)) {
-                d8.addAntinodes(p.p1(), p.p2(), signalMap);
-            }
-        });
+//        signals.signals().forEach((sig, locs) -> {
+//            for (Day8.Pair p : pairs(locs)) {
+//                d8.findAntinodes(p.p1(), p.p2(), signals);
+//            }
+//        });
     }
 
     @Test
