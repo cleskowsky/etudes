@@ -3,6 +3,8 @@ package net.leskowsky;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Day9 {
     public static void main(String[] args) throws IOException {
@@ -10,7 +12,7 @@ public class Day9 {
 
         var x = new Day9();
         x.example();
-        x.part1();
+//        x.part1();
     }
 
     void example() {
@@ -19,34 +21,52 @@ public class Day9 {
         String s = "2333133121414131402";
 
         System.out.println(unpack(s));
-        assert unpack(s).equals("00...111...2...333.44.5555.6666.777.888899");
+        assert unpack(s).toString().equals("00...111...2...333.44.5555.6666.777.888899");
+    }
+
+    static record Block(String fileId) {
+    }
+
+    static class FileSystem {
+        List<Block> blocks = new ArrayList<>();
+
+        @Override
+        public String toString() {
+            var sb = new StringBuilder();
+            for (var block : blocks) {
+                sb.append(block.fileId());
+            }
+            return sb.toString();
+        }
     }
 
     /**
      * Returns expanded string after compaction removed
      */
-    String unpack(String s) {
-        var result = new StringBuilder();
+    FileSystem unpack(String s) {
+        var result = new FileSystem();
 
         int fileId = 0;
         boolean fileBlock = true;
         for (char c : s.toCharArray()) {
             if (fileBlock) {
                 // add file blocks
-                var fileName = String.valueOf(fileId);
-                result.append(fileName.repeat(Character.getNumericValue(c)));
+                for (int i = 0; i < Character.getNumericValue(c); i++) {
+                    result.blocks.add(new Block(String.valueOf(fileId)));
+                }
                 fileBlock = false;
-
                 fileId++;
             } else {
                 // add free blocks
-                result.append(".".repeat(Character.getNumericValue(c)));
+                for (int i = 0; i < Character.getNumericValue(c); i++) {
+                    result.blocks.add(new Block("."));
+                }
                 fileBlock = true;
             }
         }
         System.out.println("finished unpack");
 
-        return result.toString();
+        return result;
     }
 
     void part1() throws IOException {
