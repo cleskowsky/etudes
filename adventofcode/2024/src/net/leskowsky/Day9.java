@@ -1,8 +1,6 @@
 package net.leskowsky;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +10,7 @@ public class Day9 {
 
         var x = new Day9();
         x.example();
-//        x.part1();
+        x.part1();
     }
 
     void example() {
@@ -24,7 +22,7 @@ public class Day9 {
         assert unpack(s).toString().equals("00...111...2...333.44.5555.6666.777.888899");
     }
 
-    static record Block(String fileId) {
+    record Block(String fileId) {
     }
 
     static class FileSystem {
@@ -76,9 +74,10 @@ public class Day9 {
         // Likely a representation that's going to be easier on ram
 
         System.out.println("part1");
+        throw new IOException();
 
-        var s = Files.readString(Path.of("inputs/day9.txt"));
-        System.out.println(unpack(s));
+//        var s = Files.readString(Path.of("inputs/day9.txt"));
+//        System.out.println(unpack(s));
 
         // Well this does work, but I've lost information about where
         // files begin and end (some free block runs are 0-length)
