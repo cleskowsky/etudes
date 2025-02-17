@@ -29,6 +29,8 @@ public class Day9 {
         compact(x);
         System.out.println(x);
         assert x.toString().equals("0099811188827773336446555566..............");
+
+        System.out.println(checksum(x));
     }
 
     record Block(String fileId) {
@@ -71,7 +73,7 @@ public class Day9 {
     /**
      * Returns expanded string after compaction removed
      */
-    FileSystem unpack(String s) {
+    private FileSystem unpack(String s) {
         var result = new FileSystem();
 
         int fileId = 0;
@@ -114,7 +116,7 @@ public class Day9 {
     /**
      * Returns fs with free blocks packed by file data
      */
-    void compact(FileSystem fs) {
+    private void compact(FileSystem fs) {
         System.out.println("compact");
 
         int tail = fs.blocks.size() - 1;
@@ -145,5 +147,23 @@ public class Day9 {
                 break;
             }
         }
+    }
+
+    /**
+     * Returns calculated checksum for filesystem
+     */
+    private long checksum(FileSystem fs) {
+        System.out.println("checksum");
+
+        var result = 0;
+        for (int i = 0; i < fs.blocks.size(); i++) {
+            var x = fs.blocks.get(i);
+            if (x.fileId().equals(".")) {
+                continue;
+            }
+            result += i * Integer.parseInt(fs.blocks.get(i).fileId());
+        }
+
+        return result;
     }
 }
