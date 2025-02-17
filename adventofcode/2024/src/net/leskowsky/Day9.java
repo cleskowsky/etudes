@@ -31,6 +31,7 @@ public class Day9 {
         assert x.toString().equals("0099811188827773336446555566..............");
 
         System.out.println(checksum(x));
+        assert 1928 == checksum(x);
     }
 
     record Block(String fileId) {
@@ -52,8 +53,8 @@ public class Day9 {
         }
 
         boolean hasFree() {
-            for (int i = 0; i < blocks.size(); i++) {
-                if (blocks.get(i).free()) {
+            for (Block block : blocks) {
+                if (block.free()) {
                     return true;
                 }
             }
@@ -111,26 +112,29 @@ public class Day9 {
 
         // Well this does work, but I've lost information about where
         // files begin and end (some free block runs are 0-length)
+
+        var x = compact(unpack(s));
+        System.out.println(checksum(x));
     }
 
     /**
      * Returns fs with free blocks packed by file data
      */
-    private void compact(FileSystem fs) {
+    private FileSystem compact(FileSystem fs) {
         System.out.println("compact");
 
         int tail = fs.blocks.size() - 1;
         while (true) {
             // stop if there are no free data blocks
             if (!fs.hasFree()) {
-                return;
+                break;
             }
 
             // find next free block
             // stop when next free is past tail
             int nextFree = fs.nextFree();
             if (nextFree > tail) {
-                return;
+                break;
             }
 
             // swap free and data blocks
@@ -147,6 +151,8 @@ public class Day9 {
                 break;
             }
         }
+
+        return fs;
     }
 
     /**
@@ -155,13 +161,13 @@ public class Day9 {
     private long checksum(FileSystem fs) {
         System.out.println("checksum");
 
-        var result = 0;
+        long result = 0;
         for (int i = 0; i < fs.blocks.size(); i++) {
             var x = fs.blocks.get(i);
             if (x.fileId().equals(".")) {
                 continue;
             }
-            result += i * Integer.parseInt(fs.blocks.get(i).fileId());
+            result += i * Long.parseLong(fs.blocks.get(i).fileId());
         }
 
         return result;
