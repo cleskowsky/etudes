@@ -1,6 +1,8 @@
 package net.leskowsky;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,11 +20,21 @@ public class Day9 {
 
         String s = "2333133121414131402";
 
-        System.out.println(unpack(s));
-        assert unpack(s).toString().equals("00...111...2...333.44.5555.6666.777.888899");
+        // unpack input
+        var x = unpack(s);
+        System.out.println(x);
+        assert x.toString().equals("00...111...2...333.44.5555.6666.777.888899");
+
+        // then compact
+        compact(x);
+        System.out.println(x);
+        assert x.toString().equals("0099811188827773336446555566..............");
     }
 
     record Block(String fileId) {
+        boolean free() {
+            return fileId.equals(".");
+        }
     }
 
     static class FileSystem {
@@ -35,6 +47,24 @@ public class Day9 {
                 sb.append(block.fileId());
             }
             return sb.toString();
+        }
+
+        boolean hasFree() {
+            for (int i = 0; i < blocks.size(); i++) {
+                if (blocks.get(i).free()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        int nextFree() {
+            for (int i = 0; i < blocks.size(); i++) {
+                if (blocks.get(i).free()) {
+                    return i;
+                }
+            }
+            throw new RuntimeException("Couldn't find free block");
         }
     }
 
@@ -74,12 +104,46 @@ public class Day9 {
         // Likely a representation that's going to be easier on ram
 
         System.out.println("part1");
-        throw new IOException();
 
-//        var s = Files.readString(Path.of("inputs/day9.txt"));
-//        System.out.println(unpack(s));
+        var s = Files.readString(Path.of("inputs/day9.txt"));
 
         // Well this does work, but I've lost information about where
         // files begin and end (some free block runs are 0-length)
+    }
+
+    /**
+     * Returns fs with free blocks packed by file data
+     */
+    void compact(FileSystem fs) {
+        System.out.println("compact");
+
+        int tail = fs.blocks.size() - 1;
+        while (true) {
+            // stop if there are no free data blocks
+            if (!fs.hasFree()) {
+                return;
+            }
+
+            // find next free block
+            // stop when next free is past tail
+            int nextFree = fs.nextFree();
+            if (nextFree > tail) {
+                return;
+            }
+
+            // swap free and data blocks
+            Block b = fs.blocks.get(nextFree);
+            fs.blocks.set(nextFree, fs.blocks.get(tail));
+            fs.blocks.set(tail, b);
+
+            // find next data block at fs end
+            for (int i = tail; i >= 0; i--) {
+                if (fs.blocks.get(i).free()) {
+                    continue;
+                }
+                tail = i;
+                break;
+            }
+        }
     }
 }
