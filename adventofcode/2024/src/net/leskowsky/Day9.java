@@ -17,7 +17,9 @@ public class Day9 {
         System.out.println("example");
 
         String s = "2333133121414131402";
+
         System.out.println(unpack(s));
+        assert unpack(s).equals("00...111...2...333.44.5555.6666.777.888899");
     }
 
     /**
@@ -57,5 +59,8 @@ public class Day9 {
 
         var s = Files.readString(Path.of("inputs/day9.txt"));
         System.out.println(unpack(s));
+
+        // Well this does work, but I've lost information about where
+        // files begin and end (some free block runs are 0-length)
     }
 }
