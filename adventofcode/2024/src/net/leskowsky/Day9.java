@@ -13,6 +13,8 @@ public class Day9 {
         var x = new Day9();
         x.example();
         x.part1();
+        x.example2();
+//        x.part2();
     }
 
     void example() {
@@ -172,4 +174,54 @@ public class Day9 {
 
         return result;
     }
+
+    void example2() throws IOException {
+        System.out.println("example2");
+
+        String s = "2333133121414131402";
+        System.out.println(checksum(compact2(unpack(s))));
+    }
+
+    private FileSystem compact2(FileSystem fs) {
+        System.out.println("compact2");
+
+        var tail = fs.blocks.size() - 1;
+        while (tail > 0) {
+            var b = fs.blocks.get(tail);
+            if (!b.free()) {
+                // find file at end
+                var blocks = reverseFindFile(tail, fs);
+                tail -= blocks.size();
+
+                // move file blocks to first fit free space
+                relocate(blocks, fs);
+            }
+        }
+
+        return fs;
+    }
+
+    List<Integer> reverseFindFile(int blockId, FileSystem fs) {
+        var result = new ArrayList<Integer>();
+        result.add(blockId);
+
+        var currFile = fs.blocks.get(blockId).fileId();
+        while (true) {
+            blockId--;
+            if (currFile.equals(fs.blocks.get(blockId).fileId())) {
+                result.add(blockId);
+            } else {
+                break;
+            }
+        }
+
+        return result;
+    }
+
+//    void part2() throws IOException {
+//        System.out.println("part2");
+//
+//        var s = Files.readString(Path.of("inputs/day9.txt"));
+//        System.out.println(compact2(checksum(x)));
+//    }
 }
