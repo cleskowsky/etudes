@@ -71,6 +71,24 @@ public class Day9 {
             }
             throw new RuntimeException("Couldn't find free block");
         }
+
+        int nextContiguousFree(int fileLength) {
+            for (int i = 0; i < blocks.size() - fileLength; i++) {
+                if (blocks.get(i).free()) {
+                    var found = new ArrayList<Integer>();
+                    for (int j = 0; j < fileLength; j++) {
+                        if (blocks.get(i + j).free()) {
+                            found.add(i + j);
+                        }
+                    }
+                    if (found.size() == fileLength) {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
     }
 
     /**
@@ -177,10 +195,11 @@ public class Day9 {
 
     void example2() throws IOException {
         System.out.println("example2");
-
         String s = "2333133121414131402";
         System.out.println(checksum(compact2(unpack(s))));
     }
+
+    static boolean debug = true;
 
     private FileSystem compact2(FileSystem fs) {
         System.out.println("compact2");
@@ -190,11 +209,22 @@ public class Day9 {
             var b = fs.blocks.get(tail);
             if (!b.free()) {
                 // find file at end
-                var blocks = reverseFindFile(tail, fs);
-                tail -= blocks.size();
+                var blockIds = reverseFindFile(tail, fs);
+                tail -= blockIds.size();
+
+                if (debug) {
+                    var x = "";
+                    for (int id : blockIds) {
+                        x += fs.blocks.get(id).fileId();
+                    }
+                    System.out.println("Found file: " + x);
+                    System.out.println("Tail: " + tail);
+                }
 
                 // move file blocks to first fit free space
-                relocate(blocks, fs);
+                relocate(blockIds, fs);
+            } else {
+                tail--;
             }
         }
 
@@ -206,7 +236,7 @@ public class Day9 {
         result.add(blockId);
 
         var currFile = fs.blocks.get(blockId).fileId();
-        while (true) {
+        while (blockId > 0) {
             blockId--;
             if (currFile.equals(fs.blocks.get(blockId).fileId())) {
                 result.add(blockId);
@@ -218,10 +248,34 @@ public class Day9 {
         return result;
     }
 
+    private void relocate(List<Integer> blockIds, FileSystem fs) {
+        int startAt = fs.nextContiguousFree(blockIds.size());
+        if (startAt == -1) {
+            // No suitable free block found
+            return;
+        }
+
+        if (startAt > blockIds.getFirst()) {
+            // Don't move files right
+            return;
+        }
+
+        System.out.println("fs before relocate: " + fs);
+        for (int i = 0; i < blockIds.size(); i++) {
+            var blockId = blockIds.get(i);
+            var fileId = fs.blocks.get(blockId).fileId();
+            fs.blocks.set(startAt + i, new Block(fileId));
+            fs.blocks.set(blockId, new Block("."));
+        }
+        System.out.println("fs after relocate: " + fs);
+    }
+
 //    void part2() throws IOException {
 //        System.out.println("part2");
 //
 //        var s = Files.readString(Path.of("inputs/day9.txt"));
 //        System.out.println(compact2(checksum(x)));
 //    }
+
+
 }
