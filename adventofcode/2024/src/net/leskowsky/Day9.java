@@ -14,7 +14,7 @@ public class Day9 {
         x.example();
         x.part1();
         x.example2();
-//        x.part2();
+        x.part2();
     }
 
     void example() {
@@ -199,7 +199,7 @@ public class Day9 {
         System.out.println(checksum(compact2(unpack(s))));
     }
 
-    static boolean debug = true;
+    static boolean debug = false;
 
     private FileSystem compact2(FileSystem fs) {
         System.out.println("compact2");
@@ -260,22 +260,25 @@ public class Day9 {
             return;
         }
 
-        System.out.println("fs before relocate: " + fs);
+        var before = fs.toString();
+
         for (int i = 0; i < blockIds.size(); i++) {
             var blockId = blockIds.get(i);
             var fileId = fs.blocks.get(blockId).fileId();
             fs.blocks.set(startAt + i, new Block(fileId));
             fs.blocks.set(blockId, new Block("."));
         }
-        System.out.println("fs after relocate: " + fs);
+
+        var after = fs.toString();
+
+        if (debug) {
+            System.out.printf("before=%s after=%s\n", before, after);
+        }
     }
 
-//    void part2() throws IOException {
-//        System.out.println("part2");
-//
-//        var s = Files.readString(Path.of("inputs/day9.txt"));
-//        System.out.println(compact2(checksum(x)));
-//    }
-
-
+    void part2() throws IOException {
+        System.out.println("part2");
+        var s = Files.readString(Path.of("inputs/day9.txt"));
+        System.out.println(checksum(compact2(unpack(s))));
+    }
 }
