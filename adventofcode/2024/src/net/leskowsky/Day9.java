@@ -193,7 +193,7 @@ public class Day9 {
         return result;
     }
 
-    void example2() throws IOException {
+    void example2() {
         System.out.println("example2");
         String s = "2333133121414131402";
         System.out.println(checksum(compact2(unpack(s))));
@@ -213,9 +213,9 @@ public class Day9 {
                 tail -= blockIds.size();
 
                 if (debug) {
-                    var x = "";
+                    StringBuilder x = new StringBuilder();
                     for (int id : blockIds) {
-                        x += fs.blocks.get(id).fileId();
+                        x.append(fs.blocks.get(id).fileId());
                     }
                     System.out.println("Found file: " + x);
                     System.out.println("Tail: " + tail);
