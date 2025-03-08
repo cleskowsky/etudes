@@ -72,8 +72,8 @@ public class Day10 {
 
         while (!seen.isEmpty()) {
             var trail = seen.removeFirst();
-            var curr = trail.path.getLast();
-            var next = moveDirections(curr);
+            Point curr = trail.path.getLast();
+            List<Point> next = moveDirections(curr);
         }
 
         return found;
