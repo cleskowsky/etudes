@@ -11,6 +11,7 @@ public class Day10 {
     public static void main(String[] args) {
         var d = new Day10();
         d.example();
+        d.example2();
     }
 
     void example() {
@@ -21,10 +22,8 @@ public class Day10 {
                 1234
                 8765
                 9876""";
-        System.out.println(s);
 
         var hm = parseInput(s);
-        System.out.println(hm);
 
         // all trails that go from a '0' position to any '9' position
         List<Trail> found = findAllTrails(hm);
@@ -34,7 +33,7 @@ public class Day10 {
         for (Trail t : found) {
             hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
         }
-        System.out.println(hikingTrails);
+        System.out.println("hikingTrails: " + hikingTrails);
         assert hikingTrails.size() == 1;
     }
 
@@ -53,6 +52,11 @@ public class Day10 {
         return result;
     }
 
+    /**
+     * Returns coords in heightMap with height 0
+     *
+     * @param heightMap
+     */
     List<Trail> findTrailHeads(Map<Point, Integer> heightMap) {
         var trailHeads = heightMap.entrySet().stream()
                 .filter(e -> e.getValue() == 0)
@@ -69,12 +73,19 @@ public class Day10 {
         return seen;
     }
 
+    /**
+     * Returns all paths from a start coord to on with height 9
+     * Note: There may be several ways to get to the 9 coord from 0
+     *
+     * @param hm
+     */
     List<Trail> findAllTrails(HeightMap hm) {
         var found = new ArrayList<Trail>();
 
         List<Trail> seen = findTrailHeads(hm);
-        System.out.println(seen);
-        assert seen.size() == 1;
+        if (debug) {
+            System.out.println(seen);
+        }
 
         while (!seen.isEmpty()) {
             if (debug) {
@@ -120,6 +131,13 @@ public class Day10 {
         }
     }
 
+    /**
+     * Given a coord and a heightMap, find neighbour coords that are
+     * 1 degree higher
+     *
+     * @param fromPos
+     * @param hm
+     */
     List<Point> nextMoves(Point fromPos, HeightMap hm) {
         var result = new ArrayList<Point>();
 
@@ -149,5 +167,30 @@ public class Day10 {
     }
 
     record Pair(Point a, Point b) {
+    }
+
+    void example2() {
+        var s = """
+                89010123
+                78121874
+                87430965
+                96549874
+                45678903
+                32019012
+                01329801
+                10456732""";
+
+        var hm = parseInput(s);
+
+        // all trails that go from a '0' position to any '9' position
+        List<Trail> found = findAllTrails(hm);
+
+        // unique trails by (start, end) pairs
+        Set<Pair> hikingTrails = new HashSet<>();
+        for (Trail t : found) {
+            hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
+        }
+        System.out.println("hikingTrails: " + hikingTrails);
+        assert hikingTrails.size() == 36;
     }
 }
