@@ -216,7 +216,6 @@ public class Day10 {
             hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
         }
         System.out.println("hikingTrails: " + hikingTrails);
-        System.out.println(hikingTrails.size());
-//        assert hikingTrails.size() == 36;
+        assert hikingTrails.size() == 459;
     }
 }
