@@ -1,5 +1,8 @@
 import util.Point;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -12,6 +15,11 @@ public class Day10 {
         var d = new Day10();
         d.example();
         d.example2();
+        try {
+            d.part1();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     void example() {
@@ -110,7 +118,7 @@ public class Day10 {
         return found;
     }
 
-    static final boolean debug = true;
+    static final boolean debug = false;
 
     static class HeightMap extends HashMap<Point, Integer> {
         Integer get(Point point) {
@@ -192,5 +200,23 @@ public class Day10 {
         }
         System.out.println("hikingTrails: " + hikingTrails);
         assert hikingTrails.size() == 36;
+    }
+
+    void part1() throws IOException {
+        var s = Files.readString(Path.of("inputs/day10.txt"));
+
+        var hm = parseInput(s);
+
+        // all trails that go from a '0' position to any '9' position
+        List<Trail> found = findAllTrails(hm);
+
+        // unique trails by (start, end) pairs
+        Set<Pair> hikingTrails = new HashSet<>();
+        for (Trail t : found) {
+            hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
+        }
+        System.out.println("hikingTrails: " + hikingTrails);
+        System.out.println(hikingTrails.size());
+//        assert hikingTrails.size() == 36;
     }
 }
