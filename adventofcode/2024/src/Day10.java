@@ -28,7 +28,8 @@ public class Day10 {
         List<Trail> seen = findTrailHeads(heightMap);
         System.out.println(seen);
 
-        List<Trail> found = new ArrayList<>();
+        List<Trail> found = findLongTrails(seen);
+        System.out.println(found);
     }
 
     private static List<Trail> findTrailHeads(Map<Point, Integer> heightMap) {
