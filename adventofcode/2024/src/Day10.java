@@ -1,6 +1,9 @@
-import net.leskowsky.Point;
+import util.Point;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Day10 {
@@ -21,6 +24,25 @@ public class Day10 {
 
         var heightMap = parseInput(s);
         System.out.println(heightMap);
+
+        var trailHeads = heightMap.entrySet().stream()
+                .filter(e -> e.getValue() == 0)
+                .map(Map.Entry::getKey)
+                .toList();
+        System.out.println(trailHeads);
+
+        List<Trail> seen = new ArrayList<>();
+        for (var entryPoint : trailHeads) {
+            var path = new ArrayList<Point>();
+            path.add(entryPoint);
+            seen.add(new Trail(path));
+        }
+        System.out.println(seen);
+
+        List<Trail> found = new ArrayList<>();
+    }
+
+    record Trail(List<Point> path) {
     }
 
     Map<Point, Integer> parseInput(String s) {
