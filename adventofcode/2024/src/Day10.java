@@ -23,26 +23,16 @@ public class Day10 {
     }
 
     void example() {
-        System.out.println("part 1, first example");
+        System.out.println("example");
 
         var s = """
                 0123
                 1234
                 8765
                 9876""";
-
         var hm = parseInput(s);
 
-        // all trails that go from a '0' position to any '9' position
-        List<Trail> found = findAllTrails(hm);
-
-        // unique trails by (start, end) pairs
-        Set<Pair> hikingTrails = new HashSet<>();
-        for (Trail t : found) {
-            hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
-        }
-        System.out.println("hikingTrails: " + hikingTrails);
-        assert hikingTrails.size() == 1;
+        assert scores(findAllTrails(hm)) == 1;
     }
 
     HeightMap parseInput(String s) {
@@ -82,8 +72,7 @@ public class Day10 {
     }
 
     /**
-     * Returns all paths from a start coord to on with height 9
-     * Note: There may be several ways to get to the 9 coord from 0
+     * All trails that go from a '0' to '9'
      *
      * @param hm
      */
@@ -140,21 +129,20 @@ public class Day10 {
     }
 
     /**
-     * Given a coord and a heightMap, find neighbour coords that are
-     * 1 degree higher
+     * Find neighbours that are higher than from by 1
      *
-     * @param fromPos
+     * @param from
      * @param hm
      */
-    List<Point> nextMoves(Point fromPos, HeightMap hm) {
+    List<Point> nextMoves(Point from, HeightMap hm) {
         var result = new ArrayList<Point>();
 
-        var currHeight = hm.get(fromPos);
+        var currHeight = hm.get(from);
 
         for (Heading h : Heading.values()) {
             var nextPos = new Point(
-                    fromPos.x() + h.facing.x(),
-                    fromPos.y() + h.facing.y()
+                    from.x() + h.facing.x(),
+                    from.y() + h.facing.y()
             );
             if (hm.get(nextPos) == currHeight + 1) {
                 result.add(nextPos);
@@ -178,6 +166,7 @@ public class Day10 {
     }
 
     void example2() {
+        System.out.println("example2");
         var s = """
                 89010123
                 78121874
@@ -187,35 +176,31 @@ public class Day10 {
                 32019012
                 01329801
                 10456732""";
-
         var hm = parseInput(s);
 
-        // all trails that go from a '0' position to any '9' position
-        List<Trail> found = findAllTrails(hm);
-
-        // unique trails by (start, end) pairs
-        Set<Pair> hikingTrails = new HashSet<>();
-        for (Trail t : found) {
-            hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
-        }
-        System.out.println("hikingTrails: " + hikingTrails);
-        assert hikingTrails.size() == 36;
+        assert scores(findAllTrails(hm)) == 36;
     }
 
     void part1() throws IOException {
+        System.out.println("part1");
+
         var s = Files.readString(Path.of("inputs/day10.txt"));
 
         var hm = parseInput(s);
+        assert scores(findAllTrails(hm)) == 459;
+    }
 
-        // all trails that go from a '0' position to any '9' position
-        List<Trail> found = findAllTrails(hm);
-
+    /**
+     * Counts unique (start, end) trails
+     *
+     * @param found
+     */
+    int scores(List<Trail> found) {
         // unique trails by (start, end) pairs
         Set<Pair> hikingTrails = new HashSet<>();
         for (Trail t : found) {
             hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
         }
-        System.out.println("hikingTrails: " + hikingTrails);
-        assert hikingTrails.size() == 459;
+        return hikingTrails.size();
     }
 }
