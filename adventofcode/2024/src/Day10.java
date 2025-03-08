@@ -25,6 +25,13 @@ public class Day10 {
         var heightMap = parseInput(s);
         System.out.println(heightMap);
 
+        List<Trail> seen = findTrailHeads(heightMap);
+        System.out.println(seen);
+
+        List<Trail> found = new ArrayList<>();
+    }
+
+    private static List<Trail> findTrailHeads(Map<Point, Integer> heightMap) {
         var trailHeads = heightMap.entrySet().stream()
                 .filter(e -> e.getValue() == 0)
                 .map(Map.Entry::getKey)
@@ -37,9 +44,7 @@ public class Day10 {
             path.add(entryPoint);
             seen.add(new Trail(path));
         }
-        System.out.println(seen);
-
-        List<Trail> found = new ArrayList<>();
+        return seen;
     }
 
     record Trail(List<Point> path) {
