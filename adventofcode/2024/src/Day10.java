@@ -1,7 +1,6 @@
 import util.Point;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,13 +25,15 @@ public class Day10 {
         System.out.println(heightMap);
 
         List<Trail> seen = findTrailHeads(heightMap);
+        assert seen.size() == 1;
         System.out.println(seen);
 
         List<Trail> found = findLongTrails(seen);
+        assert found.size() == 1;
         System.out.println(found);
     }
 
-    private static List<Trail> findTrailHeads(Map<Point, Integer> heightMap) {
+    List<Trail> findTrailHeads(Map<Point, Integer> heightMap) {
         var trailHeads = heightMap.entrySet().stream()
                 .filter(e -> e.getValue() == 0)
                 .map(Map.Entry::getKey)
@@ -64,5 +65,17 @@ public class Day10 {
         }
 
         return result;
+    }
+
+    List<Trail> findLongTrails(List<Trail> seen) {
+        var found = new ArrayList<Trail>();
+
+        while (!seen.isEmpty()) {
+            var trail = seen.removeFirst();
+            var curr = trail.path.getLast();
+            var next = moveDirections(curr);
+        }
+
+        return found;
     }
 }
