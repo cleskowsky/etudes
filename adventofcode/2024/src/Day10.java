@@ -2,8 +2,10 @@ import util.Point;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Day10 {
     public static void main(String[] args) {
@@ -24,9 +26,16 @@ public class Day10 {
         var hm = parseInput(s);
         System.out.println(hm);
 
-        List<Trail> found = findLongTrails(hm);
-        System.out.println("found: " + found);
-        assert found.size() == 1;
+        // all trails that go from a '0' position to any '9' position
+        List<Trail> found = findAllTrails(hm);
+
+        // unique trails by (start, end) pairs
+        Set<Pair> hikingTrails = new HashSet<>();
+        for (Trail t : found) {
+            hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
+        }
+        System.out.println(hikingTrails);
+        assert hikingTrails.size() == 1;
     }
 
     HeightMap parseInput(String s) {
@@ -60,7 +69,7 @@ public class Day10 {
         return seen;
     }
 
-    List<Trail> findLongTrails(HeightMap hm) {
+    List<Trail> findAllTrails(HeightMap hm) {
         var found = new ArrayList<Trail>();
 
         List<Trail> seen = findTrailHeads(hm);
@@ -137,5 +146,8 @@ public class Day10 {
         public Trail(Trail t) {
             super(t);
         }
+    }
+
+    record Pair(Point a, Point b) {
     }
 }
