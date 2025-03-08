@@ -11,15 +11,12 @@ import java.util.Map;
 import java.util.Set;
 
 public class Day10 {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var d = new Day10();
         d.example();
         d.example2();
-        try {
-            d.part1();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        d.part1();
+        d.part2();
     }
 
     void example() {
@@ -202,5 +199,14 @@ public class Day10 {
             hikingTrails.add(new Pair(t.getFirst(), t.getLast()));
         }
         return hikingTrails.size();
+    }
+
+    void part2() throws IOException {
+        System.out.println("part2");
+
+        var s = Files.readString(Path.of("inputs/day10.txt"));
+
+        var hm = parseInput(s);
+        assert findAllTrails(hm).size() == 1034;
     }
 }
