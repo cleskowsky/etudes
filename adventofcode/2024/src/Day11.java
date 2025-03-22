@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 import java.util.List;
 
 public class Day11 {
@@ -17,50 +16,9 @@ public class Day11 {
         System.out.println(blink(stones, 6));
     }
 
-    /**
-     * Returns the stones after a blink
-     * 
-     * @param s
-     */
+    // Return stones after n blinks
     int blink(List<Long> stones, int rounds) {
-
-        var val = new ArrayList<Long>(stones);
-
-        for (int i = 0; i < rounds; i++) {
-
-            // a scratch list to store stones after each round
-            var result = new ArrayList<Long>();
-
-            for (var s : val) {
-                // 0 becomes 1
-                if (s == 0) {
-                    result.add(1l);
-                    continue;
-                }
-
-                // even number of digits - splits into 2
-                if (s.toString().length() % 2 == 0) {
-                    var str = s.toString();
-                    var half = str.length() / 2;
-                    var first = Long.parseLong(str.substring(0, half));
-                    var second = Long.parseLong(str.substring(half));
-                    result.add(first);
-                    result.add(second);
-                    continue;
-                }
-
-                // default - *2024
-                result.add(s * 2024);
-            }
-
-            if (debug) {
-                System.out.println(result);
-            }
-
-            val = result;
-        }
-
-        return val.size();
+        return 0;
     }
 
     static boolean debug = false;
