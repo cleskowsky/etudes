@@ -12,9 +12,8 @@ public class Day11 {
 
     void example() {
         System.out.println("example");
-
         var stones = List.of(125L, 17L);
-        System.out.println(blink(stones, 6));
+        assert blink(stones, 25) == 55312;
     }
 
     // Return stones after n blinks
