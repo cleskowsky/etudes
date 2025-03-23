@@ -89,9 +89,10 @@ public class Day11 {
         var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
         long val = 0;
 
+        var n = 45;
         for (var s : stones) {
-            System.out.println("Blinking " + s + " 25 times");
-            val += blink(List.of(s), 25);
+            System.out.printf("Blinking %d %d times\n", s, n);
+            val += blink(List.of(s), n);
         }
 
         System.out.println(val);
