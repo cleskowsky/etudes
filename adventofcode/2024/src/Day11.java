@@ -7,7 +7,7 @@ public class Day11 {
 
         var d = new Day11();
         d.example();
-//        d.part1();
+        d.part1();
     }
 
     void example() {
@@ -76,10 +76,9 @@ public class Day11 {
 
     static boolean debug = false;
 
-//    void part1() {
-//        System.out.println("part 1");
-//
-//        var stones = List.of(5l, 89749l, 6061l, 43l, 867l, 1965860l, 0l, 206250l);
-//        System.out.println(blink(stones, 25));
-//    }
+    void part1() {
+        System.out.println("part 1");
+        var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
+        assert blink(stones, 25) == 203609;
+    }
 }
