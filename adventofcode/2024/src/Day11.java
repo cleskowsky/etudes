@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Day11 {
     public static void main(String[] args) {
@@ -7,33 +9,45 @@ public class Day11 {
 
         var d = new Day11();
         d.example();
-        d.part1();
-        d.part2();
+//        d.part1();
+//        d.part2();
     }
 
     void example() {
         System.out.println("example");
         var stones = List.of(125L, 17L);
+        System.out.println(blink(stones, 25));
         assert blink(stones, 25) == 55312;
     }
 
     // Return stones after n blinks
-    int blink(List<Long> stones, int rounds) {
+    long blink(List<Long> stones, int rounds) {
 
         if (debug) {
             System.out.println("Blinking " + rounds + " times");
             System.out.println("stones=" + stones);
         }
 
-        var val = 0;
+        var val = 0L;
 
         if (rounds == 0) {
             // return number of stones in final round
             val += stones.size();
         } else {
             // blink first
-            var x = blink(stones.getFirst());
-            val += blink(x, rounds - 1);
+            // use cached stone value for rounds if available
+            var stoneVal = blinkCache.get(new BlinkCacheKey(stones.getFirst(), rounds - 1));
+            if (stoneVal == null) {
+                var x = blink(stones.getFirst());
+                stoneVal = blink(x, rounds - 1);
+            }
+            val += stoneVal;
+
+            // cache value for stone after n rounds
+            blinkCache.put(
+                    new BlinkCacheKey(stones.getFirst(), rounds - 1),
+                    stoneVal
+            );
 
             // blink rest
             if (stones.size() > 1) {
@@ -42,6 +56,11 @@ public class Day11 {
         }
 
         return val;
+    }
+
+    Map<BlinkCacheKey, Long> blinkCache = new HashMap<>();
+
+    record BlinkCacheKey(long stone, int round) {
     }
 
     private static List<Long> blink(Long s) {
