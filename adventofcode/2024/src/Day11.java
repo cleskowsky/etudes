@@ -8,9 +8,12 @@ public class Day11 {
         System.out.println("day 11");
 
         var d = new Day11();
-        d.example();
+
+//        d.example();
 //        d.part1();
-//        d.part2();
+        var start = System.currentTimeMillis();
+        d.part2();
+        System.out.println("example took " + (System.currentTimeMillis() - start) + "ms");
     }
 
     void example() {
@@ -22,7 +25,6 @@ public class Day11 {
 
     // Return stones after n blinks
     long blink(List<Long> stones, int rounds) {
-
         if (debug) {
             System.out.println("Blinking " + rounds + " times");
             System.out.println("stones=" + stones);
@@ -36,6 +38,7 @@ public class Day11 {
         } else {
             // blink first
             // use cached stone value for rounds if available
+//            Long stoneVal = null;
             var stoneVal = blinkCache.get(new BlinkCacheKey(stones.getFirst(), rounds - 1));
             if (stoneVal == null) {
                 var x = blink(stones.getFirst());
