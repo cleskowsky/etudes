@@ -20,36 +20,44 @@ public class Day11 {
     // Return stones after n blinks
     int blink(List<Long> stones, int rounds) {
 
-        var val = new ArrayList<Long>(stones);
-
-        for (int i = 0; i < rounds; i++) {
-
-            // a scratch list to store stones after each round
-            var result = new ArrayList<Long>();
-
-            for (var s : val) {
-                var x = blink(s);
-                result.addAll(x);
-            }
-
-            if (debug) {
-                System.out.println(result);
-            }
-
-            val = result;
+        if (debug) {
+            System.out.println("Blinking " + rounds + " times");
+            System.out.println("stones=" + stones);
         }
 
-        return val.size();
+        var val = 0;
+
+        if (rounds == 0) {
+            // return number of stones in final round
+            val += stones.size();
+        } else {
+            // blink first
+            var x = blink(stones.getFirst());
+            val += blink(x, rounds - 1);
+
+            // blink rest
+            if (stones.size() > 1) {
+                val += blink(stones.subList(1, stones.size()), rounds);
+            }
+        }
+
+        return val;
     }
 
     private static List<Long> blink(Long s) {
         var result = new ArrayList<Long>();
 
-        // 0 becomes 1
         if (s == 0) {
+            // 0 becomes 1
+            if (debug) {
+                System.out.println("0 becomes 1");
+            }
             result.add(1L);
         } else if (s.toString().length() % 2 == 0) {
             // even number of digits - splits into 2
+            if (debug) {
+                System.out.println("even number of digits - splits into 2");
+            }
             var str = s.toString();
             var half = str.length() / 2;
             var first = Long.parseLong(str.substring(0, half));
@@ -58,6 +66,9 @@ public class Day11 {
             result.add(second);
         } else {
             // default - *2024
+            if (debug) {
+                System.out.println("default - *2024");
+            }
             result.add(s * 2024);
         }
 
