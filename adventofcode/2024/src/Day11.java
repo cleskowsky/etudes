@@ -8,12 +8,9 @@ public class Day11 {
         System.out.println("day 11");
 
         var d = new Day11();
-
-//        d.example();
-//        d.part1();
-        var start = System.currentTimeMillis();
+        d.example();
+        d.part1();
         d.part2();
-        System.out.println("example took " + (System.currentTimeMillis() - start) + "ms");
     }
 
     void example() {
@@ -38,7 +35,6 @@ public class Day11 {
         } else {
             // blink first
             // use cached stone value for rounds if available
-//            Long stoneVal = null;
             var stoneVal = blinkCache.get(new BlinkCacheKey(stones.getFirst(), rounds - 1));
             if (stoneVal == null) {
                 var x = blink(stones.getFirst());
@@ -101,23 +97,19 @@ public class Day11 {
 
     void part1() {
         System.out.println("part 1");
+
         var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
-        assert blink(stones, 25) == 203609;
+        var x = blink(stones, 25);
+        System.out.println(x);
+        assert x == 203609;
     }
 
     void part2() {
         System.out.println("part 2");
 
         var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
-        long val = 0;
-
-        var n = 75;
-        for (var s : stones) {
-            System.out.printf("Blinking %d %d times\n", s, n);
-            val += blink(List.of(s), n);
-        }
-
-        System.out.println(val);
-//        assert blink(stones, 25) == 203609;
+        var x = blink(stones, 75);
+        System.out.println(x);
+        assert x == 240954878211138L;
     }
 }
