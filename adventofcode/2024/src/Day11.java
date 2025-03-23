@@ -8,6 +8,7 @@ public class Day11 {
         var d = new Day11();
         d.example();
         d.part1();
+        d.part2();
     }
 
     void example() {
@@ -80,5 +81,20 @@ public class Day11 {
         System.out.println("part 1");
         var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
         assert blink(stones, 25) == 203609;
+    }
+
+    void part2() {
+        System.out.println("part 2");
+
+        var stones = List.of(5L, 89749L, 6061L, 43L, 867L, 1965860L, 0L, 206250L);
+        long val = 0;
+
+        for (var s : stones) {
+            System.out.println("Blinking " + s + " 25 times");
+            val += blink(List.of(s), 25);
+        }
+
+        System.out.println(val);
+//        assert blink(stones, 25) == 203609;
     }
 }
