@@ -26,7 +26,7 @@ public class Day12 {
             .reduce(0, Integer::sum);
     }
 
-    class Farm extends HashMap<Point, Character> {
+    static class Farm extends HashMap<Point, Character> {
         public List<Region> getRegions() {
             return null;
         }
@@ -38,7 +38,7 @@ public class Day12 {
     record Point(int x, int y) {
     }
 
-    public static int fencePrice(Region region) {
+    static int fencePrice(Region region) {
         return 0;
     }
 
