@@ -11,12 +11,15 @@
         <maven.compiler.target>21</maven.compiler.target>
     </properties>
 
+    <build>
+        <defaultGoal>test</defaultGoal>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.28</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>
