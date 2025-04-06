@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Learn Vue 3 Attribute Binding</title>
+
+    <script src="https://unpkg.com/vue@3"></script>
+
+    <style>
+        html,
+        body {
+            height: 100%;
+        }
+
+        body {
+            display: grid;
+            place-items: center;
+        }
+
+        .text-red {
+            color: red;
+        }
+
+        .text-green {
+            color: green;
+        }
+    </style>
+</head>
+
+<body>
+
+    <p>
+        <button v-bind:class="active ? 'text-red' : 'text-green'" v-on:click="toggle">Click me</button>
+    </p>
+
+    <script>
+        // Vuejs options? style of setting up components
+        Vue.createApp({
+            data() {
+                return {
+                    active: false
+                }
+            },
+
+            methods: {
+                toggle() {
+                    this.active = !this.active
+                }
+            }
+        }).mount('body')
+    </script>
+
+</body>
+
+</html>
