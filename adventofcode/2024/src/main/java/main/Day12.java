@@ -3,7 +3,7 @@ package main;
 import java.util.HashMap;
 import java.util.List;
 
-public class Day12 {
+class Day12 {
     static class Farm extends HashMap<Point, Character> {
         List<Character> getPlots() {
             return values().stream().toList();
