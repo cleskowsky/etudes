@@ -10,8 +10,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static main.Day8.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static main.Day8.Point;
+import static main.Day8.SignalMap;
+import static main.Day8.findAntinodes;
+import static main.Day8.findAntinodes2;
 
 class Day8Test {
     private SignalMap parse(String s) {

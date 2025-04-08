@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class Day5Test {
 
     @Test
-    public void goodOrdering() throws IOException {
+    public void goodOrdering() {
         // Given a set of page pageOrderRules and a manual update ordering
         var parserResult = parseSampleInput();
 
@@ -30,7 +30,7 @@ class Day5Test {
     }
 
     @Test
-    public void badOrdering() throws IOException {
+    public void badOrdering() {
         // Given a set of page pageOrderRules and a manual update ordering
         var parserResult = parseSampleInput();
 

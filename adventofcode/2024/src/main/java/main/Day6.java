@@ -10,11 +10,8 @@ import java.util.Map;
 import java.util.Set;
 
 public class Day6 {
-    public static void main(String[] args) {
-    }
-
     // Lab
-    static record Lab(Map<Point, Boolean> floor) {
+    record Lab(Map<Point, Boolean> floor) {
         public boolean isBlocked(int x, int y) {
             return isBlocked(new Point(x, y));
         }
@@ -68,7 +65,7 @@ public class Day6 {
         }
     }
 
-    static record SeenFacing(Point pos, Direction dir) {
+    record SeenFacing(Point pos, Direction dir) {
     }
 
     // Guard
@@ -133,14 +130,6 @@ public class Day6 {
     public record Point(int x, int y) {
         public Point(Point p) {
             this(p.x, p.y);
-        }
-
-        public Point add(Point p) {
-            return new Point(x + p.x, y + p.y);
-        }
-
-        public Point sub(Point p) {
-            return new Point(x - p.x, y - p.y);
         }
     }
 }
