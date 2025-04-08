@@ -32,19 +32,6 @@ public class Day6 {
             }
         }
 
-        /**
-         * Return number of blocked squares in lab
-         */
-        public List<Point> blocked() {
-            var result = new ArrayList<Point>();
-            for (var entry : floor.entrySet()) {
-                if (floor.get(entry.getKey())) {
-                    result.add(entry.getKey());
-                }
-            }
-            return result;
-        }
-
         public void obstruct(Point p) {
             floor.put(p, true);
         }
