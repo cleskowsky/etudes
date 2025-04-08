@@ -1,4 +1,4 @@
-package net.leskowsky;
+package main;
 
 import java.io.IOException;
 import java.nio.file.Files;

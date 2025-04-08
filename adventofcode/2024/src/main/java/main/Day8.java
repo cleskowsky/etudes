@@ -1,4 +1,4 @@
-package net.leskowsky;
+package main;
 
 import java.util.HashSet;
 import java.util.List;
@@ -104,4 +104,19 @@ public class Day8 {
 
         return result;
     }
+
+    public record Point(int x, int y) {
+        public Point(Point p) {
+            this(p.x, p.y);
+        }
+
+        public Point add(Point p) {
+            return new Point(x + p.x, y + p.y);
+        }
+
+        public Point sub(Point p) {
+            return new Point(x - p.x, y - p.y);
+        }
+    }
+
 }

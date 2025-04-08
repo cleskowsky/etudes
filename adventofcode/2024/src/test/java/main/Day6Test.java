@@ -1,4 +1,4 @@
-package net.leskowsky;
+package main;
 
 import lombok.Data;
 import org.junit.jupiter.api.Test;
@@ -8,9 +8,10 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashMap;
 
-import static net.leskowsky.Day6.Direction;
-import static net.leskowsky.Day6.Guard;
-import static net.leskowsky.Day6.Lab;
+import static main.Day6.*;
+import static main.Day6.Direction;
+import static main.Day6.Guard;
+import static main.Day6.Lab;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;

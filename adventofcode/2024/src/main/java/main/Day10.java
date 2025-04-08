@@ -1,4 +1,4 @@
-import util.Point;
+package main;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -208,5 +208,8 @@ public class Day10 {
 
         var hm = parseInput(s);
         assert findAllTrails(hm).size() == 1034;
+    }
+
+    record Point(int x, int y) {
     }
 }

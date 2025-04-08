@@ -1,5 +1,6 @@
-package net.leskowsky;
+package main;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -9,12 +10,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static net.leskowsky.Day8.findAntinodes;
-import static net.leskowsky.Day8.findAntinodes2;
+import static main.Day8.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class Day8Test {
-    private Day8.SignalMap parse(String s) {
+    private SignalMap parse(String s) {
         var signals = new HashMap<Character, List<Point>>();
 
         var lines = s.split("\n");
@@ -31,7 +31,7 @@ class Day8Test {
             }
         }
 
-        return new Day8.SignalMap(signals, lines[0].length(), lines.length);
+        return new SignalMap(signals, lines[0].length(), lines.length);
     }
 
     @Test
@@ -48,7 +48,7 @@ class Day8Test {
                 ..........
                 ..........""";
         var signals = parse(s);
-        assertEquals(4, findAntinodes(signals).size());
+        Assertions.assertEquals(4, findAntinodes(signals).size());
 
         s = """
                 ......#....#
@@ -64,7 +64,7 @@ class Day8Test {
                 ..........#.
                 ..........#.""";
         signals = parse(s);
-        assertEquals(14, findAntinodes(signals).size());
+        Assertions.assertEquals(14, findAntinodes(signals).size());
     }
 
     @Test
@@ -76,7 +76,7 @@ class Day8Test {
         //     find antinodes
         // count antinodes
         var signals = parse(Files.readString(Path.of("inputs/day8.txt")));
-        assertEquals(376, findAntinodes(signals).size());
+        Assertions.assertEquals(376, findAntinodes(signals).size());
     }
 
     @Test
@@ -93,12 +93,12 @@ class Day8Test {
                 ....#.....
                 ..........""";
         var signals = parse(s);
-        assertEquals(9, findAntinodes2(signals).size());
+        Assertions.assertEquals(9, findAntinodes2(signals).size());
     }
 
     @Test
     void part2() throws IOException {
         var signals = parse(Files.readString(Path.of("inputs/day8.txt")));
-        assertEquals(1352, findAntinodes2(signals).size());
+        Assertions.assertEquals(1352, findAntinodes2(signals).size());
     }
 }
