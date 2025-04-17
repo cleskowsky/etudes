@@ -19,4 +19,14 @@ public class Day12Test {
         assertEquals('E', f.getPlot(2, 3));
         assertEquals('C', f.getPlot(3, 3));
     }
+
+    // identify farm regions
+    // area(r) => # of plots in region
+    // region perimeter
+    // fence price is area * perimeter
+
+    @Test
+    void regions() {
+
+    }
 }
