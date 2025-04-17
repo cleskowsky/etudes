@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>adventofcode2024</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <groupId>net.leskowsky.adventofcode2024</groupId>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
