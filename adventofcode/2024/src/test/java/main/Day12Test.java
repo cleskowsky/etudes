@@ -27,6 +27,17 @@ public class Day12Test {
 
     @Test
     void regions() {
-
+        var s = """
+                AAAA
+                BBCD
+                BBCC
+                EEEC""";
+        Farm f = Day12.parseInput(s);
+        var regions = Day12.regions(f);
+        assertEquals(5, regions.size());
+        // assertEquals(4, regions.get('A').size());
+        // assertEquals(4, regions.get('B').size());
+        // assertEquals(4, regions.get('C').size());
+        // assertEquals(1, regions.get('D').size());
     }
 }
