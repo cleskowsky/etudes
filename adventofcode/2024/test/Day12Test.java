@@ -14,12 +14,13 @@ public class Day12Test {
                 EEEC""";
 
         // When parsed
-        var farm = Day12.InputParser.parse(s);
+        var farm = Day12.parseInput(s);
 
-        // Then a farm is returned with 5 plots
-        assertEquals(5, farm.plots());
+        // Then a farm is returned with 16 plots
+        assertEquals(16, farm.plots().size());
     }
 
-    // another test
-    // ...
+    // Region fence price
+    // Region area
+    // Region perimeter
 }
