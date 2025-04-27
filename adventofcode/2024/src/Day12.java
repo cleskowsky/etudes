@@ -23,14 +23,9 @@ public class Day12 {
     }
 
     /**
-     * Returns a list of regions for farm
+     * Returns a region -> points map for farm
      */
-    List<Region> regions(Farm farm) {
-        return List.of(
-                new Region("A", List.of(new Point(0, 0)))
-        );
-    }
-
-    record Region(String name, List<Point> points) {
+    Map<Character, List<Point>> regions(Farm f) {
+        return Map.of('A', List.of(new Point(0, 0)));
     }
 }
