@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Test;
 
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day12Test {
@@ -20,7 +22,20 @@ public class Day12Test {
         assertEquals(16, farm.plots().size());
     }
 
-    // Region fence price
+    // Regions
+    @Test
+    void findRegions() {
+        var testTable = Map.of(
+                "A", 1
+        );
+        for (var t : testTable.entrySet()) {
+            var d = new Day12();
+            var farm = Day12.parseInput(t.getKey());
+            assertEquals(t.getValue(), d.regions(farm).size());
+        }
+    }
+
     // Region area
     // Region perimeter
+    // Region fence price
 }

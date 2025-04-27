@@ -1,11 +1,8 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class Day12 {
-    public static void main(String[] args) {
-        System.out.println(1);
-    }
-
     static Farm parseInput(String s) {
         var plots = new HashMap<Point, Character>();
 
@@ -23,5 +20,17 @@ public class Day12 {
     }
 
     record Point(int x, int y) {
+    }
+
+    /**
+     * Returns a list of regions for farm
+     */
+    List<Region> regions(Farm farm) {
+        return List.of(
+                new Region("A", List.of(new Point(0, 0)))
+        );
+    }
+
+    record Region(String name, List<Point> points) {
     }
 }
