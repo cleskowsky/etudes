@@ -28,6 +28,10 @@ public class Day12 {
         Point left() {
             return new Point(x - 1, y);
         }
+
+        Point add(Point p) {
+            return new Point(x + p.x, y + p.y);
+        }
     }
 
     /**
@@ -65,7 +69,7 @@ public class Day12 {
                 // couldn't find region, create one
                 var plots = new ArrayList<Point>();
                 plots.add(p);
-                var region = new Region(myPlant.toString(), plots);
+                var region = new Region(myPlant.toString(), plots, f);
                 plotsToRegionsMap.put(p, region);
                 result.add(region);
             }
@@ -74,6 +78,28 @@ public class Day12 {
         return result;
     }
 
-    record Region(String name, List<Point> plots) {
+    record Region(String name, List<Point> plots, Farm farm) {
+    }
+
+    List<Point> directions = List.of(
+            new Point(0, -1),
+            new Point(-1, 0),
+            new Point(0, 1),
+            new Point(1, 0)
+    );
+
+    int perimeter(Region r) {
+        var sides = 0;
+        for (var p : r.plots()) {
+            var plotPlant = r.farm().plots().get(p);
+            for ( var d : directions) {
+                var neighbourPlotPlant = r.farm().plots().get(p.add(d));
+                if (plotPlant.equals(neighbourPlotPlant)) {
+                    continue;
+                }
+                sides++;
+            }
+        }
+        return sides;
     }
 }

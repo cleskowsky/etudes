@@ -50,6 +50,22 @@ public class Day12Test {
     }
 
     // Region area
+    // This is just a count of plots in a region and we have region already
+
     // Region perimeter
+    @Test
+    void regionPerimeter() {
+        var s = """
+                        AAAA
+                        BBCD
+                        BBCC
+                        EEEC""";
+        var d = new Day12();
+        var perimeters = d.regions(Day12.parseInput(s)).stream()
+                .map(d::perimeter)
+                .toList();
+        System.out.println(perimeters);
+    }
+
     // Region fence price
 }
