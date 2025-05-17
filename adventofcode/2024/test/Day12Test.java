@@ -29,7 +29,18 @@ public class Day12Test {
                 "A", 1,
                 """
                         AB
-                        AB""", 2
+                        AB""", 2,
+                """
+                        AAAA
+                        BBCD
+                        BBCC
+                        EEEC""", 5,
+                """
+                        OOOOO
+                        OXOXO
+                        OOOOO
+                        OXOXO
+                        OOOOO""", 5
         );
         for (var t : testTable.entrySet()) {
             var d = new Day12();
