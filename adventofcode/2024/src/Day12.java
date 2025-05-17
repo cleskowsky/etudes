@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class Day12 {
     static Farm parseInput(String s) {
@@ -22,14 +23,6 @@ public class Day12 {
     }
 
     record Point(int x, int y) {
-        Point up() {
-            return new Point(x, y - 1);
-        }
-
-        Point left() {
-            return new Point(x - 1, y);
-        }
-
         Point add(Point p) {
             return new Point(x + p.x, y + p.y);
         }
@@ -49,27 +42,28 @@ public class Day12 {
                 var p = new Point(j, i);
                 var plant = farm.plots().get(p);
 
-                // find existing region for this plot
+                // find an existing region for this plot
                 Region r = null;
                 for (var d : directions) {
                     var neighbour = p.add(d);
-                    if (plant == farm.plots().get(neighbour)) {
-                        r = plotCache.get(p.add(d));
+                    if (r == null && plant == farm.plots().get(neighbour)) {
+                        r = plotCache.get(neighbour);
                     }
                 }
 
-                // create region if none found
+                // create it if not found
                 if (r == null) {
-                    var plots = new ArrayList<Point>();
+                    var plots = new HashSet<Point>();
                     plots.add(p);
                     r = new Region(plant.toString(), plots, farm);
                     regions.add(r);
                 }
 
-                // add p to plotCache
+                // add p to the plotCache
                 plotCache.put(p, r);
 
-                // add neighbours to my region
+                // add neighbours adjacent plots to the region and update
+                // the plotCache
                 for (var d : directions) {
                     var neighbour = p.add(d);
                     if (plant == farm.plots().get(neighbour)) {
@@ -83,7 +77,7 @@ public class Day12 {
         return regions;
     }
 
-    record Region(String name, List<Point> plots, Farm farm) {
+    record Region(String name, Set<Point> plots, Farm farm) {
     }
 
     List<Point> directions = List.of(
