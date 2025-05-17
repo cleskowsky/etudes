@@ -56,10 +56,10 @@ public class Day12Test {
     @Test
     void regionPerimeter() {
         var s = """
-                        AAAA
-                        BBCD
-                        BBCC
-                        EEEC""";
+                AAAA
+                BBCD
+                BBCC
+                EEEC""";
         var d = new Day12();
         var fenceNeeded = d.regions(Day12.parseInput(s)).stream()
                 .map(d::perimeter)
@@ -71,14 +71,43 @@ public class Day12Test {
     @Test
     void regionFencePrice() {
         var s = """
-                        AAAA
-                        BBCD
-                        BBCC
-                        EEEC""";
+                AAAA
+                BBCD
+                BBCC
+                EEEC""";
         var d = new Day12();
         var totalCost = d.regions(Day12.parseInput(s)).stream()
                 .map(d::fencePrice)
                 .reduce(0, Integer::sum);
         assertEquals(140, totalCost);
+    }
+
+    // Region fence price 2
+    @Test
+    void regionFencePrice2() {
+        var s = """
+                RRRRIICCFF
+                RRRRIICCCF
+                VVRRRCCFFF
+                VVRCCCJFFF
+                VVVVCJJCFE
+                VVIVCCJJEE
+                VVIIICJJEE
+                MIIIIIJJEE
+                MIIISIJEEE
+                MMMISSJEEE""";
+        var d = new Day12();
+
+        var farm = Day12.parseInput(s);
+        d.regions(farm).forEach(r -> {
+            System.out.println(r);
+            System.out.println(r.plots().size());
+        });
+        assertEquals(11, d.regions(farm).size());
+
+        var totalCost = d.regions(Day12.parseInput(s)).stream()
+                .map(d::fencePrice)
+                .reduce(0, Integer::sum);
+        assertEquals(1930, totalCost);
     }
 }

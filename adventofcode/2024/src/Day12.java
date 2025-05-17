@@ -66,6 +66,8 @@ public class Day12 {
                     continue;
                 }
 
+                // look diagonal top right, right for region
+
                 // couldn't find region, create one
                 var plots = new ArrayList<Point>();
                 plots.add(p);
