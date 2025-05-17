@@ -61,11 +61,24 @@ public class Day12Test {
                         BBCC
                         EEEC""";
         var d = new Day12();
-        var perimeters = d.regions(Day12.parseInput(s)).stream()
+        var fenceNeeded = d.regions(Day12.parseInput(s)).stream()
                 .map(d::perimeter)
-                .toList();
-        System.out.println(perimeters);
+                .reduce(0, Integer::sum);
+        assertEquals(40, fenceNeeded);
     }
 
     // Region fence price
+    @Test
+    void regionFencePrice() {
+        var s = """
+                        AAAA
+                        BBCD
+                        BBCC
+                        EEEC""";
+        var d = new Day12();
+        var totalCost = d.regions(Day12.parseInput(s)).stream()
+                .map(d::fencePrice)
+                .reduce(0, Integer::sum);
+        assertEquals(140, totalCost);
+    }
 }

@@ -102,4 +102,8 @@ public class Day12 {
         }
         return sides;
     }
+
+    int fencePrice(Region r) {
+        return perimeter(r) * r.plots().size();
+    }
 }
