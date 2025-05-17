@@ -1,7 +1,5 @@
 import org.junit.jupiter.api.Test;
 
-import java.util.Map;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day12Test {
@@ -25,28 +23,43 @@ public class Day12Test {
     // Regions
     @Test
     void findRegions() {
-        var testTable = Map.of(
-                "A", 1,
-                """
-                        AB
-                        AB""", 2,
-                """
-                        AAAA
-                        BBCD
-                        BBCC
-                        EEEC""", 5,
-                """
-                        OOOOO
-                        OXOXO
-                        OOOOO
-                        OXOXO
-                        OOOOO""", 5
-        );
-        for (var t : testTable.entrySet()) {
-            var d = new Day12();
-            var farm = Day12.parseInput(t.getKey());
-            assertEquals(t.getValue(), d.regions(farm).size());
-        }
+        var s = """
+                AB
+                AB""";
+        regionFinderTester(s, 2);
+    }
+
+    @Test
+    void findRegions2() {
+        var s2 = """
+                AAAA
+                BBCD
+                BBCC
+                EEEC""";
+        regionFinderTester(s2, 5);
+    }
+
+    @Test
+    void findRegions3() {
+        var s = "A";
+        regionFinderTester(s, 1);
+    }
+
+    @Test
+    void findRegions4() {
+        var s = """
+                OOOOO
+                OXOXO
+                OOOOO
+                OXOXO
+                OOOOO""";
+        regionFinderTester(s, 5);
+    }
+
+    private void regionFinderTester(String s, int expected) {
+        var d = new Day12();
+        var farm = Day12.parseInput(s);
+        assertEquals(expected, d.regions(farm).size());
     }
 
     // Region area

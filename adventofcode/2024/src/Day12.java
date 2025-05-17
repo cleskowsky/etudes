@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -37,47 +38,49 @@ public class Day12 {
     /**
      * Returns farm regions as list
      */
-    List<Region> regions(Farm f) {
-        var result = new ArrayList<Region>();
+    List<Region> regions(Farm farm) {
+        var regions = new ArrayList<Region>();
 
-        Map<Point, Region> plotsToRegionsMap = new HashMap<>();
+        Map<Point, Region> plotCache = new HashMap<>();
 
-        var gridX = Math.sqrt(f.plots().size());
+        var gridX = Math.sqrt(farm.plots().size());
         for (int i = 0; i < gridX; i++) {
             for (int j = 0; j < gridX; j++) {
                 var p = new Point(j, i);
+                var plant = farm.plots().get(p);
 
-                // look up for region
-                var myPlant = f.plots().get(p);
-                var adjPlant = f.plots().get(p.up());
-                if (adjPlant == myPlant) {
-                    var region = plotsToRegionsMap.get(p.up());
-                    region.plots().add(p);
-                    plotsToRegionsMap.put(p, region);
-                    continue;
+                // find existing region for this plot
+                Region r = null;
+                for (var d : directions) {
+                    var neighbour = p.add(d);
+                    if (plant == farm.plots().get(neighbour)) {
+                        r = plotCache.get(p.add(d));
+                    }
                 }
 
-                // look left for region
-                adjPlant = f.plots().get(p.left());
-                if (adjPlant == myPlant) {
-                    var region = plotsToRegionsMap.get(p.left());
-                    region.plots().add(p);
-                    plotsToRegionsMap.put(p, region);
-                    continue;
+                // create region if none found
+                if (r == null) {
+                    var plots = new ArrayList<Point>();
+                    plots.add(p);
+                    r = new Region(plant.toString(), plots, farm);
+                    regions.add(r);
                 }
 
-                // look diagonal top right, right for region
+                // add p to plotCache
+                plotCache.put(p, r);
 
-                // couldn't find region, create one
-                var plots = new ArrayList<Point>();
-                plots.add(p);
-                var region = new Region(myPlant.toString(), plots, f);
-                plotsToRegionsMap.put(p, region);
-                result.add(region);
+                // add neighbours to my region
+                for (var d : directions) {
+                    var neighbour = p.add(d);
+                    if (plant == farm.plots().get(neighbour)) {
+                        r.plots().add(neighbour);
+                        plotCache.put(neighbour, r);
+                    }
+                }
             }
         }
 
-        return result;
+        return regions;
     }
 
     record Region(String name, List<Point> plots, Farm farm) {
@@ -94,7 +97,7 @@ public class Day12 {
         var sides = 0;
         for (var p : r.plots()) {
             var plotPlant = r.farm().plots().get(p);
-            for ( var d : directions) {
+            for (var d : directions) {
                 var neighbourPlotPlant = r.farm().plots().get(p.add(d));
                 if (plotPlant.equals(neighbourPlotPlant)) {
                     continue;
