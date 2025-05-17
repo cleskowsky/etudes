@@ -27,7 +27,9 @@ public class Day12Test {
     void findRegions() {
         var testTable = Map.of(
                 "A", 1,
-                "AB", 2
+                """
+                        AB
+                        AB""", 2
         );
         for (var t : testTable.entrySet()) {
             var d = new Day12();

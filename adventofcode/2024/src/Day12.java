@@ -36,7 +36,7 @@ public class Day12 {
     List<Region> regions(Farm f) {
         var result = new ArrayList<Region>();
 
-        Map<Point, Region> cache = new HashMap<>();
+        Map<Point, Region> plotsToRegionsMap = new HashMap<>();
 
         var gridX = Math.sqrt(f.plots().size());
         for (int i = 0; i < gridX; i++) {
@@ -45,24 +45,29 @@ public class Day12 {
 
                 // look up for region
                 var myPlant = f.plots().get(p);
-                var adjPlant = f.plots().getOrDefault(p.up(), '.');
+                var adjPlant = f.plots().get(p.up());
                 if (adjPlant == myPlant) {
-                    var region = cache.get(p.up());
+                    var region = plotsToRegionsMap.get(p.up());
                     region.plots().add(p);
-                    cache.put(p, region);
+                    plotsToRegionsMap.put(p, region);
                     continue;
                 }
 
                 // look left for region
-                adjPlant = f.plots().getOrDefault(p.left(), '.');
+                adjPlant = f.plots().get(p.left());
                 if (adjPlant == myPlant) {
-                    var region = cache.get(p.left());
+                    var region = plotsToRegionsMap.get(p.left());
                     region.plots().add(p);
-                    cache.put(p, region);
+                    plotsToRegionsMap.put(p, region);
                     continue;
                 }
 
                 // couldn't find region, create one
+                var plots = new ArrayList<Point>();
+                plots.add(p);
+                var region = new Region(myPlant.toString(), plots);
+                plotsToRegionsMap.put(p, region);
+                result.add(region);
             }
         }
 
