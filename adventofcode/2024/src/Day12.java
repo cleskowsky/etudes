@@ -1,4 +1,7 @@
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Day12 {
     static Farm parseInput(String s) {
@@ -61,8 +64,8 @@ public class Day12 {
 
         while (!found.isEmpty()) {
             var x = found.removeFirst();
-
             if (seen.contains(x)) {
+                // seen this plot already
                 continue;
             }
 
@@ -71,10 +74,6 @@ public class Day12 {
                 var adjacentPlant = farm.plots().get(neighbour);
                 if (adjacentPlant == null || adjacentPlant != r.name().charAt(0)) {
                     // non-existent or non-region
-                    continue;
-                }
-                if (seen.contains(neighbour)) {
-                    // visited plot
                     continue;
                 }
                 found.add(neighbour);
