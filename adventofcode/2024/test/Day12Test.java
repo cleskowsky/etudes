@@ -112,10 +112,6 @@ public class Day12Test {
         var d = new Day12();
 
         var farm = Day12.parseInput(s);
-        d.regions(farm).forEach(r -> {
-            System.out.println(r);
-            System.out.println(r.plots().size());
-        });
         assertEquals(11, d.regions(farm).size());
 
         var totalCost = d.regions(Day12.parseInput(s)).stream()

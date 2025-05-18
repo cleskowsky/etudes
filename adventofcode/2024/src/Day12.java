@@ -1,9 +1,4 @@
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Day12 {
     static Farm parseInput(String s) {
@@ -29,55 +24,70 @@ public class Day12 {
     }
 
     /**
-     * Returns farm regions as list
+     * Returns a list of farm regions
      */
     List<Region> regions(Farm farm) {
         var regions = new ArrayList<Region>();
 
-        Map<Point, Region> plotCache = new HashMap<>();
-
+        // input is always a square
         var gridX = Math.sqrt(farm.plots().size());
+
+        // remember plots seen
+        var seen = new ArrayList<Point>();
+
+        // visit every plot row by row
         for (int i = 0; i < gridX; i++) {
             for (int j = 0; j < gridX; j++) {
-                var p = new Point(j, i);
-                var plant = farm.plots().get(p);
 
-                // find an existing region for this plot
-                Region r = null;
-                for (var d : directions) {
-                    var neighbour = p.add(d);
-                    if (r == null && plant == farm.plots().get(neighbour)) {
-                        r = plotCache.get(neighbour);
-                    }
+                // if a plot hasn't been seen before, find the containing region
+                if (seen.contains(new Point(j, i))) {
+                    continue;
                 }
-
-                // create it if not found
-                if (r == null) {
-                    var plots = new HashSet<Point>();
-                    plots.add(p);
-                    r = new Region(plant.toString(), plots, farm);
-                    regions.add(r);
-                }
-
-                // add p to the plotCache
-                plotCache.put(p, r);
-
-                // add neighbours adjacent plots to the region and update
-                // the plotCache
-                for (var d : directions) {
-                    var neighbour = p.add(d);
-                    if (plant == farm.plots().get(neighbour)) {
-                        r.plots().add(neighbour);
-                        plotCache.put(neighbour, r);
-                    }
-                }
+                regions.add(findRegion(new Point(j, i), farm, seen));
             }
         }
 
         return regions;
     }
 
-    record Region(String name, Set<Point> plots, Farm farm) {
+    /**
+     * Returns a list of plots in a region
+     */
+    Region findRegion(Point p, Farm farm, List<Point> seen) {
+        var found = new ArrayList<Point>();
+        found.add(p);
+
+        Region r = new Region(farm.plots().get(p).toString(), new ArrayList<>(), farm);
+
+        while (!found.isEmpty()) {
+            var x = found.removeFirst();
+
+            if (seen.contains(x)) {
+                continue;
+            }
+
+            for (var d : directions) {
+                var neighbour = x.add(d);
+                var adjacentPlant = farm.plots().get(neighbour);
+                if (adjacentPlant == null || adjacentPlant != r.name().charAt(0)) {
+                    // non-existent or non-region
+                    continue;
+                }
+                if (seen.contains(neighbour)) {
+                    // visited plot
+                    continue;
+                }
+                found.add(neighbour);
+            }
+
+            r.plots().add(x);
+            seen.add(x);
+        }
+
+        return r;
+    }
+
+    record Region(String name, List<Point> plots, Farm farm) {
     }
 
     List<Point> directions = List.of(
