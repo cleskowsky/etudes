@@ -59,6 +59,14 @@ public class Day12Test {
     private void regionFinderTester(String s, int expected) {
         var d = new Day12();
         var farm = Day12.parseInput(s);
+
+        if (Day12.DEBUG) {
+            d.regions(farm).forEach(r -> {
+                System.out.println(r.toString());
+                System.out.println(r.plots().size());
+            });
+        }
+
         assertEquals(expected, d.regions(farm).size());
     }
 
