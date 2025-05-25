@@ -27,6 +27,10 @@ public class Day12 {
         Point add(Point p) {
             return new Point(x + p.x, y + p.y);
         }
+
+        Point add(Heading h) {
+            return new Point(x + h.x, y + h.y);
+        }
     }
 
     /**
@@ -72,8 +76,8 @@ public class Day12 {
                 continue;
             }
 
-            for (var d : directions) {
-                var neighbour = x.add(d);
+            for (var h : Heading.values()) {
+                var neighbour = x.add(h);
                 var adjacentPlant = farm.plots().get(neighbour);
                 if (adjacentPlant == null || adjacentPlant != r.name().charAt(0)) {
                     // non-existent or non-region
@@ -92,25 +96,35 @@ public class Day12 {
     record Region(String name, List<Point> plots, Farm farm) {
     }
 
-    List<Point> directions = List.of(
-            new Point(0, -1),
-            new Point(-1, 0),
-            new Point(0, 1),
-            new Point(1, 0)
-    );
+    enum Heading {
+        TOP(0, -1),
+        RIGHT(1, 0),
+        BOTTOM(0, -1),
+        LEFT(-1, 0);
+
+        int x;
+        int y;
+
+        Heading(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
 
     int perimeter(Region r) {
         var sides = 0;
 
         // Split fencing into vertical, horizontal and then
         // merge adjacent fences
-        var rows = new HashMap<Integer, List<Point>>();
-        var cols = new HashMap<Integer, List<Point>>();
+        var north = new ArrayList<Point>();
+        var south = new ArrayList<Point>();
+        var east = new ArrayList<Point>();
+        var west = new ArrayList<Point>();
 
         for (var p : r.plots()) {
             var plotPlant = r.farm().plots().get(p);
-            for (var d : directions) {
-                var neighbour = p.add(d);
+            for (var h : Heading.values()) {
+                var neighbour = p.add(h);
 
                 var adjPlant = r.farm().plots().get(neighbour);
                 if (plotPlant.equals(adjPlant)) {
@@ -120,21 +134,24 @@ public class Day12 {
                 sides++;
 
                 // add plot to index
-                rows.computeIfAbsent(neighbour.y(), k -> new ArrayList<>()).add(neighbour);
-                cols.computeIfAbsent(neighbour.x(), k -> new ArrayList<>()).add(neighbour);
+
+                if (h.equals(Heading.TOP)) {
+                    // top fence
+                    north.add(p);
+                } else if (h.equals(Heading.BOTTOM)) {
+                    // bottom fence
+                    south.add(p);
+                } else if (h.equals(Heading.LEFT)) {
+                    // left fence
+                    west.add(p);
+                } else if (h.equals(Heading.RIGHT)) {
+                    // right fence
+                    east.add(p);
+                }
             }
         }
 
         System.out.println("Calculating perimeter for: " + r);
-        rows.forEach((k, v) -> {
-            System.out.println("Row: " + k);
-            System.out.println(v);
-        });
-//        cols.forEach((k, v) -> {
-//            System.out.println("Col: " + k);
-//            System.out.println(v);
-//        });
-        System.out.println("");
 
         return sides;
     }
