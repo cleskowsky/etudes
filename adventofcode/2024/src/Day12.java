@@ -246,9 +246,9 @@ public class Day12 {
         System.out.println("before sort plots=" + plots);
 
         plots.sort((a, b) -> {
-            if (a.y() < b.y()) {
+            if (a.x() < b.x()) {
                 return -1;
-            } else if (a.y() == b.y() && a.x() < b.x()) {
+            } else if (a.x() == b.x() && a.y() < b.y()) {
                 return -1;
             } else if (a.equals(b)) {
                 return 0;
@@ -275,5 +275,9 @@ public class Day12 {
 
     int fencePrice(Region r) {
         return perimeter(r) * r.plots().size();
+    }
+
+    int fencePrice2(Region r) {
+        return perimeter2(r) * r.plots().size();
     }
 }
