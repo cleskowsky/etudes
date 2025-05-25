@@ -212,6 +212,8 @@ public class Day12 {
     }
 
     int countSidesX(List<Point> plots) {
+        System.out.println("before sort plots=" + plots);
+
         plots.sort((a, b) -> {
             if (a.y() < b.y()) {
                 return -1;
@@ -223,6 +225,8 @@ public class Day12 {
                 return 1;
             }
         });
+
+        System.out.println("after sort plots=" + plots);
 
         int sides = 1;
         var p = plots.getFirst();
@@ -239,6 +243,8 @@ public class Day12 {
     }
 
     int countSidesY(List<Point> plots) {
+        System.out.println("before sort plots=" + plots);
+
         plots.sort((a, b) -> {
             if (a.y() < b.y()) {
                 return -1;
@@ -250,6 +256,8 @@ public class Day12 {
                 return 1;
             }
         });
+
+        System.out.println("after sort plots=" + plots);
 
         int sides = 1;
         var p = plots.getFirst();
