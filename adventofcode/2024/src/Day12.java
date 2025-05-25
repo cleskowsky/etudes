@@ -24,10 +24,6 @@ public class Day12 {
     }
 
     record Point(int x, int y) {
-        Point add(Point p) {
-            return new Point(x + p.x, y + p.y);
-        }
-
         Point add(Heading h) {
             return new Point(x + h.x, y + h.y);
         }
@@ -99,7 +95,7 @@ public class Day12 {
     enum Heading {
         TOP(0, -1),
         RIGHT(1, 0),
-        BOTTOM(0, -1),
+        BOTTOM(0, 1),
         LEFT(-1, 0);
 
         int x;
@@ -153,7 +149,16 @@ public class Day12 {
 
         System.out.println("Calculating perimeter for: " + r);
 
+//        System.out.println(countSides(north, Heading.TOP, Heading.BOTTOM));
+
         return sides;
+    }
+
+    int countSides(List<Point> sides, Heading... headings) {
+        System.out.println(sides);
+        sides.sort((a, b) -> a.y - b.y);
+        System.out.println(sides);
+        return 0;
     }
 
     int fencePrice(Region r) {
