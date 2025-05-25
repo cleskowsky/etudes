@@ -110,13 +110,6 @@ public class Day12 {
     int perimeter(Region r) {
         var sides = 0;
 
-        // Split fencing into vertical, horizontal and then
-        // merge adjacent fences
-        var north = new ArrayList<Point>();
-        var south = new ArrayList<Point>();
-        var east = new ArrayList<Point>();
-        var west = new ArrayList<Point>();
-
         for (var p : r.plots()) {
             var plotPlant = r.farm().plots().get(p);
             for (var h : Heading.values()) {
@@ -128,32 +121,8 @@ public class Day12 {
                 }
 
                 sides++;
-
-                // add plot to index
-
-                if (h.equals(Heading.TOP)) {
-                    // top fence
-                    north.add(p);
-                } else if (h.equals(Heading.BOTTOM)) {
-                    // bottom fence
-                    south.add(p);
-                } else if (h.equals(Heading.LEFT)) {
-                    // left fence
-                    west.add(p);
-                } else if (h.equals(Heading.RIGHT)) {
-                    // right fence
-                    east.add(p);
-                }
             }
         }
-
-        System.out.printf("Area for: %s area=%d%n", r.name(), r.plots().size());
-        System.out.println("Calculating perimeter for: " + r);
-
-        System.out.println("top side fencing sides=" + countSidesX(north));
-        System.out.println("left side fencing sides=" + countSidesY(west));
-        System.out.println("bottom side fencing sides=" + countSidesX(south));
-        System.out.println("right side fencing sides=" + countSidesY(east));
 
         return sides;
     }
