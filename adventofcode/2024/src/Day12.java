@@ -149,20 +149,35 @@ public class Day12 {
 
         System.out.println("Calculating perimeter for: " + r);
 
-        System.out.println("north side fencing sides=" + countSides(north));
-        System.out.println("south side fencing sides=" + countSides(south));
+        System.out.println("top side fencing sides=" + countSidesX(north));
+        System.out.println("left side fencing sides=" + countSidesY(west));
+        System.out.println("bottom side fencing sides=" + countSidesX(south));
+        System.out.println("right side fencing sides=" + countSidesY(east));
 
         return sides;
     }
 
-    int countSides(List<Point> plots) {
-        System.out.println(plots);
-
+    int countSidesX(List<Point> plots) {
         int sides = 1;
         var p = plots.getFirst();
         for (int i = 1; i < plots.size(); i++) {
             var adjPlot = plots.get(i);
             if (adjPlot.x() - p.x() > 1 || adjPlot.y() != p.y()) {
+                // start a new fence if there's a gap between adjacent plots
+                sides++;
+            }
+            p = adjPlot;
+        }
+
+        return sides;
+    }
+
+    int countSidesY(List<Point> plots) {
+        int sides = 1;
+        var p = plots.getFirst();
+        for (int i = 1; i < plots.size(); i++) {
+            var adjPlot = plots.get(i);
+            if (adjPlot.y() - p.y() > 1 || adjPlot.x() != p.x()) {
                 // start a new fence if there's a gap between adjacent plots
                 sides++;
             }
