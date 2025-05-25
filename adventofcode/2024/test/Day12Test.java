@@ -88,6 +88,21 @@ public class Day12Test {
         assertEquals(40, fenceNeeded);
     }
 
+    @Test
+    void regionPerimeter2() {
+        var s= """
+                EEEEE
+                EXXXX
+                EEEEE
+                EXXXX
+                EEEEE""";
+        var d = new Day12();
+        var fenceNeeded = d.regions(Day12.parseInput(s)).stream()
+                .map(d::perimeter2)
+                .reduce(0, Integer::sum);
+        assertEquals(20, fenceNeeded);
+    }
+
     // Region fence price
     @Test
     void regionFencePrice() {
