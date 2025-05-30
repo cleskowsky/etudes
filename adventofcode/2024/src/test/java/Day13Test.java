@@ -63,4 +63,13 @@ public class Day13Test {
 
         assertEquals(new SolverResult(0, 0), solver(prize, buttonA, buttonB));
     }
+
+    @Test
+    void solverTest2() {
+        var prize = new Prize(7870, 6450);
+        var buttonA = new Button(17, 86);
+        var buttonB = new Button(84, 37);
+
+        assertEquals(new SolverResult(38, 86), solver(prize, buttonA, buttonB));
+    }
 }
