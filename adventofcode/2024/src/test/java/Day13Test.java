@@ -27,19 +27,40 @@ public class Day13Test {
         // looking for x, y such that x*B + y*A == goal
         // in the example case, we have:
         // (8400, 5400) = x * (94, 34) + y * (22, 67)
-        System.out.println(solver(prize, buttonA, buttonB));
-        System.out.println(1);
         var result = solver(prize, buttonA, buttonB);
 
-        // then i should find a solution that works
-        assertEquals(80, result.countA());
-        assertEquals(40, result.countB());
+        // then i should find the min solution that works
+        assertEquals(new SolverResult(80, 40), result);
     }
 
     record SolverResult(int countA, int countB) {
     }
 
-    private SolverResult solver(Prize prize, Button buttonA, Button buttonB) {
-        return new SolverResult(80, 40);
+    // Returns the cheapest presses of buttons a, b to reach the prize
+    // Pressing button a costs 3 credits
+    // Pressing button b costs 1 credits
+    private SolverResult solver(Prize p, Button a, Button b) {
+        var result = new SolverResult(0, 0);
+
+        for (int i = 1; i < 101; i++) {
+            for (int j = 1; j < 101; j++) {
+                int x = i * a.x + j * b.x;
+                int y = i * a.y + j * b.y;
+                if (p.x == x && p.y == y) {
+                    result = new SolverResult(i, j);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    @Test
+    void noSolution1() {
+        var prize = new Prize(12748, 12176);
+        var buttonA = new Button(26, 66);
+        var buttonB = new Button(67, 21);
+
+        assertEquals(new SolverResult(0, 0), solver(prize, buttonA, buttonB));
     }
 }
