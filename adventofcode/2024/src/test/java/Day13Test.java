@@ -1,6 +1,14 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.MatchResult;
+import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day13Test {
 
@@ -17,7 +25,7 @@ public class Day13Test {
     }
 
     @Test
-    void solverTest() {
+    void testSolver() {
         // given a goal and step sizes
         var prize = new Prize(8400, 5400);
         var buttonA = new Button(94, 34);
@@ -71,5 +79,62 @@ public class Day13Test {
         var buttonB = new Button(84, 37);
 
         assertEquals(new SolverResult(38, 86), solver(prize, buttonA, buttonB));
+    }
+
+    @Test
+    void part1() {
+        var machines = parseInput("inputs/day13.txt");
+        System.out.println(machines);
+        System.out.println(machines.size());
+    }
+
+    // Example input:
+    //    Button A: X+40, Y+38
+    //    Button B: X+21, Y+84
+    //    Prize: X=4245, Y=5634
+    //
+    //    Button A: X+19, Y+11
+    //    Button B: X+37, Y+98
+    //    Prize: X=3246, Y=6474
+    //    ...
+    private List<Machine> parseInput(String s) {
+        var result = new ArrayList<Machine>();
+
+        try {
+            var lines = Files.readString(Path.of(s)).split("\n");
+            for (int i = 0; i < lines.length; i += 4) {
+                var b1 = parseInts(lines[i]);
+                var b2 = parseInts(lines[i + 1]);
+                var p = parseInts(lines[i + 2]);
+                result.add(
+                        new Machine(
+                                new Prize(p.getFirst(), p.getLast()),
+                                new Button(b1.getFirst(), b1.getLast()),
+                                new Button(b2.getFirst(), b2.getLast())
+                        )
+                );
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }
+
+    record Machine(Prize p, Button a, Button b) {
+    }
+
+    @Test
+    void testParseInts() {
+        var x = parseInts("Button A: X+40, Y+38");
+        assertEquals(new Button(40, 38), new Button(x.get(0), x.get(1)));
+    }
+
+    private List<Integer> parseInts(String s) {
+        var m = Pattern.compile("\\d{2}");
+        return m.matcher(s).results()
+                .map(MatchResult::group)
+                .map(Integer::parseInt)
+                .toList();
     }
 }
