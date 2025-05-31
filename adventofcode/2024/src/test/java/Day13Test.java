@@ -48,6 +48,8 @@ public class Day13Test {
         var cnta = 0;
         var cntb = 0;
         for (var t : testTable) {
+            System.out.println(t);
+
             var result = solver(t.p, t.a, t.b);
             cnta += result.countA;
             cntb += result.countB;
@@ -61,17 +63,48 @@ public class Day13Test {
 
     // Returns the cheapest way to reach the prize by pushing buttons a, b
     public SolverResult solver(Prize p, Button a, Button b) {
-        var result = new SolverResult(0, 0);
 
-//        for (int i = 1; i < 101; i++) {
-//            for (int j = 1; j < 101; j++) {
-//                if (p.x == i * a.x + j * b.x && p.y == i * a.y + j * b.y) {
-//                    result = new SolverResult(i, j);
-//                }
-//            }
-//        }
+        // given goal x, delta d1, delta d2
+        var goal = p.x;
+        var d1 = a.x;
+        var d2 = b.x;
 
-        return result;
+        // when i subtract d1 from it i times
+        // then d2 should divide it as well if there is an answer
+        // want to find i, j such that i * d1 + j * d2 = goal
+        var pairs = new ArrayList<Pair>();
+
+        var i = 0;
+        while (goal >= 0) {
+            if (goal % d2 == 0) {
+                var j = goal / d2;
+
+                // check goal.y works too
+                if (p.y == i * a.y + j * b.y) {
+                    pairs.add(new Pair(i, goal / d2));
+                }
+            }
+            goal -= d1;
+            i++;
+        }
+
+        if (pairs.isEmpty()) {
+            return new SolverResult(0, 0);
+        }
+
+        // i'll have to track how many times I've subtracted d1
+        var min = pairs.getFirst();
+        var cost = 3 * min.i + min.j;
+
+        for (var pair : pairs) {
+            var x = 3 * pair.i + pair.j;
+            if (x < cost) {
+                min = pair;
+                cost = x;
+            }
+        }
+
+        return new SolverResult(min.i, min.j);
     }
 
     Prize prize(int x, int y) {
