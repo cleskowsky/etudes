@@ -158,7 +158,6 @@ public class Day13Test {
         var pairs = new ArrayList<Pair>();
 
         var i = 0;
-        var j = 0;
         while (goal >= 0) {
             if (goal % d2 == 0) {
                 pairs.add(new Pair(i, goal / d2));
@@ -168,7 +167,18 @@ public class Day13Test {
         }
 
         // i'll have to track how many times I've subtracted d1
-        System.out.println(pairs);
+        var min = pairs.getFirst();
+        var cost = 3 * min.i + min.j;
+
+        for (var p : pairs) {
+            var x = 3 * p.i + p.j;
+            if (x < cost) {
+                min = p;
+                cost = x;
+            }
+        }
+
+        assertEquals(new Pair(80, 40), min);
     }
 
     record Pair(int i, int j) {
