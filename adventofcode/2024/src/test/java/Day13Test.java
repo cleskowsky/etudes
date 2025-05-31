@@ -40,16 +40,23 @@ public class Day13Test {
         var testTable = List.of(
                 new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
                 new Claw(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0)),
-                new Claw(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86))
+                new Claw(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86)),
+                new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0))
         );
 
         // when i solve for the goal
+        var cnta = 0;
+        var cntb = 0;
         for (var t : testTable) {
             var result = solver(t.p, t.a, t.b);
+            cnta += result.countA;
+            cntb += result.countB;
 
             // then i should find the min solution that works
             assertEquals(t.r, result);
         }
+
+        System.out.println(3 * cnta + 1 * cntb);
     }
 
     // Returns the cheapest way to reach the prize by pushing buttons a, b
@@ -58,9 +65,7 @@ public class Day13Test {
 
         for (int i = 1; i < 101; i++) {
             for (int j = 1; j < 101; j++) {
-                int x = i * a.x + j * b.x;
-                int y = i * a.y + j * b.y;
-                if (p.x == x && p.y == y) {
+                if (p.x == i * a.x + j * b.x && p.y == i * a.y + j * b.y) {
                     result = new SolverResult(i, j);
                 }
             }
@@ -83,9 +88,18 @@ public class Day13Test {
 
     @Test
     void part1() {
-        var machines = parseInput("inputs/day13.txt");
-        System.out.println(machines);
-        System.out.println(machines.size());
+        var claws = parseInput("inputs/day13.txt");
+        assertEquals(320, claws.size());
+
+        var cnta = 0;
+        var cntb = 0;
+        for (var c : claws) {
+            var result = solver(c.p, c.a, c.b);
+            cnta += result.countA;
+            cntb += result.countB;
+        }
+
+        System.out.println(3 * cnta + cntb);
     }
 
     // Example input:
@@ -124,7 +138,7 @@ public class Day13Test {
     }
 
     private List<Integer> parseInts(String s) {
-        var m = Pattern.compile("\\d{2}");
+        var m = Pattern.compile("\\d+");
         return m.matcher(s).results()
                 .map(MatchResult::group)
                 .map(Integer::parseInt)
