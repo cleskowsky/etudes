@@ -56,7 +56,7 @@ public class Day13Test {
             assertEquals(t.r, result);
         }
 
-        System.out.println(3 * cnta + 1 * cntb);
+        System.out.println(3 * cnta + cntb);
     }
 
     // Returns the cheapest way to reach the prize by pushing buttons a, b
