@@ -24,61 +24,27 @@ public class Day13Test {
     public record Button(int x, int y) {
     }
 
+    public record SolverResult(int countA, int countB) {
+    }
+
     @Test
-    void testSolver() {
+    void solver() {
+
         // given a goal and step sizes
-        var prize = new Prize(8400, 5400);
-        var buttonA = new Button(94, 34);
-        var buttonB = new Button(22, 67);
+        var testTable = List.of(
+                // Goal, ButtonA, ButtonB, Expected result
+                List.of(new Prize(8400, 5400), new Button(94, 34), new Button(22, 67), new SolverResult(80, 40)),
+                List.of(new Prize(12748, 12176), new Button(26, 66), new Button(67, 21), new SolverResult(0, 0)),
+                List.of(new Prize(7870, 6450), new Button(17, 86), new Button(84, 37), new SolverResult(38, 86))
+        );
 
         // when i solve for the goal
-        // looking for x, y such that x*B + y*A == goal
-        // in the example case, we have:
-        // (8400, 5400) = x * (94, 34) + y * (22, 67)
-        var result = solver(prize, buttonA, buttonB);
+        for (var t : testTable) {
+            var result = Day13.solver(t.get(0), t.get(1), t.get(2));
 
-        // then i should find the min solution that works
-        assertEquals(new SolverResult(80, 40), result);
-    }
-
-    record SolverResult(int countA, int countB) {
-    }
-
-    // Returns the cheapest presses of buttons a, b to reach the prize
-    // Pressing button a costs 3 credits
-    // Pressing button b costs 1 credits
-    private SolverResult solver(Prize p, Button a, Button b) {
-        var result = new SolverResult(0, 0);
-
-        for (int i = 1; i < 101; i++) {
-            for (int j = 1; j < 101; j++) {
-                int x = i * a.x + j * b.x;
-                int y = i * a.y + j * b.y;
-                if (p.x == x && p.y == y) {
-                    result = new SolverResult(i, j);
-                }
-            }
+            // then i should find the min solution that works
+            assertEquals(t.get(3), result);
         }
-
-        return result;
-    }
-
-    @Test
-    void noSolution1() {
-        var prize = new Prize(12748, 12176);
-        var buttonA = new Button(26, 66);
-        var buttonB = new Button(67, 21);
-
-        assertEquals(new SolverResult(0, 0), solver(prize, buttonA, buttonB));
-    }
-
-    @Test
-    void solverTest2() {
-        var prize = new Prize(7870, 6450);
-        var buttonA = new Button(17, 86);
-        var buttonB = new Button(84, 37);
-
-        assertEquals(new SolverResult(38, 86), solver(prize, buttonA, buttonB));
     }
 
     @Test
