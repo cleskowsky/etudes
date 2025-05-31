@@ -33,9 +33,9 @@ public class Day13Test {
         // given a goal and step sizes
         var testTable = List.of(
                 // Goal, ButtonA, ButtonB, Expected result
-                List.of(new Prize(8400, 5400), new Button(94, 34), new Button(22, 67), new SolverResult(80, 40)),
-                List.of(new Prize(12748, 12176), new Button(26, 66), new Button(67, 21), new SolverResult(0, 0)),
-                List.of(new Prize(7870, 6450), new Button(17, 86), new Button(84, 37), new SolverResult(38, 86))
+                List.of(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
+                List.of(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0)),
+                List.of(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86))
         );
 
         // when i solve for the goal
@@ -45,6 +45,18 @@ public class Day13Test {
             // then i should find the min solution that works
             assertEquals(t.get(3), result);
         }
+    }
+
+    Prize prize(int x, int y) {
+        return new Prize(x, y);
+    }
+
+    Button button(int x, int y) {
+        return new Button(x, y);
+    }
+
+    SolverResult result(int a, int b) {
+        return new SolverResult(a, b);
     }
 
     @Test
