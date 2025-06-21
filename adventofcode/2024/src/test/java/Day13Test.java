@@ -41,8 +41,7 @@ public class Day13Test {
                 new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
                 new Claw(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0)),
                 new Claw(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86)),
-                new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0))
-        );
+                new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0)));
 
         // when i solve for the goal
         var cnta = 0;
@@ -64,47 +63,36 @@ public class Day13Test {
     // Returns the cheapest way to reach the prize by pushing buttons a, b
     public SolverResult solver(Prize p, Button a, Button b) {
 
-        // given goal x, delta d1, delta d2
-        var goal = p.x;
-        var d1 = a.x;
-        var d2 = b.x;
+        var result = new SolverResult(0, 0);
 
-        // when i subtract d1 from it i times
-        // then d2 should divide it as well if there is an answer
-        // want to find i, j such that i * d1 + j * d2 = goal
-        var pairs = new ArrayList<Pair>();
+        for (int i = 0; i < 100; i++) {
 
-        var i = 0;
-        while (goal >= 0) {
-            if (goal % d2 == 0) {
-                var j = goal / d2;
+            // i * v1 + n * v2 = goal
+            // we only have 1 unknown here which is how many times
+            // we need to press button b (v2)
 
-                // check goal.y works too
-                if (p.y == i * a.y + j * b.y) {
-                    pairs.add(new Pair(i, goal / d2));
+            // i * v1 + n * v2 = goal
+            // n * v2 = goal - i * v1
+            // n = (goal - i * v1) / v2
+
+            if ((p.x - i * a.x) % b.x == 0) {
+                
+                // b divides it evenly
+                System.out.println("i evenly divides: " + i);
+
+                if ((p.y - i * a.y) % b.y == 0) {
+
+                    // found n!
+                    var n = (p.y - i * a.y) / b.y;
+                    System.out.println("n evenly divides: " + n);
+
+                    return new SolverResult(i, n);
                 }
             }
-            goal -= d1;
-            i++;
+
         }
 
-        if (pairs.isEmpty()) {
-            return new SolverResult(0, 0);
-        }
-
-        // i'll have to track how many times I've subtracted d1
-        var min = pairs.getFirst();
-        var cost = 3 * min.i + min.j;
-
-        for (var pair : pairs) {
-            var x = 3 * pair.i + pair.j;
-            if (x < cost) {
-                min = pair;
-                cost = x;
-            }
-        }
-
-        return new SolverResult(min.i, min.j);
+        return result;
     }
 
     Prize prize(int x, int y) {
@@ -132,18 +120,19 @@ public class Day13Test {
             cntb += result.countB;
         }
 
-        System.out.println(3 * cnta + cntb);
+        System.out.println(3 * cnta * 10000000000000L);
+        assertEquals(40369, 3 * cnta + cntb);
     }
 
     // Example input:
-    //    Button A: X+40, Y+38
-    //    Button B: X+21, Y+84
-    //    Prize: X=4245, Y=5634
+    // Button A: X+40, Y+38
+    // Button B: X+21, Y+84
+    // Prize: X=4245, Y=5634
     //
-    //    Button A: X+19, Y+11
-    //    Button B: X+37, Y+98
-    //    Prize: X=3246, Y=6474
-    //    ...
+    // Button A: X+19, Y+11
+    // Button B: X+37, Y+98
+    // Prize: X=3246, Y=6474
+    // ...
     private List<Claw> parseInput(String s) {
         var result = new ArrayList<Claw>();
 
@@ -159,9 +148,7 @@ public class Day13Test {
                                 new Button(b1.getFirst(), b1.getLast()),
                                 new Button(b2.getFirst(), b2.getLast()),
                                 // placeholder
-                                new SolverResult(0, 0)
-                        )
-                );
+                                new SolverResult(0, 0)));
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
