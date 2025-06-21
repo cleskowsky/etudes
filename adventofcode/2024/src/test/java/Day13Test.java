@@ -38,10 +38,10 @@ public class Day13Test {
 
         // given a goal and step sizes
         var testTable = List.of(
-                new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)));
-                // new Claw(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0)),
-                // new Claw(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86)),
-                // new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0)));
+                new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
+                new Claw(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0)),
+                new Claw(prize(7870, 6450), button(17, 86), button(84, 37), result(38, 86)),
+                new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0)));
 
         // when i solve for the goal
         var cnta = 0;
@@ -63,30 +63,15 @@ public class Day13Test {
 
         var result = new SolverResult(0, 0);
 
-        // for (int i = 1; i < 101; i++) {
-        //     for (int j = 1; j < 101; j++) {
-        //         if (p.x == i * a.x + j * b.x && p.y == i * a.y + j * b.y) {
-        //             result = new SolverResult(i, j);
-        //         }
-        //     }
-        // }
-
-        // choose a length for v1
-        // is there a solution for v2 starting from v1?
-
         for (int i = 0; i < 100; i++) {
 
             // i * v1 + n * v2 = goal
             // we only have 1 unknown here which is how many times
             // we need to press button b (v2)
 
-
             // i * v1 + n * v2 = goal
             // n * v2 = goal - i * v1
             // n = (goal - i * v1) / v2
-
-            // solve: (n * v2.x) - i * v1.x = goal.x &&
-            //        (n * v2.y) - i * v1.y = goal.y
 
             if ((p.x - i * a.x) % b.x == 0) {
                 
