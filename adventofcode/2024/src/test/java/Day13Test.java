@@ -63,13 +63,13 @@ public class Day13Test {
     public SolverResult solver(Prize p, Button a, Button b) {
         var result = new SolverResult(0, 0);
 
-//        for (int i = 1; i < 101; i++) {
-//            for (int j = 1; j < 101; j++) {
-//                if (p.x == i * a.x + j * b.x && p.y == i * a.y + j * b.y) {
-//                    result = new SolverResult(i, j);
-//                }
-//            }
-//        }
+       for (int i = 1; i < 101; i++) {
+           for (int j = 1; j < 101; j++) {
+               if (p.x == i * a.x + j * b.x && p.y == i * a.y + j * b.y) {
+                   result = new SolverResult(i, j);
+               }
+           }
+       }
 
         return result;
     }
@@ -99,7 +99,7 @@ public class Day13Test {
             cntb += result.countB;
         }
 
-        System.out.println(3 * cnta + cntb);
+        assertEquals(40369, 3 * cnta + cntb);
     }
 
     // Example input:
