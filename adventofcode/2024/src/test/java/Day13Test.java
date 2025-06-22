@@ -209,19 +209,34 @@ public class Day13Test {
         // given 2 equations with 2 unknowns
         // new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
 
+        var claw = new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40));
+
         // px = i * ax + j * bx
         // py = i * ay + j * by
 
         // 8400 = i * 94 + j * 22
         // 5400 = i * 34 + j * 67
+
+        // solve for j
         // i = (8400 - j * 22) / 94
         // 34 * (8400 - j * 22) / 94 + 67 * j = 5400
         // 34 * (8400 - j * 22) + 94 * 67 * j = 5400 * 94
-        // 34 * 8400 - 34 * 22 * j + 6298 * j = 507,600
-        // 285,600 - 748 * j + 6298 * j = 507,600
-        // 5,550 * j + 285,600 = 507,600
-        // 5,550 * j = 222,000
-        // j = 40
+        // this is it ... i can get j using values from the input
+        // 34 * 8400 - 34 * 22 * j + 94 * 67 * j = 5400 * 94
+
+        // and again for i
+        // j = (5400 - i * 34) / 67
+        // 8400 = i * 94 + (5400 - i * 34) / 67 * 22
+        // 67 * 8400 = i * 94 * 67 + (5400 - i * 34) * 22
+        // 67 * 8400 = i * 94 * 67 + 5400 * 22 - i * 34 * 22
+        // 67 * 8400 - 5400 * 22 = i * 94 * 67 - i * 34 * 22
+        // i = (67 * 8400 - 5400 * 22) / (94 * 67 - 34 * 22)
+
+        int d = claw.a.x * claw.b.y - claw.a.y * claw.b.x;
+        var i = (claw.b.y * claw.p.x - claw.p.y * claw.b.x) / d;
+        var j = (claw.p.y * claw.a.x - claw.a.y * claw.p.x) / d;
+
+        assertEquals(claw.r, result(i, j));
 
         // when given to solver to solve
         // then solver either finds a solution or indicates no solution exists
