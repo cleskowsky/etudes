@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class Day13Test {
 
@@ -21,13 +21,13 @@ public class Day13Test {
     // Note: Pressing button a costs 3 credits, pressing button b
     // costs 1 credits
 
-    public record Prize(int x, int y) {
+    public record Prize(long x, long y) {
     }
 
     public record Button(int x, int y) {
     }
 
-    public record SolverResult(int countA, int countB) {
+    public record SolverResult(long countA, long countB) {
     }
 
     record Claw(Prize p, Button a, Button b, SolverResult r) {
@@ -44,8 +44,8 @@ public class Day13Test {
                 new Claw(prize(18641, 10279), button(69, 23), button(27, 71), result(0, 0)));
 
         // when i solve for the goal
-        var cnta = 0;
-        var cntb = 0;
+        var cnta = 0L;
+        var cntb = 0L;
         for (var t : testTable) {
             System.out.println(t);
 
@@ -75,15 +75,15 @@ public class Day13Test {
             // n * v2 = goal - i * v1
             // n = (goal - i * v1) / v2
 
-            if ((p.x - i * a.x) % b.x == 0) {
+            if ((p.x - (long) i * a.x) % b.x == 0) {
 
                 // b divides it evenly
                 System.out.println("i evenly divides: " + i);
 
-                if ((p.y - i * a.y) % b.y == 0) {
+                if ((p.y - (long) i * a.y) % b.y == 0) {
 
                     // found n!
-                    var n = (p.y - i * a.y) / b.y;
+                    var n = (p.y - (long) i * a.y) / b.y;
                     System.out.println("n evenly divides: " + n);
 
                     return new SolverResult(i, n);
@@ -103,7 +103,7 @@ public class Day13Test {
         return new Button(x, y);
     }
 
-    SolverResult result(int a, int b) {
+    SolverResult result(long a, long b) {
         return new SolverResult(a, b);
     }
 
@@ -112,8 +112,8 @@ public class Day13Test {
         var claws = parseInput("inputs/day13.txt");
         assertEquals(320, claws.size());
 
-        var cnta = 0;
-        var cntb = 0;
+        var cnta = 0L;
+        var cntb = 0L;
         for (var c : claws) {
             var result = solver(c.p, c.a, c.b);
             cnta += result.countA;
@@ -232,14 +232,26 @@ public class Day13Test {
         // 67 * 8400 - 5400 * 22 = i * 94 * 67 - i * 34 * 22
         // i = (67 * 8400 - 5400 * 22) / (94 * 67 - 34 * 22)
 
-        int d = claw.a.x * claw.b.y - claw.a.y * claw.b.x;
+        double d = claw.a.x * claw.b.y - claw.a.y * claw.b.x;
         var i = (claw.b.y * claw.p.x - claw.p.y * claw.b.x) / d;
         var j = (claw.p.y * claw.a.x - claw.a.y * claw.p.x) / d;
 
-        assertEquals(claw.r, result(i, j));
+        assertEquals(claw.r, result((long) i, (long) j));
 
         // when given to solver to solve
         // then solver either finds a solution or indicates no solution exists
+    }
+
+    @Test
+    void cantSolve() {
+        var claw = new Claw(prize(12748, 12176), button(26, 66), button(67, 21), result(0, 0));
+
+        double d = claw.a.x * claw.b.y - claw.a.y * claw.b.x;
+        var i = (claw.b.y * claw.p.x - claw.p.y * claw.b.x) / d;
+        var j = (claw.p.y * claw.a.x - claw.a.y * claw.p.x) / d;
+
+        assertNotEquals(Math.floor(i), i, 0.0);
+        assertNotEquals(Math.floor(j), j, 0.0);
     }
 
 }
