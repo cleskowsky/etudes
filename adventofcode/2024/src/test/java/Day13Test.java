@@ -118,7 +118,7 @@ public class Day13Test {
             cntb += result.countB;
         }
 
-        assertEquals(40369, 3 * cnta + cntb);
+        assertEquals(72587986598368L, 3 * cnta + cntb);
     }
 
     // Example input:
