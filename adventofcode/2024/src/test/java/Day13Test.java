@@ -74,7 +74,7 @@ public class Day13Test {
         return new SolverResult(0, 0);
     }
 
-    Prize prize(int x, int y) {
+    Prize prize(long x, long y) {
         return new Prize(x, y);
     }
 
@@ -99,7 +99,25 @@ public class Day13Test {
             cntb += result.countB;
         }
 
-        System.out.println(3 * cnta * 10000000000000L);
+        assertEquals(40369, 3 * cnta + cntb);
+    }
+
+    @Test
+    void part2() {
+        var claws = parseInput("inputs/day13.txt");
+        assertEquals(320, claws.size());
+
+        var cnta = 0L;
+        var cntb = 0L;
+        for (var c : claws) {
+            // Move prize 10,000,000,000,000 away from input
+            long offset = 10000000000000L;
+            var p = prize(c.p.x + offset, c.p.y + offset);
+            var result = solver(p, c.a, c.b);
+            cnta += result.countA;
+            cntb += result.countB;
+        }
+
         assertEquals(40369, 3 * cnta + cntb);
     }
 
@@ -232,5 +250,4 @@ public class Day13Test {
         assertNotEquals(Math.floor(i), i, 0.0);
         assertNotEquals(Math.floor(j), j, 0.0);
     }
-
 }
