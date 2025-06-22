@@ -203,4 +203,18 @@ public class Day13Test {
 
     record Pair(int i, int j) {
     }
+
+    @Test
+    void benchmarkSolvePart2SampleWithFarAwayTarget() {
+        // this is just to see how long it takes to run the solver
+        var start = System.currentTimeMillis();
+
+//        var x = 0;
+//        while (x < 10000000008400L) {
+//            x += 94;
+//        }
+        
+        var end = System.currentTimeMillis();
+        System.out.println("Time taken: " + (end - start) + " ms");
+    }
 }
