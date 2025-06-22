@@ -63,36 +63,15 @@ public class Day13Test {
     // Returns the cheapest way to reach the prize by pushing buttons a, b
     public SolverResult solver(Prize p, Button a, Button b) {
 
-        var result = new SolverResult(0, 0);
+        double i1 = a.x * b.y - a.y * b.x;
+        var i = (b.y * p.x - p.y * b.x) / i1;
+        var j = (p.y * a.x - a.y * p.x) / i1;
 
-        for (int i = 0; i < 100; i++) {
-
-            // i * v1 + n * v2 = goal
-            // we only have 1 unknown here which is how many times
-            // we need to press button b (v2)
-
-            // i * v1 + n * v2 = goal
-            // n * v2 = goal - i * v1
-            // n = (goal - i * v1) / v2
-
-            if ((p.x - (long) i * a.x) % b.x == 0) {
-
-                // b divides it evenly
-                System.out.println("i evenly divides: " + i);
-
-                if ((p.y - (long) i * a.y) % b.y == 0) {
-
-                    // found n!
-                    var n = (p.y - (long) i * a.y) / b.y;
-                    System.out.println("n evenly divides: " + n);
-
-                    return new SolverResult(i, n);
-                }
-            }
-
+        if ((i % 1 == 0) && (j % 1 == 0)) {
+            return new SolverResult((long) i, (long) j);
         }
 
-        return result;
+        return new SolverResult(0, 0);
     }
 
     Prize prize(int x, int y) {
