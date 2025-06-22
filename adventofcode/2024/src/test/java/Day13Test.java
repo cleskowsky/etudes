@@ -76,7 +76,7 @@ public class Day13Test {
             // n = (goal - i * v1) / v2
 
             if ((p.x - i * a.x) % b.x == 0) {
-                
+
                 // b divides it evenly
                 System.out.println("i evenly divides: " + i);
 
@@ -205,16 +205,26 @@ public class Day13Test {
     }
 
     @Test
-    void benchmarkSolvePart2SampleWithFarAwayTarget() {
-        // this is just to see how long it takes to run the solver
-        var start = System.currentTimeMillis();
+    void solve() {
+        // given 2 equations with 2 unknowns
+        // new Claw(prize(8400, 5400), button(94, 34), button(22, 67), result(80, 40)),
 
-//        var x = 0;
-//        while (x < 10000000008400L) {
-//            x += 94;
-//        }
-        
-        var end = System.currentTimeMillis();
-        System.out.println("Time taken: " + (end - start) + " ms");
+        // px = i * ax + j * bx
+        // py = i * ay + j * by
+
+        // 8400 = i * 94 + j * 22
+        // 5400 = i * 34 + j * 67
+        // i = (8400 - j * 22) / 94
+        // 34 * (8400 - j * 22) / 94 + 67 * j = 5400
+        // 34 * (8400 - j * 22) + 94 * 67 * j = 5400 * 94
+        // 34 * 8400 - 34 * 22 * j + 6298 * j = 507,600
+        // 285,600 - 748 * j + 6298 * j = 507,600
+        // 5,550 * j + 285,600 = 507,600
+        // 5,550 * j = 222,000
+        // j = 40
+
+        // when given to solver to solve
+        // then solver either finds a solution or indicates no solution exists
     }
+
 }
