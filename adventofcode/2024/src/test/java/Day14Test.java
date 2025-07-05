@@ -2,6 +2,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class Day14Test {
 
@@ -42,9 +43,9 @@ public class Day14Test {
                 p=7,3 v=-1,2
                 p=2,4 v=2,-3
                 p=9,5 v=-3,-3""";
-        System.out.println(parseInput(s));
 
         var robots = parseInput(s);
+        System.out.println(robots);
         System.out.println(robots.size());
     }
 
@@ -54,16 +55,25 @@ public class Day14Test {
     // p=10,3 v=-1,2
     // ...
     List<Robot> parseInput(String s) {
-        var val = Arrays.stream(s.split("\n"))
+        return Arrays.stream(s.split("\n"))
                 .map(this::parseRobot)
                 .toList();
-
-        return val;
     }
 
-    // eg p=2,4 v=2,-3
+    // eg Pos and mov for a single robot separated by a space
+    // p=2,4 v=2,-3
     Robot parseRobot(String s) {
-        var split = s.split()
-        return new Robot(new Pos(0, 0), new Mov(0, 0));
+        var pat = Pattern.compile("p=(-?\\d+),(-?\\d+)\\sv=(-?\\d+),(-?\\d+)");
+
+        // parse pos, mov
+        var m = pat.matcher(s);
+        if (m.matches()) {
+            return new Robot(
+                    new Pos(Integer.parseInt(m.group(1)), Integer.parseInt(m.group(2))),
+                    new Mov(Integer.parseInt(m.group(3)), Integer.parseInt(m.group(4)))
+            );
+        } else {
+            throw new RuntimeException("Bad robot: " + s);
+        }
     }
 }
