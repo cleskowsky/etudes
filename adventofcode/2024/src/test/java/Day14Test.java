@@ -28,9 +28,8 @@ public class Day14Test {
     record Robot(Pos p, Mov m) {
     }
 
-    @Test
-    void canParseInput() {
-        var s = """
+    String sampleInput() {
+        return """
                 p=0,4 v=3,-3
                 p=6,3 v=-1,-3
                 p=10,3 v=-1,2
@@ -43,8 +42,11 @@ public class Day14Test {
                 p=7,3 v=-1,2
                 p=2,4 v=2,-3
                 p=9,5 v=-3,-3""";
+    }
 
-        var robots = parseInput(s);
+    @Test
+    void canParseInput() {
+        var robots = parseInput(sampleInput());
         System.out.println(robots);
         System.out.println(robots.size());
     }
