@@ -98,7 +98,15 @@ public class Day14Test {
 
     Robot moveRobot(Robot r, int steps, int maxX, int maxY) {
         var newX = (r.pos.x + r.mov.u * steps) % maxX;
+        if (newX < 0) {
+            newX = maxX + newX;
+        }
+
         var newY = (r.pos.y + r.mov.v * steps) % maxY;
+        if (newY < 0) {
+            newY = maxY + newY;
+        }
+
         return new Robot(new Pos(newX, newY), r.mov);
     }
 
@@ -137,5 +145,13 @@ public class Day14Test {
         r = moveRobot(r, 1, 3, 1);
         // then it will be in tile 0, 0
         assertEquals(new Pos(0, 0), r.pos);
+
+        // .x. -> x.. -> ..x
+        // given a 1-d map 3 tiles wide, and 1 tile deep, and a robot at 1, 0
+        r = new Robot(new Pos(1, 0), new Mov(-2, 0));
+        // when robot moves 2 tiles left
+        r = moveRobot(r, 1, 3, 1);
+        // then it will be in tile 2, 0
+        assertEquals(new Pos(2, 0), r.pos);
     }
 }
