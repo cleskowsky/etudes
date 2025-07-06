@@ -1,8 +1,11 @@
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day14Test {
 
@@ -25,7 +28,7 @@ public class Day14Test {
     record Mov(int u, int v) {
     }
 
-    record Robot(Pos p, Mov m) {
+    record Robot(Pos pos, Mov mov) {
     }
 
     String sampleInput() {
@@ -52,9 +55,9 @@ public class Day14Test {
     }
 
     // eg 1 robot per line
-    // p=0,4 v=3,-3
-    // p=6,3 v=-1,-3
-    // p=10,3 v=-1,2
+    // pos=0,4 v=3,-3
+    // pos=6,3 v=-1,-3
+    // pos=10,3 v=-1,2
     // ...
     List<Robot> parseInput(String s) {
         return Arrays.stream(s.split("\n"))
@@ -63,7 +66,7 @@ public class Day14Test {
     }
 
     // eg Pos and mov for a single robot separated by a space
-    // p=2,4 v=2,-3
+    // pos=2,4 v=2,-3
     Robot parseRobot(String s) {
         var pat = Pattern.compile("p=(-?\\d+),(-?\\d+)\\sv=(-?\\d+),(-?\\d+)");
 
@@ -77,5 +80,62 @@ public class Day14Test {
         } else {
             throw new RuntimeException("Bad robot: " + s);
         }
+    }
+
+    @Test
+    void sample() {
+        var robots = parseInput(sampleInput());
+        robots.forEach(System.out::println);
+        System.out.println();
+
+        robots = parseInput(sampleInput())
+                .stream()
+                .map(r -> moveRobot(r, 100, 11, 7))
+                .toList();
+
+        robots.forEach(System.out::println);
+    }
+
+    Robot moveRobot(Robot r, int steps, int maxX, int maxY) {
+        var newX = (r.pos.x + r.mov.u * steps) % maxX;
+        var newY = (r.pos.y + r.mov.v * steps) % maxY;
+        return new Robot(new Pos(newX, newY), r.mov);
+    }
+
+    /*
+     * let's see if we can predict what tile a robot will land in
+     * after wrapping around from one side of the floor map to the
+     * other (multiple times)
+     */
+
+    @Test
+    void mapWrapping() {
+        // x, moving right
+
+        // .x. -> ..x
+        // given a 1-d map 3 tiles wide, and 1 tile deep, and a robot at 1, 0
+        var r = new Robot(new Pos(1, 0), new Mov(1, 0));
+        // when robot moves 1 tile right
+        r = moveRobot(r, 1, 3, 1);
+        // then it will be in tile 2, 0
+        assertEquals(new Pos(2, 0), r.pos);
+
+        // .x. -> ..x -> x..
+        // given a 1-d map 3 tiles wide, and 1 tile deep, and a robot at 1, 0
+        r = new Robot(new Pos(1, 0), new Mov(2, 0));
+        // when robot moves 2 tiles right
+        r = moveRobot(r, 1, 3, 1);
+        // then it will be in tile 0, 0
+        assertEquals(new Pos(0, 0), r.pos);
+
+        // x, moving left
+
+        // .x. -> x..
+        // given a 1-d map 3 tiles wide, and 1 tile deep, and a robot at 1, 0
+        r = new Robot(new Pos(1, 0), new Mov(-1, 0));
+        // when robot moves 1 tile left
+        r = moveRobot(r, 1, 3, 1);
+        // then it will be in tile 0, 0
+        assertEquals(new Pos(0, 0), r.pos);
     }
 }
