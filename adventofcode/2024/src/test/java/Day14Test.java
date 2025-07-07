@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestTemplate;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -91,7 +94,7 @@ public class Day14Test {
                 .map(r -> moveRobot(r, 100, 11, 7))
                 .toList();
 
-        System.out.println(safetyFactor(robots, 11, 7));
+        assertEquals(12, safetyFactor(robots, 11, 7));
     }
 
     Robot moveRobot(Robot r, int steps, int maxX, int maxY) {
@@ -188,8 +191,19 @@ public class Day14Test {
             }
         });
 
-        System.out.println(Arrays.toString(quadrants));
-
         return Arrays.stream(quadrants).reduce(1, (a, b) -> a * b);
+    }
+
+    @Test
+    void partA() throws IOException {
+        String input = Files.readString(Path.of("inputs/day14.txt"));
+        var robots = parseInput(input);
+
+        robots = parseInput(sampleInput())
+                .stream()
+                .map(r -> moveRobot(r, 100, 11, 7))
+                .toList();
+
+        System.out.println(safetyFactor(robots, 11, 7));
     }
 }
