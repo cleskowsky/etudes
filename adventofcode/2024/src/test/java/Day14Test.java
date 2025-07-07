@@ -85,15 +85,13 @@ public class Day14Test {
     @Test
     void sample() {
         var robots = parseInput(sampleInput());
-        robots.forEach(System.out::println);
-        System.out.println();
 
         robots = parseInput(sampleInput())
                 .stream()
                 .map(r -> moveRobot(r, 100, 11, 7))
                 .toList();
 
-        robots.forEach(System.out::println);
+        System.out.println(safetyFactor(robots, 11, 7));
     }
 
     Robot moveRobot(Robot r, int steps, int maxX, int maxY) {
@@ -153,5 +151,45 @@ public class Day14Test {
         r = moveRobot(r, 1, 3, 1);
         // then it will be in tile 2, 0
         assertEquals(new Pos(2, 0), r.pos);
+    }
+
+    // Returns the safety factor for the given map and robots
+    int safetyFactor(List<Robot> robots, int maxX, int maxY) {
+
+        // the grid length and width are both odd
+        assert maxX % 2 == 1;
+        assert maxY % 2 == 1;
+
+        /*
+         * i have to sort the robots into quadrants and then the
+         * safety factor is the number of robots in each quadrant
+         * multiplied together
+         */
+
+        int midX = maxX / 2;
+        int midY = maxY / 2;
+
+        int[] quadrants = new int[4];
+        robots.forEach(r -> {
+            if (r.pos.x < midX) {
+                if (r.pos.y < midY) {
+                    quadrants[0]++;
+                } else if (r.pos.y > midY) {
+                    quadrants[1]++;
+                }
+            }
+
+            if (r.pos.x > midX) {
+                if (r.pos.y < midY) {
+                    quadrants[2]++;
+                } else if (r.pos.y > midY) {
+                    quadrants[3]++;
+                }
+            }
+        });
+
+        System.out.println(Arrays.toString(quadrants));
+
+        return Arrays.stream(quadrants).reduce(1, (a, b) -> a * b);
     }
 }
