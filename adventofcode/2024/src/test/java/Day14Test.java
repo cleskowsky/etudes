@@ -197,13 +197,15 @@ public class Day14Test {
     @Test
     void partA() throws IOException {
         String input = Files.readString(Path.of("inputs/day14.txt"));
-        var robots = parseInput(input);
 
-        robots = parseInput(sampleInput())
+        int gridX = 101;
+        int gridY = 103;
+
+        var robots = parseInput(input)
                 .stream()
-                .map(r -> moveRobot(r, 100, 11, 7))
+                .map(r -> moveRobot(r, 100, gridX, gridY))
                 .toList();
 
-        System.out.println(safetyFactor(robots, 11, 7));
+        assertEquals(224969976, safetyFactor(robots, gridX, gridY));
     }
 }
