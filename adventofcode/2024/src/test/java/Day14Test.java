@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -271,6 +272,7 @@ public class Day14Test {
             this.y = y;
         }
     }
+
     @Test
     void isOnALine() {
         // given a robot
@@ -292,5 +294,46 @@ public class Day14Test {
             int dy = r.pos().y() - d.y;
             return g.containsKey(new Pos(dx, dy));
         });
+    }
+
+    @Test
+    void partB() throws IOException {
+        String input = Files.readString(Path.of("inputs/day14.txt"));
+
+        int gridX = 101;
+        int gridY = 103;
+
+        var robots = parseInput(input);
+
+        // if more than half of the robots are on a line
+        // or diagonal, print the step
+
+        // event loop
+        int step = 0;
+        while (true) {
+            step++;
+
+            var movedRobots = robots.stream()
+                    .map(r -> moveRobot(r, 1, gridX, gridY))
+                    .toList();
+
+            // add robots to grid
+            var g = new RobotGrid();
+            movedRobots.forEach(r -> g.put(r.pos, r));
+
+            var found = movedRobots.stream()
+                    .filter(r -> isOnALine(r, g) || isOnADiagonal(r, g))
+                    .count();
+
+            // answer: on step 7892, 377 robots are aligned
+            if (found >= 350) {
+                System.out.println("Part_b aligned=" + found);
+                break;
+            }
+
+            robots = movedRobots;
+        }
+
+        assertEquals(7892, step);
     }
 }
