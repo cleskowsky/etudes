@@ -237,12 +237,12 @@ public class Day14Test {
         SW(-1, 1),
         SE(1, 1);
 
-        public final int dx;
-        public final int dy;
+        public final int x;
+        public final int y;
 
-        Diagonals(int dx, int dy) {
-            this.dx = dx;
-            this.dy = dy;
+        Diagonals(int x, int y) {
+            this.x = x;
+            this.y = y;
         }
     }
 
@@ -251,14 +251,46 @@ public class Day14Test {
 
     boolean isOnADiagonal(Robot r, RobotGrid g) {
         return Arrays.stream(Diagonals.values()).anyMatch(d -> {
-            int dx = r.pos().x() - d.dx;
-            int dy = r.pos().y() - d.dy;
+            int dx = r.pos().x() - d.x;
+            int dy = r.pos().y() - d.y;
             return g.containsKey(new Pos(dx, dy));
         });
     }
 
-//    @Test
-//    void isOnALine(Robot r, RobotGrid g) {
-//
-//    }
+    enum Cardinals {
+        N(0, -1),
+        E(1, 0),
+        S(0, 1),
+        W(-1, 0);
+
+        public final int x;
+        public final int y;
+
+        Cardinals(int x, int y) {
+            this.x = x;
+            this.y = y;
+        }
+    }
+    @Test
+    void isOnALine() {
+        // given a robot
+        var r1 = new Robot(new Pos(1, 0), new Mov(1, 0));
+        var r2 = new Robot(new Pos(1, 1), new Mov(0, 1));
+
+        // when it is on a vert or horiz line with its neighbours,
+        var g = new RobotGrid();
+        g.put(r1.pos, r1);
+        g.put(r2.pos, r2);
+
+        // then return true
+        assertTrue(isOnALine(r1, g));
+    }
+
+    boolean isOnALine(Robot r, RobotGrid g) {
+        return Arrays.stream(Cardinals.values()).anyMatch(d -> {
+            int dx = r.pos().x() - d.x;
+            int dy = r.pos().y() - d.y;
+            return g.containsKey(new Pos(dx, dy));
+        });
+    }
 }
