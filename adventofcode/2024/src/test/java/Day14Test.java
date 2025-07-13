@@ -1,5 +1,4 @@
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestTemplate;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,7 +6,6 @@ import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -233,7 +231,7 @@ public class Day14Test {
         assertTrue(isOnADiagonal(r1, g));
     }
 
-    enum Direction {
+    enum Diagonals {
         NW(-1, -1),
         NE(1, -1),
         SW(-1, 1),
@@ -242,7 +240,7 @@ public class Day14Test {
         public final int dx;
         public final int dy;
 
-        Direction(int dx, int dy) {
+        Diagonals(int dx, int dy) {
             this.dx = dx;
             this.dy = dy;
         }
@@ -252,10 +250,15 @@ public class Day14Test {
     }
 
     boolean isOnADiagonal(Robot r, RobotGrid g) {
-        return Arrays.stream(Direction.values()).anyMatch(d -> {
+        return Arrays.stream(Diagonals.values()).anyMatch(d -> {
             int dx = r.pos().x() - d.dx;
             int dy = r.pos().y() - d.dy;
             return g.containsKey(new Pos(dx, dy));
         });
     }
+
+//    @Test
+//    void isOnALine(Robot r, RobotGrid g) {
+//
+//    }
 }
