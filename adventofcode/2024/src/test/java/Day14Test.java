@@ -278,27 +278,28 @@ public class Day14Test {
         while (true) {
             step++;
 
-            var movedRobots = robots.stream()
+            // move robots
+            robots = robots.stream()
                     .map(r -> moveRobot(r, 1, gridX, gridY))
                     .toList();
 
-            // add robots to grid
+            // make a new robot grid
             var g = new RobotGrid();
-            movedRobots.forEach(r -> g.put(r.pos, r));
+            robots.forEach(r -> g.put(r.pos, r));
 
-            var found = movedRobots.stream()
+            // count robots with adjacents
+            var found = robots.stream()
                     .filter(r -> isAdjacent(r, g))
                     .count();
 
-            // answer: on step 7892, 377 robots are aligned
+            // stop when enough robots are adjacent to others
             if (found >= 350) {
                 System.out.println("Part_b aligned=" + found);
                 break;
             }
-
-            robots = movedRobots;
         }
 
+        // answer: on step 7892, 377 robots are aligned
         assertEquals(7892, step);
     }
 }
