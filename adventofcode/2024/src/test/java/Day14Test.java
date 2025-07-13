@@ -5,10 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class Day14Test {
 
@@ -207,5 +210,52 @@ public class Day14Test {
                 .toList();
 
         assertEquals(224969976, safetyFactor(robots, gridX, gridY));
+    }
+
+    /*
+     * for part b, I'm looking for a step where the robots are lined up in such a
+     * way that it looks like i'm down at a xmas tree. i will try frequency analysis
+     * for robots on a diagonal or on a straight line relative to others
+     */
+
+    @Test
+    void isOnADiagonal() {
+        // given a robot
+        var r1 = new Robot(new Pos(0, 0), new Mov(1, 0));
+        var r2 = new Robot(new Pos(1, 1), new Mov(0, 1));
+
+        // when it is on a diagonal with its neighbours,
+        var g = new RobotGrid();
+        g.put(r1.pos, r1);
+        g.put(r2.pos, r2);
+
+        // then return true
+        assertTrue(isOnADiagonal(r1, g));
+    }
+
+    enum Direction {
+        NW(-1, -1),
+        NE(1, -1),
+        SW(-1, 1),
+        SE(1, 1);
+
+        public final int dx;
+        public final int dy;
+
+        Direction(int dx, int dy) {
+            this.dx = dx;
+            this.dy = dy;
+        }
+    }
+
+    class RobotGrid extends HashMap<Pos, Robot> {
+    }
+
+    boolean isOnADiagonal(Robot r, RobotGrid g) {
+        return Arrays.stream(Direction.values()).anyMatch(d -> {
+            int dx = r.pos().x() - d.dx;
+            int dy = r.pos().y() - d.dy;
+            return g.containsKey(new Pos(dx, dy));
+        });
     }
 }
