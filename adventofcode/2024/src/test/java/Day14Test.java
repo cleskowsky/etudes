@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -218,7 +217,7 @@ public class Day14Test {
      */
 
     @Test
-    void isOnADiagonal() {
+    void isAdjacent() {
         // given a robot
         var r1 = new Robot(new Pos(0, 0), new Mov(1, 0));
         var r2 = new Robot(new Pos(1, 1), new Mov(0, 1));
@@ -229,19 +228,23 @@ public class Day14Test {
         g.put(r2.pos, r2);
 
         // then return true
-        assertTrue(isOnADiagonal(r1, g));
+        assertTrue(isAdjacent(r1, g));
     }
 
-    enum Diagonals {
-        NW(-1, -1),
+    enum Direction {
+        N(0, -1),
         NE(1, -1),
+        E(1, 0),
+        SE(1, 1),
+        S(0, 1),
         SW(-1, 1),
-        SE(1, 1);
+        W(-1, 0),
+        NW(-1, -1);
 
         public final int x;
         public final int y;
 
-        Diagonals(int x, int y) {
+        Direction(int x, int y) {
             this.x = x;
             this.y = y;
         }
@@ -250,46 +253,8 @@ public class Day14Test {
     class RobotGrid extends HashMap<Pos, Robot> {
     }
 
-    boolean isOnADiagonal(Robot r, RobotGrid g) {
-        return Arrays.stream(Diagonals.values()).anyMatch(d -> {
-            int dx = r.pos().x() - d.x;
-            int dy = r.pos().y() - d.y;
-            return g.containsKey(new Pos(dx, dy));
-        });
-    }
-
-    enum Cardinals {
-        N(0, -1),
-        E(1, 0),
-        S(0, 1),
-        W(-1, 0);
-
-        public final int x;
-        public final int y;
-
-        Cardinals(int x, int y) {
-            this.x = x;
-            this.y = y;
-        }
-    }
-
-    @Test
-    void isOnALine() {
-        // given a robot
-        var r1 = new Robot(new Pos(1, 0), new Mov(1, 0));
-        var r2 = new Robot(new Pos(1, 1), new Mov(0, 1));
-
-        // when it is on a vert or horiz line with its neighbours,
-        var g = new RobotGrid();
-        g.put(r1.pos, r1);
-        g.put(r2.pos, r2);
-
-        // then return true
-        assertTrue(isOnALine(r1, g));
-    }
-
-    boolean isOnALine(Robot r, RobotGrid g) {
-        return Arrays.stream(Cardinals.values()).anyMatch(d -> {
+    boolean isAdjacent(Robot r, RobotGrid g) {
+        return Arrays.stream(Direction.values()).anyMatch(d -> {
             int dx = r.pos().x() - d.x;
             int dy = r.pos().y() - d.y;
             return g.containsKey(new Pos(dx, dy));
@@ -322,7 +287,7 @@ public class Day14Test {
             movedRobots.forEach(r -> g.put(r.pos, r));
 
             var found = movedRobots.stream()
-                    .filter(r -> isOnALine(r, g) || isOnADiagonal(r, g))
+                    .filter(r -> isAdjacent(r, g))
                     .count();
 
             // answer: on step 7892, 377 robots are aligned
