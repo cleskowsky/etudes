@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Test;
 import java.util.HashMap;
 import java.util.List;
 
-public class Day15 {
+public class Day15Test {
 
     /*
      * when the robot moves into a space with a box
