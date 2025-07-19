@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 
@@ -20,17 +23,50 @@ public class Day15Test {
     @Test
     void parseInput() {
         var g = parseInput("inputs/day15.txt");
-        System.out.println(g);
     }
 
     record Warehouse(Robot r, Floor f) {
     }
 
-    ParserResult parseInput(String s) {
+    static final ParseResult ParseFailed = new ParseResult(null, null);
+
+    ParseResult parseInput(String s) {
+        try {
+            var split = Files.readString(Path.of(s)).split("\n\n");
+            Floor f = parseFloor(split[0]);
+            List<Move> moves = parseMoves(split[1]);
+            return new ParseResult(new Warehouse(new Robot(0, 0), f), moves);
+        } catch (IOException e) {
+            return ParseFailed;
+        }
+    }
+
+    /*
+     * Expect:
+     *
+     * ########
+     * #..O.O.#
+     * ##@.O..#
+     * #...O..#
+     * #.#.O..#
+     * #...O..#
+     * #......#
+     * ########
+     */
+    Floor parseFloor(String s) {
         return null;
     }
 
-    record ParserResult(Warehouse wh, List<Move> moves) {
+    /*
+     * Expect:
+     *
+     * <^^>>>vv<v>>v<<
+     */
+    List<Move> parseMoves(String s) {
+        return null;
+    }
+
+    record ParseResult(Warehouse wh, List<Move> moves) {
     }
 
     record Move(Dir d) {
