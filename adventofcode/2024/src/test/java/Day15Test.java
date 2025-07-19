@@ -73,13 +73,9 @@ public class Day15Test {
             for (int x = 0; x < row.length(); x++) {
                 var c = row.charAt(x);
                 switch (c) {
-                    case '#' -> {
-                        f.put(new Tile(x, y), new Wall());
-                    }
+                    case '#' -> f.put(new Tile(x, y), new Wall());
 
-                    case 'O' -> {
-                        f.put(new Tile(x, y), new Box());
-                    }
+                    case 'O' -> f.put(new Tile(x, y), new Box());
 
                     case '@' -> {
                         if (wh != null) {
@@ -108,26 +104,23 @@ public class Day15Test {
      *
      * <^^>>>vv<v>>v<<
      */
-    List<Move> parseMoves(String s) {
+    List<Dir> parseMoves(String s) {
 
-        var val = new ArrayList<Move>();
+        var val = new ArrayList<Dir>();
 
         for (char c : s.toCharArray()) {
             switch (c) {
-                case '^' -> val.add(new Move(Dir.UP));
-                case '>' -> val.add(new Move(Dir.RIGHT));
-                case 'v' -> val.add(new Move(Dir.DOWN));
-                case '<' -> val.add(new Move(Dir.LEFT));
+                case '^' -> val.add(Dir.UP);
+                case '>' -> val.add(Dir.RIGHT);
+                case 'v' -> val.add(Dir.DOWN);
+                case '<' -> val.add(Dir.LEFT);
                 default -> throw new RuntimeException("Bad direction: " + c);
             }
         }
         return val;
     }
 
-    record ParseResult(Warehouse wh, List<Move> moves) {
-    }
-
-    record Move(Dir d) {
+    record ParseResult(Warehouse wh, List<Dir> moves) {
     }
 
     enum Dir {
@@ -154,7 +147,7 @@ public class Day15Test {
     record Wall() {
     }
 
-    class Floor extends HashMap<Tile, Object> {
+    static class Floor extends HashMap<Tile, Object> {
 
         int maxX;
         int maxY;
