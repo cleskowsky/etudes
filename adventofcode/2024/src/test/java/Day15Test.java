@@ -26,18 +26,20 @@ public class Day15Test {
     }
 
     record Warehouse(Robot r, Floor f) {
+        Warehouse {
+            f.put(r);
+        }
     }
-
-    static final ParseResult ParseFailed = new ParseResult(null, null);
 
     ParseResult parseInput(String s) {
         try {
             var split = Files.readString(Path.of(s)).split("\n\n");
-            Floor f = parseFloor(split[0]);
-            List<Move> moves = parseMoves(split[1]);
-            return new ParseResult(new Warehouse(new Robot(0, 0), f), moves);
+            var wh = parseWarehouse(split[0]);
+            System.out.println(wh);
+            var moves = parseMoves(split[1]);
+            return new ParseResult(wh, moves);
         } catch (IOException e) {
-            return ParseFailed;
+            throw new RuntimeException(e);
         }
     }
 
@@ -53,8 +55,44 @@ public class Day15Test {
      * #......#
      * ########
      */
-    Floor parseFloor(String s) {
-        return null;
+    Warehouse parseWarehouse(String s) {
+
+        Warehouse wh = null;
+        var f = new Floor();
+
+        var rows = s.split("\n");
+        for (int y = 0; y < rows.length; y++) {
+            var row = rows[y];
+            for (int x = 0; x < row.length(); x++) {
+                var c = row.charAt(x);
+                switch (c) {
+                    case '#' -> {
+                        f.put(new Tile(x, y), new Wall());
+                    }
+
+                    case 'O' -> {
+                        f.put(new Tile(x, y), new Box());
+                    }
+
+                    case '@' -> {
+                        if (wh != null) {
+                            throw new RuntimeException("More than 1 robot found");
+                        }
+                        wh = new Warehouse(new Robot(x, y), f);
+                    }
+
+                    case '.' -> {}
+
+                    default -> throw new RuntimeException("Couldn't parse: " + c);
+                }
+            }
+        }
+
+        if (wh == null) {
+            throw new RuntimeException("Couldn't parse warehouse");
+        }
+
+        return wh;
     }
 
     /*
@@ -96,10 +134,13 @@ public class Day15Test {
     record Wall() {
     }
 
-    class Floor extends HashMap<Coord, Object> {
+    class Floor extends HashMap<Tile, Object> {
+        void put(Robot r) {
+            put(new Tile(r.x(), r.y()), r);
+        }
     }
 
-    record Coord(int x, int y) {
+    record Tile(int x, int y) {
     }
 
 //    void move(Robot r, Dir d, Warehouse wh) {
