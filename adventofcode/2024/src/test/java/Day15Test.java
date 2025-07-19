@@ -188,6 +188,13 @@ public class Day15Test {
         move(wh.r, d, wh);
     }
 
+    /*
+     * warehouse knows it has a robot
+     * robot knows where it is in the wh
+     * the floor doesn't know where the robot is
+     *  floor knows about boxes and walls
+     */
+
     void move(Robot r, Dir d, Warehouse wh) {
 
         var adj = new Tile(r.t().x() + d.x, r.t().y() + d.y);
