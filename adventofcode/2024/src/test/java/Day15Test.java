@@ -3,8 +3,11 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class Day15Test {
 
@@ -22,7 +25,9 @@ public class Day15Test {
 
     @Test
     void parseInput() {
-        var g = parseInput("inputs/day15.txt");
+        var parseResult = parseInput("inputs/day15.txt");
+        assertEquals(new Robot(2,2), parseResult.wh().r());
+        assertEquals(15, parseResult.moves().size());
     }
 
     record Warehouse(Robot r, Floor f) {
@@ -35,7 +40,6 @@ public class Day15Test {
         try {
             var split = Files.readString(Path.of(s)).split("\n\n");
             var wh = parseWarehouse(split[0]);
-            System.out.println(wh);
             var moves = parseMoves(split[1]);
             return new ParseResult(wh, moves);
         } catch (IOException e) {
@@ -83,7 +87,7 @@ public class Day15Test {
 
                     case '.' -> {}
 
-                    default -> throw new RuntimeException("Couldn't parse: " + c);
+                    default -> throw new RuntimeException("Bad tile: " + c);
                 }
             }
         }
@@ -101,7 +105,19 @@ public class Day15Test {
      * <^^>>>vv<v>>v<<
      */
     List<Move> parseMoves(String s) {
-        return null;
+
+        var val = new ArrayList<Move>();
+
+        for (char c : s.toCharArray()) {
+            switch (c) {
+                case '^' -> val.add(new Move(Dir.UP));
+                case '>' -> val.add(new Move(Dir.RIGHT));
+                case 'v' -> val.add(new Move(Dir.DOWN));
+                case '<' -> val.add(new Move(Dir.LEFT));
+                default -> throw new RuntimeException("Bad direction: " + c);
+            }
+        }
+        return val;
     }
 
     record ParseResult(Warehouse wh, List<Move> moves) {
@@ -143,9 +159,11 @@ public class Day15Test {
     record Tile(int x, int y) {
     }
 
-//    void move(Robot r, Dir d, Warehouse wh) {
-//        // if wall, return
-//        // if empty, move
-//        // if box, move box then move robot
-//    }
+    /*
+     * move robot:
+     *  if tile is empty, move
+     *  if tile is wall, skip
+     *  res = if tile is box, move box
+     *  if res, move robot
+     */
 }
