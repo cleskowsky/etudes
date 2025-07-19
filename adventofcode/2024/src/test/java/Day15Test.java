@@ -26,7 +26,7 @@ public class Day15Test {
     @Test
     void parseInput() {
         var parseResult = parseInput("inputs/day15.txt");
-        assertEquals(new Robot(2,2), parseResult.wh().r());
+        assertEquals(new Robot(2, 2), parseResult.wh().r());
         assertEquals(15, parseResult.moves().size());
     }
 
@@ -61,10 +61,13 @@ public class Day15Test {
      */
     Warehouse parseWarehouse(String s) {
 
-        Warehouse wh = null;
-        var f = new Floor();
-
         var rows = s.split("\n");
+        int maxX = rows[0].length(); // string
+        int maxY = rows.length; // array
+
+        Warehouse wh = null;
+        var f = new Floor(maxX, maxY);
+
         for (int y = 0; y < rows.length; y++) {
             var row = rows[y];
             for (int x = 0; x < row.length(); x++) {
@@ -85,7 +88,8 @@ public class Day15Test {
                         wh = new Warehouse(new Robot(x, y), f);
                     }
 
-                    case '.' -> {}
+                    case '.' -> {
+                    }
 
                     default -> throw new RuntimeException("Bad tile: " + c);
                 }
@@ -151,6 +155,16 @@ public class Day15Test {
     }
 
     class Floor extends HashMap<Tile, Object> {
+
+        int maxX;
+        int maxY;
+
+        public Floor(int maxX, int maxY) {
+            super();
+            this.maxX = maxX;
+            this.maxY = maxY;
+        }
+
         void put(Robot r) {
             put(new Tile(r.x(), r.y()), r);
         }
@@ -166,4 +180,16 @@ public class Day15Test {
      *  res = if tile is box, move box
      *  if res, move robot
      */
+
+    @Test
+    void sample() {
+        var res = parseInput("inputs/day15.txt");
+        var wh = res.wh();
+        var moves = res.moves();
+
+        var m = moves.getFirst();
+
+        move(robot, m, wh);
+
+    }
 }
