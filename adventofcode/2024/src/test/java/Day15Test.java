@@ -37,7 +37,6 @@ public class Day15Test {
         public Warehouse(Robot r, Floor f) {
             this.r = r;
             this.f = f;
-            f.put(r);
         }
     }
 
@@ -165,10 +164,6 @@ public class Day15Test {
             this.maxX = maxX;
             this.maxY = maxY;
         }
-
-        void put(Robot r) {
-            put(r.t(), r);
-        }
     }
 
     record Tile(int x, int y) {
@@ -211,8 +206,6 @@ public class Day15Test {
                 // empty tile
                 // move the robot
                 wh.r = new Robot(adj);
-                wh.f.put(wh.r);
-                wh.f.remove(r);
             }
         }
     }
