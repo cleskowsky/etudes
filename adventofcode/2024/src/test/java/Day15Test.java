@@ -26,12 +26,17 @@ public class Day15Test {
     @Test
     void parseInput() {
         var parseResult = parseInput("inputs/day15.txt");
-        assertEquals(new Robot(2, 2), parseResult.wh().r());
+        assertEquals(new Robot(2, 2), parseResult.wh().r);
         assertEquals(15, parseResult.moves().size());
     }
 
-    record Warehouse(Robot r, Floor f) {
-        Warehouse {
+    static class Warehouse {
+        Robot r;
+        Floor f;
+
+        public Warehouse(Robot r, Floor f) {
+            this.r = r;
+            this.f = f;
             f.put(r);
         }
     }
@@ -138,7 +143,10 @@ public class Day15Test {
         }
     }
 
-    record Robot(int x, int y) {
+    record Robot(Tile t) {
+        public Robot(int x, int y) {
+            this(new Tile(x, y));
+        }
     }
 
     record Box() {
@@ -159,7 +167,7 @@ public class Day15Test {
         }
 
         void put(Robot r) {
-            put(new Tile(r.x(), r.y()), r);
+            put(r.t(), r);
         }
     }
 
@@ -176,13 +184,36 @@ public class Day15Test {
 
     @Test
     void sample() {
+
         var res = parseInput("inputs/day15.txt");
         var wh = res.wh();
         var moves = res.moves();
 
-        var m = moves.getFirst();
+        var d = moves.getFirst();
+        move(wh.r, d, wh);
+    }
 
-        move(robot, m, wh);
+    void move(Robot r, Dir d, Warehouse wh) {
 
+        var adj = new Tile(r.t().x() + d.x, r.t().y() + d.y);
+
+        switch (wh.f.get(adj)) {
+            case Box b -> {
+                // try moving box
+            }
+
+            case Wall w -> {
+                // do nothing
+                // can't move in this case
+            }
+
+            default -> {
+                // empty tile
+                // move the robot
+                wh.r = new Robot(adj);
+                wh.f.put(wh.r);
+                wh.f.remove(r);
+            }
+        }
     }
 }
