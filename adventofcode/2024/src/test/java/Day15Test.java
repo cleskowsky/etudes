@@ -149,6 +149,10 @@ public class Day15Test {
             this.maxX = maxX;
             this.maxY = maxY;
         }
+
+        boolean isEmpty(Tile t) {
+            return get(t) == '.';
+        }
     }
 
     record Tile(int x, int y) {
@@ -173,43 +177,73 @@ public class Day15Test {
         move(wh.robot, d, wh);
     }
 
-    void move(Tile t, Dir d, Warehouse wh) {
+    // Moves the thing at tile t (only ever called for boxes, and the robot)
+    void move(Tile t, Dir dir, Warehouse wh) {
+        var floor = wh.floor;
 
-        var adj = new Tile(t.x() + d.x, t.y() + d.y);
-        var c = wh.floor.get(adj);
+        var adj = new Tile(t.x() + dir.x, t.y() + dir.y);
+        var c = floor.get(adj);
 
-        if (c == 'O') {
-            move(adj, d, wh);
+        // move adjacent tile
+        if (c == '.') {
+            /*
+             * empty
+             * move whatever was passed in
+             * we will only ever see a robot
+             * or box here
+             */
+            move(t, adj, wh);
+        } else if (c == 'O') {
+            // try moving box
+            move(adj, dir, wh);
         }
 
-        /*
-         * if we're looking at the robot tile,
-         * move it if the adj square is empty
-         * (it may have moved above)
-         */
+        // move myself
+        c = floor.get(adj);
+        if (c == '.') {
+            move(t, adj, wh);
+        }
+    }
 
-        if (t.equals(wh.robot)) {
-            c = wh.floor.get(adj);
-            if (c == '.') {
-                wh.floor.put(t, '.');
-                wh.floor.put(adj, '@');
-                wh.robot = adj;
-            }
+    void move(Tile from, Tile to, Warehouse wh) {
+        var floor = wh.floor;
+        if (!floor.isEmpty(to)) {
+            throw new RuntimeException("Bad move: from=" + from + ", to=" + to);
+        }
+
+        floor.put(to, floor.get(from));
+        floor.put(from, '.');
+
+        if (from == wh.robot) {
+            wh.robot = to;
         }
     }
 
     @Test
     void move() {
         String s = """
-                @.
+                @.#
+                O.#
+                ..#
+                ###
                 
-                >""";
-        System.out.println(s);
+                v""";
+
         var res = parseInput(s);
-        System.out.println(res);
         var wh = res.wh();
-        System.out.println(wh);
-        System.out.println(wh.robot);
-        System.out.println(wh.floor);
+        var moves = res.moves();
+        var floor = wh.floor;
+
+        move(wh.robot, moves.getFirst(), wh);
+        // robot should move down 1 tile
+        assertEquals(new Tile(0, 1), wh.robot);
+        // and so should the box
+        assertEquals('O', floor.get(new Tile(0, 2)));
+
+        // i can't move the robot / box again because
+        // i've hit a wall ...
+        move(wh.robot, moves.getFirst(), wh);
+        assertEquals(new Tile(0, 1), wh.robot);
+        assertEquals('O', floor.get(new Tile(0, 2)));
     }
 }
