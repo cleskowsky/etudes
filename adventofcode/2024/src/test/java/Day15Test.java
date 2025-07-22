@@ -37,18 +37,23 @@ public class Day15Test {
         public Warehouse(Robot r, Floor f) {
             this.r = r;
             this.f = f;
+            f.put(r.t(), r);
+        }
+    }
+
+    ParseResult parseInput(Path p) {
+        try {
+            return parseInput(Files.readString(p));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     ParseResult parseInput(String s) {
-        try {
-            var split = Files.readString(Path.of(s)).split("\n\n");
-            var wh = parseWarehouse(split[0]);
-            var moves = parseMoves(split[1]);
-            return new ParseResult(wh, moves);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        var split = s.split("\n\n");
+        var wh = parseWarehouse(split[0]);
+        var moves = parseMoves(split[1]);
+        return new ParseResult(wh, moves);
     }
 
     /*
@@ -79,7 +84,7 @@ public class Day15Test {
                 switch (c) {
                     case '#' -> f.put(new Tile(x, y), new Wall());
 
-                    case 'O' -> f.put(new Tile(x, y), new Box());
+                    case 'O' -> f.put(new Tile(x, y), new Box(x, y));
 
                     case '@' -> {
                         if (wh != null) {
@@ -89,6 +94,7 @@ public class Day15Test {
                     }
 
                     case '.' -> {
+                        f.put(new Tile(x, y), new Empty());
                     }
 
                     default -> throw new RuntimeException("Bad tile: " + c);
@@ -148,10 +154,16 @@ public class Day15Test {
         }
     }
 
-    record Box() {
+    record Box(Tile t) {
+        public Box(int x, int y) {
+            this(new Tile(x, y));
+        }
     }
 
     record Wall() {
+    }
+
+    record Empty() {
     }
 
     static class Floor extends HashMap<Tile, Object> {
@@ -199,21 +211,57 @@ public class Day15Test {
 
         var adj = new Tile(r.t().x() + d.x, r.t().y() + d.y);
 
-        switch (wh.f.get(adj)) {
+        var obj = wh.f.get(adj);
+        switch (obj) {
             case Box b -> {
                 // try moving box
+                move(b, d, wh);
+
+                // re-check adj tile
+                obj = wh.f.get(adj);
+                if (obj == null) {
+                    move(r, d, wh);
+                }
             }
 
-            case Wall w -> {
-                // do nothing
-                // can't move in this case
-            }
+            case null -> wh.r = new Robot(adj);
 
-            default -> {
-                // empty tile
-                // move the robot
-                wh.r = new Robot(adj);
-            }
+            default -> throw new RuntimeException("Bad floor tile: " + obj);
         }
+    }
+
+    void move(Box b, Dir d, Warehouse wh) {
+
+        var adj = new Tile(b.t().x() + d.x, b.t().y() + d.y);
+
+        var obj = wh.f.get(adj);
+        switch (obj) {
+            case Box b1 -> {
+                move(b1, d, wh);
+            }
+
+            case null -> {
+                var f = wh.f;
+                f.put(adj, b);
+                f.remove(b.t());
+            }
+
+            default -> throw new RuntimeException("Bad floor tile: " + obj);
+        }
+    }
+
+    @Test
+    void move() {
+        String s = """
+                @.
+                
+                >""";
+        System.out.println(s);
+        var res = parseInput(s);
+        System.out.println(res);
+        var wh = res.wh();
+        System.out.println(wh);
+        System.out.println(wh.r);
+        System.out.println(wh.f);
     }
 }
