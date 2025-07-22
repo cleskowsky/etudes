@@ -26,18 +26,18 @@ public class Day15Test {
     @Test
     void parseInput() {
         var parseResult = parseInput("inputs/day15.txt");
-        assertEquals(new Robot(2, 2), parseResult.wh().r);
+        assertEquals(new Tile(2, 2), parseResult.wh().robot);
         assertEquals(15, parseResult.moves().size());
     }
 
     static class Warehouse {
-        Robot r;
-        Floor f;
+        Tile robot;
+        Floor floor;
 
-        public Warehouse(Robot r, Floor f) {
-            this.r = r;
-            this.f = f;
-            f.put(r.t(), r);
+        public Warehouse(Tile robot, Floor floor) {
+            this.robot = robot;
+            this.floor = floor;
+            floor.put(robot, '@');
         }
     }
 
@@ -81,23 +81,14 @@ public class Day15Test {
             var row = rows[y];
             for (int x = 0; x < row.length(); x++) {
                 var c = row.charAt(x);
-                switch (c) {
-                    case '#' -> f.put(new Tile(x, y), new Wall());
 
-                    case 'O' -> f.put(new Tile(x, y), new Box(x, y));
+                if ("#O@.".indexOf(c) == -1) {
+                    throw new RuntimeException("Invalid character" + c);
+                }
 
-                    case '@' -> {
-                        if (wh != null) {
-                            throw new RuntimeException("More than 1 robot found");
-                        }
-                        wh = new Warehouse(new Robot(x, y), f);
-                    }
-
-                    case '.' -> {
-                        f.put(new Tile(x, y), new Empty());
-                    }
-
-                    default -> throw new RuntimeException("Bad tile: " + c);
+                f.put(new Tile(x, y), c);
+                if (c == '@') {
+                    wh = new Warehouse(new Tile(x, y), f);
                 }
             }
         }
@@ -148,25 +139,7 @@ public class Day15Test {
         }
     }
 
-    record Robot(Tile t) {
-        public Robot(int x, int y) {
-            this(new Tile(x, y));
-        }
-    }
-
-    record Box(Tile t) {
-        public Box(int x, int y) {
-            this(new Tile(x, y));
-        }
-    }
-
-    record Wall() {
-    }
-
-    record Empty() {
-    }
-
-    static class Floor extends HashMap<Tile, Object> {
+    static class Floor extends HashMap<Tile, Character> {
 
         int maxX;
         int maxY;
@@ -197,56 +170,31 @@ public class Day15Test {
         var moves = res.moves();
 
         var d = moves.getFirst();
-        move(wh.r, d, wh);
+        move(wh.robot, d, wh);
     }
 
-    /*
-     * warehouse knows it has a robot
-     * robot knows where it is in the wh
-     * the floor doesn't know where the robot is
-     *  floor knows about boxes and walls
-     */
+    void move(Tile t, Dir d, Warehouse wh) {
 
-    void move(Robot r, Dir d, Warehouse wh) {
+        var adj = new Tile(t.x() + d.x, t.y() + d.y);
+        var c = wh.floor.get(adj);
 
-        var adj = new Tile(r.t().x() + d.x, r.t().y() + d.y);
-
-        var obj = wh.f.get(adj);
-        switch (obj) {
-            case Box b -> {
-                // try moving box
-                move(b, d, wh);
-
-                // re-check adj tile
-                obj = wh.f.get(adj);
-                if (obj == null) {
-                    move(r, d, wh);
-                }
-            }
-
-            case null -> wh.r = new Robot(adj);
-
-            default -> throw new RuntimeException("Bad floor tile: " + obj);
+        if (c == 'O') {
+            move(adj, d, wh);
         }
-    }
 
-    void move(Box b, Dir d, Warehouse wh) {
+        /*
+         * if we're looking at the robot tile,
+         * move it if the adj square is empty
+         * (it may have moved above)
+         */
 
-        var adj = new Tile(b.t().x() + d.x, b.t().y() + d.y);
-
-        var obj = wh.f.get(adj);
-        switch (obj) {
-            case Box b1 -> {
-                move(b1, d, wh);
+        if (t.equals(wh.robot)) {
+            c = wh.floor.get(adj);
+            if (c == '.') {
+                wh.floor.put(t, '.');
+                wh.floor.put(adj, '@');
+                wh.robot = adj;
             }
-
-            case null -> {
-                var f = wh.f;
-                f.put(adj, b);
-                f.remove(b.t());
-            }
-
-            default -> throw new RuntimeException("Bad floor tile: " + obj);
         }
     }
 
@@ -261,7 +209,7 @@ public class Day15Test {
         System.out.println(res);
         var wh = res.wh();
         System.out.println(wh);
-        System.out.println(wh.r);
-        System.out.println(wh.f);
+        System.out.println(wh.robot);
+        System.out.println(wh.floor);
     }
 }
