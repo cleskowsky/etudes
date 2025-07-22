@@ -178,11 +178,12 @@ public class Day15Test {
     }
 
     // Moves the thing at tile t (only ever called for boxes, and the robot)
-    void move(Tile t, Dir dir, Warehouse wh) {
+    void move(Tile from, Dir dir, Warehouse wh) {
+
         var floor = wh.floor;
 
-        var adj = new Tile(t.x() + dir.x, t.y() + dir.y);
-        var c = floor.get(adj);
+        var to = new Tile(from.x() + dir.x, from.y() + dir.y);
+        var c = floor.get(to);
 
         // move adjacent tile
         if (c == '.') {
@@ -192,20 +193,20 @@ public class Day15Test {
              * we will only ever see a robot
              * or box here
              */
-            move(t, adj, wh);
+            move(from, to, wh);
         } else if (c == 'O') {
             // try moving box
-            move(adj, dir, wh);
+            move(to, dir, wh);
         }
 
         // move myself
-        c = floor.get(adj);
-        if (c == '.') {
-            move(t, adj, wh);
+        if (floor.isEmpty(to)) {
+            move(from, to, wh);
         }
     }
 
     void move(Tile from, Tile to, Warehouse wh) {
+
         var floor = wh.floor;
         if (!floor.isEmpty(to)) {
             throw new RuntimeException("Bad move: from=" + from + ", to=" + to);
