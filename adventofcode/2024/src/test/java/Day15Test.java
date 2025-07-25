@@ -39,6 +39,14 @@ public class Day15Test {
             this.floor = floor;
             floor.put(robot, '@');
         }
+
+        @Override
+        public String toString() {
+            return "Warehouse{" +
+                    "robot=" + robot +
+                    ", floor=\n" + floor +
+                    '}';
+        }
     }
 
     ParseResult parseInput(Path p) {
@@ -153,6 +161,18 @@ public class Day15Test {
         boolean isEmpty(Tile t) {
             return get(t) == '.';
         }
+
+        @Override
+        public String toString() {
+            var val = new StringBuilder();
+            for (int y = 0; y < maxY; y++) {
+                for (int x = 0; x < maxX; x++) {
+                    val.append(get(new Tile(x, y)));
+                }
+                val.append("\n");
+            }
+            return val.toString();
+        }
     }
 
     record Tile(int x, int y) {
@@ -246,5 +266,7 @@ public class Day15Test {
         move(wh.robot, moves.getFirst(), wh);
         assertEquals(new Tile(0, 1), wh.robot);
         assertEquals('O', floor.get(new Tile(0, 2)));
+
+        System.out.println(wh);
     }
 }
