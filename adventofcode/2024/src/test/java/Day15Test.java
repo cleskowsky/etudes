@@ -91,7 +91,7 @@ public class Day15Test {
                 var c = row.charAt(x);
 
                 if ("#O@.".indexOf(c) == -1) {
-                    throw new RuntimeException("Invalid character" + c);
+                    throw new RuntimeException("Invalid character: " + c);
                 }
 
                 f.put(new Tile(x, y), c);
@@ -189,12 +189,18 @@ public class Day15Test {
     @Test
     void sample() {
 
-        var res = parseInput("inputs/day15.txt");
+        var res = parseInput(Path.of("inputs/day15.txt"));
         var wh = res.wh();
         var moves = res.moves();
 
-        var d = moves.getFirst();
-        move(wh.robot, d, wh);
+        // warehouse before any moves
+        System.out.println(wh);
+
+        moves.stream().forEach(m -> {
+            System.out.println("\nmoving: " + m);
+            move(wh.robot, m, wh);
+            System.out.println(wh);
+        });
     }
 
     // Moves the thing at tile t (only ever called for boxes, and the robot)
@@ -266,7 +272,5 @@ public class Day15Test {
         move(wh.robot, moves.getFirst(), wh);
         assertEquals(new Tile(0, 1), wh.robot);
         assertEquals('O', floor.get(new Tile(0, 2)));
-
-        System.out.println(wh);
     }
 }
