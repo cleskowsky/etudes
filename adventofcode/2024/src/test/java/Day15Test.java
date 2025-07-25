@@ -123,6 +123,8 @@ public class Day15Test {
                 case '>' -> val.add(Dir.RIGHT);
                 case 'v' -> val.add(Dir.DOWN);
                 case '<' -> val.add(Dir.LEFT);
+                case '\n' -> {
+                }
                 default -> throw new RuntimeException("Bad direction: " + c);
             }
         }
@@ -190,6 +192,7 @@ public class Day15Test {
     void sample() {
 
         var res = parseInput(Path.of("inputs/day15.txt"));
+        // var res = parseInput(Path.of("inputs/day15_2.txt"));
         var wh = res.wh();
         var moves = res.moves();
 
