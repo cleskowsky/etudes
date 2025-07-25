@@ -191,19 +191,26 @@ public class Day15Test {
     @Test
     void sample() {
 
-        var res = parseInput(Path.of("inputs/day15.txt"));
+        // var res = parseInput(Path.of("inputs/day15.txt"));
         // var res = parseInput(Path.of("inputs/day15_2.txt"));
+
+        // part a
+        var res = parseInput(Path.of("inputs/day15_3.txt"));
+
         var wh = res.wh();
         var moves = res.moves();
 
         // warehouse before any moves
-        System.out.println(wh);
+        // System.out.println(wh);
 
         moves.stream().forEach(m -> {
-            System.out.println("\nmoving: " + m);
+            // System.out.println("\nmoving: " + m);
             move(wh.robot, m, wh);
-            System.out.println(wh);
+            // System.out.println(wh);
         });
+
+        // assertEquals(2028, sumGpsCoords(wh.floor));
+        assertEquals(1568399, sumGpsCoords(wh.floor));
     }
 
     // Moves the thing at tile t (only ever called for boxes, and the robot)
@@ -275,5 +282,18 @@ public class Day15Test {
         move(wh.robot, moves.getFirst(), wh);
         assertEquals(new Tile(0, 1), wh.robot);
         assertEquals('O', floor.get(new Tile(0, 2)));
+    }
+
+    long sumGpsCoords(Floor f) {
+        long val = 0;
+        for (int y = 0; y < f.maxY; y++) {
+            for (int x = 0; x < f.maxX; x++) {
+                var c = f.get(new Tile(x, y));
+                if (c == 'O') {
+                    val += 100L * y + x;
+                }
+            }
+        }
+        return val;
     }
 }
