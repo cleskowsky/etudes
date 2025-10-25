@@ -38,4 +38,24 @@ public class AppTest {
             assertEquals("byte[] src must have even length", e.getMessage());
         }
     }
+
+    // Today I learned ... :/
+    @Test
+    void isDigitMapsHexToDecimal() {
+
+        var x = "0123456789abcdefABCDEF".toCharArray();
+
+        for (char c : x) {
+            var v = Character.digit(c, 16);
+            if (c >= '0' && c <= '9') {
+                assertEquals(c - '0', v);
+            } else if (c >= 'a' && c <= 'f') {
+                assertEquals(c - 'a' + 10, v);
+            } else if (c >= 'A' && c <= 'F') {
+                assertEquals(c - 'A' + 10, v);
+            } else {
+                fail("unexpected char: " + c);
+            }
+        }
+    }
 }
