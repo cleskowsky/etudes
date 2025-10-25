@@ -41,7 +41,7 @@ public class AppTest {
 
     // Today I learned ... :/
     @Test
-    void isDigitMapsHexToDecimal() {
+    void digitMapsHexToDecimal() {
 
         var x = "0123456789abcdefABCDEF".toCharArray();
 
