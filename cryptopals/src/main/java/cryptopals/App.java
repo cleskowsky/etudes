@@ -41,17 +41,17 @@ public class App {
     public String hexToBinary(String src) {
 
         if (src.length() % 2 != 0) {
-            throw new IllegalArgumentException("Hex string must have even length");
+            throw new IllegalArgumentException("Hex string should have even length");
         }
 
-        var ret = new StringBuilder();
+        var dst = new StringBuilder();
         for (int i = 0; i < src.length(); i += 2) {
             var c1 = src.charAt(i);
             var c2 = src.charAt(i + 1);
-            ret.append(hexToBinaryMap.get(c1));
-            ret.append(hexToBinaryMap.get(c2));
+            dst.append(hexToBinaryMap.get(c1));
+            dst.append(hexToBinaryMap.get(c2));
         }
 
-        return ret.toString();
+        return dst.toString();
     }
 }
