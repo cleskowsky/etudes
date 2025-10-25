@@ -17,11 +17,11 @@ public class AppTest {
 
         // base case
         var test = "4b";
-        assertEquals("01001011", app.hexToBinary(test));
+        assertEquals("01001011", app.toBinary(test));
 
         // fails on odd length
         try {
-            app.hexToBinary("4");
+            app.toBinary("4");
             fail();
         } catch (IllegalArgumentException e) {
             assertEquals("Hex string must have even length", e.getMessage());

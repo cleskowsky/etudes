@@ -38,16 +38,16 @@ public class App {
     /**
      * Convert hex string to binary
      */
-    public String hexToBinary(String s) {
+    public String hexToBinary(String hex) {
 
-        if (s.length() % 2 != 0) {
+        if (hex.length() % 2 != 0) {
             throw new IllegalArgumentException("Hex string must have even length");
         }
 
         var ret = new StringBuilder();
-        for (int i = 0; i < s.length(); i += 2) {
-            var c1 = s.charAt(i);
-            var c2 = s.charAt(i + 1);
+        for (int i = 0; i < hex.length(); i += 2) {
+            var c1 = hex.charAt(i);
+            var c2 = hex.charAt(i + 1);
             ret.append(hexToBinaryMap.get(c1));
             ret.append(hexToBinaryMap.get(c2));
         }
