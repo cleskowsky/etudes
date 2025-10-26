@@ -52,13 +52,11 @@ public class AppTest {
 
     @Test
     void toBase64() {
-        // Given a byte, and an instance of App
-        var app = new App();
-        var src = "49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d";
-        var x = Hex.toBinary(src);
+        // Given a byte array
+        var src = Hex.toBinary("49276d206b696c6c696e6720796f757220627261696e206c696b65206120706f69736f6e6f7573206d757368726f6f6d");
 
-        // When passed in to app.toBase64(), it is converted to a base64 string
-        var retval = Base64.toBase64(x);
+        // When run through a base64 encoder,
+        var retval = Base64.toBase64(src);
 
         // Then a string of base64-encoded bytes is produced
         assertEquals("SSdtIGtpbGxpbmcgeW91ciBicmFpbiBsaWtlIGEgcG9pc29ub3VzIG11c2hyb29t", retval);
