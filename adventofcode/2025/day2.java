@@ -7,7 +7,7 @@ void main() throws IOException {
     assert checker.check(1188511880);
     assert !checker.check(1188511885);
 
-    var t1 = invalidIds(new Range(1188511880, 1188511890));
+    var t1 = invalidIds(new Range(1188511880, 1188511890), checker);
     assert 1 == t1.size();
     assert 1188511885 == t1.getFirst();
 
@@ -20,12 +20,11 @@ void main() throws IOException {
     partA(ranges);
 }
 
-List<Long> invalidIds(Range r) {
+List<Long> invalidIds(Range r, Checker checker) {
     var val = new ArrayList<Long>();
     for (long i = r.min(); i <= r.max(); i++) {
 
         // skip good ids
-        var checker = new DefaultChecker();
         if (checker.check(i)) {
             continue;
         }
@@ -102,7 +101,7 @@ List<Range> parse(String file) {
 void partA(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
-        badIds.addAll(invalidIds(r));
+        badIds.addAll(invalidIds(r, new DefaultChecker()));
     }
 
     // too low : 9283763888 :/
@@ -115,7 +114,7 @@ void partA(List<Range> ranges) {
 void partB(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
-        badIds.addAll(invalidIds(r));
+        badIds.addAll(invalidIds(r, new DefaultChecker()));
     }
     println(badIds.stream().reduce(0L, Long::sum));
 }
