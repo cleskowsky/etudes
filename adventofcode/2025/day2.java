@@ -4,45 +4,28 @@ void main() throws IOException {
     assert isValid(1188511880);
     assert !isValid(1188511885);
 
-    var t1 = invalidIds(1188511880, 1188511890);
+    var t1 = invalidIds(new Range(1188511880, 1188511890));
     assert 1 == t1.size();
     assert 1188511885 == t1.getFirst();
 
-    var t2 = invalidIds(446443, 446449);
-    assert 1 == t2.size();
-    assert 446446 == t2.getFirst();
-
     assert isValid(101);
-    assert !isValid(592592);
+
+    List<Range> sampleRanges = parse("inputs/day2_sample.txt");
+    List<Range> ranges = parse("inputs/day2.txt");
 
     // sample
-//    var input = Files.readString(Path.of("inputs/day2_sample.txt"));
-//    println(input);
-//
-//    var badIds = new ArrayList<Long>();
-//
-//    for (String range : input.split(",")) {
-//        var split = range.split("-");
-//        badIds.addAll(invalidIds(
-//                Long.parseLong(split[0]),
-//                Long.parseLong(split[1])
-//        ));
+
+//    for (Range r : sampleRanges) {
+//        badIds.addAll(invalidIds(r));
 //    }
 //    println(badIds);
 //    println(badIds.stream().reduce(0L, Long::sum));
 
     // part 1
-    var input = Files.readString(Path.of("inputs/day2.txt"));
-    println(input);
 
     var badIds = new ArrayList<Long>();
-
-    for (String range : input.split(",")) {
-        var split = range.split("-");
-        badIds.addAll(invalidIds(
-                Long.parseLong(split[0]),
-                Long.parseLong(split[1])
-        ));
+    for (Range r : ranges) {
+        badIds.addAll(invalidIds(r));
     }
 
     // too low : 9283763888 :/
@@ -51,14 +34,13 @@ void main() throws IOException {
 
     println(badIds);
     println(badIds.stream().reduce(0L, Long::sum));
-    println(badIds.stream().mapToLong(Long::longValue).sum());
 
     // part 2
 }
 
-List<Long> invalidIds(long begin, long end) {
+List<Long> invalidIds(Range r) {
     var val = new ArrayList<Long>();
-    for (long i = begin; i <= end; i++) {
+    for (long i = r.min(); i <= r.max(); i++) {
         if (!isValid(i)) {
             val.add(i);
         }
@@ -92,4 +74,24 @@ boolean isValid(long id) {
 
     // we're not valid so we must be invalid
     return false;
+}
+
+record Range(long min, long max) {}
+
+List<Range> parse(String file) {
+    var val = new ArrayList<Range>();
+
+    try {
+        String data = Files.readString(Path.of(file));
+        for (String range : data.split(",")) {
+            String[] split = range.split("-");
+            var min = Long.parseLong(split[0]);
+            var max = Long.parseLong(split[1]);
+            val.add(new Range(min, max));
+        }
+    } catch (IOException e) {
+        throw new RuntimeException(e);
+    }
+
+    return val;
 }
