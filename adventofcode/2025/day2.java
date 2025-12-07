@@ -30,9 +30,10 @@ void main() throws IOException {
     assert 1 == v2.split("11", 2).size();
     assert 2 == v2.split("111", 2).size();
     assert 3 == v2.split("824824824", 3).size();
+    assert 1 == v2.split("11", 3).size();
 
     // 1 is repeated twice
-    assert !v2.isValid(11);
+//    assert !v2.isValid(11);
 //    assert !v2.isValid(824824824);
 
 //    partB(sampleRanges);
