@@ -13,29 +13,8 @@ void main() throws IOException {
     List<Range> sampleRanges = parse("inputs/day2_sample.txt");
     List<Range> ranges = parse("inputs/day2.txt");
 
-    // sample
-
-//    for (Range r : sampleRanges) {
-//        badIds.addAll(invalidIds(r));
-//    }
-//    println(badIds);
-//    println(badIds.stream().reduce(0L, Long::sum));
-
-    // part 1
-
-    var badIds = new ArrayList<Long>();
-    for (Range r : ranges) {
-        badIds.addAll(invalidIds(r));
-    }
-
-    // too low : 9283763888 :/
-    // That's not the right answer; your answer is too low. If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit. Please wait one minute before trying again. [Return to Day 2]
-    // i had a bad cast to int when i was stuffing digits into my byte buffer :'(
-
-    println(badIds);
-    println(badIds.stream().reduce(0L, Long::sum));
-
-    // part 2
+    partA(sampleRanges);
+    partA(ranges);
 }
 
 List<Long> invalidIds(Range r) {
@@ -76,7 +55,8 @@ boolean isValid(long id) {
     return false;
 }
 
-record Range(long min, long max) {}
+record Range(long min, long max) {
+}
 
 List<Range> parse(String file) {
     var val = new ArrayList<Range>();
@@ -94,4 +74,25 @@ List<Range> parse(String file) {
     }
 
     return val;
+}
+
+void partA(List<Range> ranges) {
+    var badIds = new ArrayList<Long>();
+    for (Range r : ranges) {
+        badIds.addAll(invalidIds(r));
+    }
+
+    // too low : 9283763888 :/
+    // That's not the right answer; your answer is too low. If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit. Please wait one minute before trying again. [Return to Day 2]
+    // i had a bad cast to int when i was stuffing digits into my byte buffer :'(
+
+    println(badIds.stream().reduce(0L, Long::sum));
+}
+
+void partB(List<Range> ranges) {
+    var badIds = new ArrayList<Long>();
+    for (Range r : ranges) {
+        badIds.addAll(invalidIds(r));
+    }
+    println(badIds.stream().reduce(0L, Long::sum));
 }
