@@ -39,6 +39,12 @@ void main() throws IOException {
 
     partB(sampleRanges);
     partB(ranges);
+
+    // try a simpler check method
+    assert !isValidId(1188511885);
+    assert isValidId(1188511880);
+
+    assert !v2.isValid(1);
 }
 
 List<Long> invalidIds(Range r, Validator v) {
@@ -144,8 +150,7 @@ static class RepeatValidator implements Validator {
         for (int i = 0; i < max; i++) {
             var chunks = split(s, i + 1);
             var first = chunks.getFirst();
-            boolean ok = chunks.stream().allMatch(c -> c.equals(first));
-            if (ok) {
+            if (chunks.stream().allMatch(chunk -> chunk.equals(first))) {
                 return false;
             }
         }
@@ -172,4 +177,15 @@ static class RepeatValidator implements Validator {
 
         return val;
     }
+}
+
+boolean isValidId(long id) {
+    var s = Long.toString(id);
+    int mid = s.length() / 2;
+
+    var left = s.substring(0, mid);
+    var right = s.substring(mid);
+
+    // if left and right are the same we have an invalid id
+    return !left.equals(right);
 }
