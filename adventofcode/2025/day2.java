@@ -48,18 +48,6 @@ List<Long> invalidIds(Range r, Validator v) {
 
 interface Validator {
     boolean isValid(long id);
-
-    // extract id to digit list
-    default List<Integer> toDigitList(long id) {
-        var val = new ArrayList<Integer>();
-
-        while (id > 0) {
-            val.add((int) (id % 10));
-            id = id / 10;
-        }
-
-        return val;
-    }
 }
 
 record Range(long min, long max) {
