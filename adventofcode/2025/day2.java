@@ -16,8 +16,8 @@ void main() throws IOException {
     List<Range> sampleRanges = parse("inputs/day2_sample.txt");
     List<Range> ranges = parse("inputs/day2.txt");
 
-    partA(sampleRanges);
-    partA(ranges);
+    assert 1227775554 == partA(sampleRanges);
+    assert 31000881061L == partA(ranges);
 
     // in part b an id is invalid if it is made up of the same pattern
     // repeated at least twice
@@ -37,14 +37,14 @@ void main() throws IOException {
     assert !v2.isValid(824824824);
     assert !v2.isValid(2121212121);
 
-    partB(sampleRanges);
-    partB(ranges);
+//    partB(sampleRanges);
+//    partB(ranges);
 
     // try a simpler check method
     assert !isValidId(1188511885);
     assert isValidId(1188511880);
 
-    assert !v2.isValid(1);
+//    assert !v2.isValid(1);
 }
 
 List<Long> invalidIds(Range r, Validator v) {
@@ -120,7 +120,7 @@ List<Range> parse(String file) {
     return val;
 }
 
-void partA(List<Range> ranges) {
+long partA(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
         badIds.addAll(invalidIds(r, new DefaultValidator()));
@@ -130,7 +130,7 @@ void partA(List<Range> ranges) {
     // That's not the right answer; your answer is too low. If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit. Please wait one minute before trying again. [Return to Day 2]
     // i had a bad cast to int when i was stuffing digits into my byte buffer :'(
 
-    println(badIds.stream().reduce(0L, Long::sum));
+    return badIds.stream().reduce(0L, Long::sum);
 }
 
 void partB(List<Range> ranges) {
@@ -183,9 +183,33 @@ boolean isValidId(long id) {
     var s = Long.toString(id);
     int mid = s.length() / 2;
 
-    var left = s.substring(0, mid);
-    var right = s.substring(mid);
+    for (int i = mid; i > 0; i--) {
+        var chunks = split(s, i);
+        var first = chunks.getFirst();
+        if (chunks.stream().allMatch(chunk -> chunk.equals(first))) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 
-    // if left and right are the same we have an invalid id
-    return !left.equals(right);
+    // shouldn't get here
+    return false;
+}
+
+List<String> split(String s, int n) {
+    var val = new ArrayList<String>();
+
+    int from = 0;
+    while (true) {
+        int to = from + n;
+        if (to >= s.length()) {
+            val.add(s.substring(from));
+            break;
+        }
+        val.add(s.substring(from, to));
+        from += n;
+    }
+
+    return val;
 }
