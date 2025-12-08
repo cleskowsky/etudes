@@ -33,23 +33,20 @@ void main() throws IOException {
     assert 1 == v2.split("11", 3).size();
 
     // 1 is repeated twice
-//    assert !v2.isValid(11);
-//    assert !v2.isValid(824824824);
+    assert !v2.isValid(11);
+    assert !v2.isValid(824824824);
+    assert !v2.isValid(2121212121);
 
-//    partB(sampleRanges);
+    partB(sampleRanges);
+    partB(ranges);
 }
 
 List<Long> invalidIds(Range r, Validator v) {
     var val = new ArrayList<Long>();
     for (long i = r.min(); i <= r.max(); i++) {
-
-        // skip good ids
-        if (v.isValid(i)) {
-            continue;
+        if (!v.isValid(i)) {
+            val.add(i);
         }
-
-        // add bad id
-        val.add(i);
     }
     return val;
 }
@@ -145,7 +142,7 @@ static class RepeatValidator implements Validator {
         int max = s.length() / 2;
 
         for (int i = 0; i < max; i++) {
-            var chunks = split(s, i);
+            var chunks = split(s, i + 1);
             var first = chunks.getFirst();
             boolean ok = chunks.stream().allMatch(c -> c.equals(first));
             if (ok) {
@@ -166,7 +163,7 @@ static class RepeatValidator implements Validator {
         while (true) {
             int to = from + n;
             if (to >= s.length()) {
-                val.add(s.substring(from, s.length() - 1));
+                val.add(s.substring(from));
                 break;
             }
             val.add(s.substring(from, to));
