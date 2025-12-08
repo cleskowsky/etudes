@@ -8,8 +8,8 @@ void main() throws IOException {
     assert 1227775554 == partA(sampleRanges);
     assert 31000881061L == partA(ranges);
 
-    println(partB(sampleRanges));
-//    partB(ranges);
+    assert 4174379265L == partB(sampleRanges);
+    assert 46769308485L == partB(ranges);
 }
 
 record Range(long min, long max) {
@@ -48,8 +48,8 @@ long partA(List<Range> ranges) {
 long partB(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
-        for (long i = r.min(); i < r.max(); i++) {
-            if (!isValidId(i)) {
+        for (long i = r.min(); i <= r.max(); i++) {
+            if (!isValidId2(i)) {
                 badIds.add(i);
             }
         }
@@ -65,6 +65,20 @@ boolean isValidId(long id) {
     var right = s.substring(mid);
 
     return !left.equals(right);
+}
+
+boolean isValidId2(long id) {
+    var s = Long.toString(id);
+    int mid = s.length() / 2;
+
+    for (int i = mid; i > 0; i--) {
+        var chunks = split(s, i);
+        var first = chunks.getFirst();
+        if (chunks.stream().allMatch(chunk -> chunk.equals(first))) {
+            return false;
+        }
+    }
+    return true;
 }
 
 List<String> split(String s, int n) {
