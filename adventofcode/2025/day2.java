@@ -8,46 +8,8 @@ void main() throws IOException {
     assert 1227775554 == partA(sampleRanges);
     assert 31000881061L == partA(ranges);
 
-    // in part b an id is invalid if it is made up of the same pattern
-    // repeated at least twice
-    // eg 11 is '1' repeated 2 times
-    //    999 is '9' repeated 3 times
-    //    824824824 is '824' repeated 3 times
-    var v2 = new RepeatValidator();
-
-    assert 2 == v2.split("11", 1).size();
-    assert 1 == v2.split("11", 2).size();
-    assert 2 == v2.split("111", 2).size();
-    assert 3 == v2.split("824824824", 3).size();
-    assert 1 == v2.split("11", 3).size();
-
-    // 1 is repeated twice
-    assert !v2.isValid(11);
-    assert !v2.isValid(824824824);
-    assert !v2.isValid(2121212121);
-
-//    partB(sampleRanges);
+    println(partB(sampleRanges));
 //    partB(ranges);
-
-    // try a simpler check method
-    assert !isValidId(1188511885);
-    assert isValidId(1188511880);
-
-//    assert !v2.isValid(1);
-}
-
-List<Long> invalidIds(Range r, Validator v) {
-    var val = new ArrayList<Long>();
-    for (long i = r.min(); i <= r.max(); i++) {
-        if (!v.isValid(i)) {
-            val.add(i);
-        }
-    }
-    return val;
-}
-
-interface Validator {
-    boolean isValid(long id);
 }
 
 record Range(long min, long max) {
@@ -80,59 +42,19 @@ long partA(List<Range> ranges) {
             }
         }
     }
-
-    // too low : 9283763888 :/
-    // That's not the right answer; your answer is too low. If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit. Please wait one minute before trying again. [Return to Day 2]
-    // i had a bad cast to int when i was stuffing digits into my byte buffer :'(
-
-    println(badIds.stream().reduce(0L, Long::sum));
     return badIds.stream().reduce(0L, Long::sum);
 }
 
-void partB(List<Range> ranges) {
+long partB(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
-        badIds.addAll(invalidIds(r, new RepeatValidator()));
-    }
-    println(badIds.stream().reduce(0L, Long::sum));
-}
-
-static class RepeatValidator implements Validator {
-    @Override
-    public boolean isValid(long id) {
-        var s = Long.toString(id);
-        int max = s.length() / 2;
-
-        for (int i = 0; i < max; i++) {
-            var chunks = split(s, i + 1);
-            var first = chunks.getFirst();
-            if (chunks.stream().allMatch(chunk -> chunk.equals(first))) {
-                return false;
+        for (long i = r.min(); i < r.max(); i++) {
+            if (!isValidId(i)) {
+                badIds.add(i);
             }
         }
-
-        // id is ok
-        // couldn't find a size where all chunks are the same
-        return true;
     }
-
-    // Returns list of strings of length n by splitting s
-    List<String> split(String s, int n) {
-        var val = new ArrayList<String>();
-
-        int from = 0;
-        while (true) {
-            int to = from + n;
-            if (to >= s.length()) {
-                val.add(s.substring(from));
-                break;
-            }
-            val.add(s.substring(from, to));
-            from += n;
-        }
-
-        return val;
-    }
+    return badIds.stream().reduce(0L, Long::sum);
 }
 
 boolean isValidId(long id) {
