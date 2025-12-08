@@ -2,17 +2,6 @@ import static java.lang.IO.println;
 
 void main() throws IOException {
 
-    var v = new DefaultValidator();
-
-    assert v.isValid(1188511880);
-    assert !v.isValid(1188511885);
-
-    var t1 = invalidIds(new Range(1188511880, 1188511890), v);
-    assert 1 == t1.size();
-    assert 1188511885 == t1.getFirst();
-
-    assert v.isValid(101);
-
     List<Range> sampleRanges = parse("inputs/day2_sample.txt");
     List<Range> ranges = parse("inputs/day2.txt");
 
@@ -73,32 +62,6 @@ interface Validator {
     }
 }
 
-static class DefaultValidator implements Validator {
-    @Override
-    public boolean isValid(long id) {
-
-        var buf = toDigitList(id);
-
-        // ids with an odd number of digits are valid
-        if (buf.size() % 2 == 1) {
-            return true;
-        }
-
-        // look at pairs starting at 0, mid
-        // an id is valid when we find a pair of different numbers
-        for (int i = 0, j = buf.size() / 2; j < buf.size(); i++, j++) {
-            int left = buf.get(i);
-            int right = buf.get(j);
-            if (left != right) {
-                return true;
-            }
-        }
-
-        // we're not valid so we must be invalid
-        return false;
-    }
-}
-
 record Range(long min, long max) {
 }
 
@@ -123,13 +86,18 @@ List<Range> parse(String file) {
 long partA(List<Range> ranges) {
     var badIds = new ArrayList<Long>();
     for (Range r : ranges) {
-        badIds.addAll(invalidIds(r, new DefaultValidator()));
+        for (long i = r.min(); i <= r.max(); i++) {
+            if (!isValidId(i)) {
+                badIds.add(i);
+            }
+        }
     }
 
     // too low : 9283763888 :/
     // That's not the right answer; your answer is too low. If you're stuck, make sure you're using the full input data; there are also some general tips on the about page, or you can ask for hints on the subreddit. Please wait one minute before trying again. [Return to Day 2]
     // i had a bad cast to int when i was stuffing digits into my byte buffer :'(
 
+    println(badIds.stream().reduce(0L, Long::sum));
     return badIds.stream().reduce(0L, Long::sum);
 }
 
@@ -183,18 +151,10 @@ boolean isValidId(long id) {
     var s = Long.toString(id);
     int mid = s.length() / 2;
 
-    for (int i = mid; i > 0; i--) {
-        var chunks = split(s, i);
-        var first = chunks.getFirst();
-        if (chunks.stream().allMatch(chunk -> chunk.equals(first))) {
-            return false;
-        } else {
-            return true;
-        }
-    }
+    var left = s.substring(0, mid);
+    var right = s.substring(mid);
 
-    // shouldn't get here
-    return false;
+    return !left.equals(right);
 }
 
 List<String> split(String s, int n) {
