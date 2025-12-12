@@ -11,17 +11,8 @@ void main() throws IOException {
     assert 357 == partA(sampleData);
     assert 17034 == partA(data);
 
-    println(partA(sampleData));
-
-    // i can pass in a range to look for the next biggest battery in
-    // i should reserve the number of batteries left to choose from the
-    // right side of the bank so we'll always be able to pick n batteries
-    //
-    // always picking the next biggest battery after the last should get
-    // me the max joltage in a bank since those are most significant
-    System.out.println("987654321111111".length());
-    println(maxJoltsInRange("987654321111111", 0, 14));
-    println(maxJoltsInRange("987654321111111", 1, 15));
+    partB(sampleData);
+    partB(data);
 }
 
 long partA(List<String> supply) {
@@ -53,6 +44,33 @@ long jolts(String bank) {
     }
 
     return max;
+}
+
+void partB(List<String> supply) {
+
+    // i'm always looking for the biggest battery to the right of the
+    // last one i picked reserving enough batteries in the tail to be
+    // able to pick n - 1 more
+
+    long sum = 0;
+
+    for (var bank : supply) {
+
+        int from = 0;
+        int remaining = 12;
+        String jolts = "";
+
+        for (int i = remaining - 1; i >= 0; i--) {
+            var b = maxJoltsInRange(bank, from, bank.length() - i);
+            jolts += b.jolts();
+            from = b.idx() + 1;
+        }
+
+        println(jolts);
+        sum += Long.parseLong(jolts);
+    }
+
+    println(sum);
 }
 
 record Battery(int jolts, int idx) {
