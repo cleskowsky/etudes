@@ -8,10 +8,10 @@ void main() throws IOException {
     assert 98 == jolts("987654321111111");
 
     // find joltages in power supply
-    assert 357 == totalJolts(sampleData);
-//    assert 17034 == totalJolts(data);
+    assert 357 == partA(sampleData);
+    assert 17034 == partA(data);
 
-    println(totalJolts(sampleData));
+    println(partA(sampleData));
 
     // i can pass in a range to look for the next biggest battery in
     // i should reserve the number of batteries left to choose from the
@@ -24,28 +24,14 @@ void main() throws IOException {
     println(maxJoltsInRange("987654321111111", 1, 15));
 }
 
-long totalJolts(List<String> supply) {
-
-    long sum = 0;
-
-    List<Battery> batteries = new ArrayList<>();
-
+long partA(List<String> supply) {
     // for every bank
+    long sum = 0;
     for (var line : supply) {
-
-        // find n batteries
+        // find 2 batteries
         sum += jolts(line);
-
-//        for (int i = 0; i < 2; i++) {
-//            if (batteries.isEmpty()) {
-//                var b = maxJoltsInRange(line, 0, howMany);
-//                batteries.add(b);
-//            } else {
-//                Battery prev = batteries.getLast();
-//                var b = maxJoltsInRange(line, prev.idx(), howMany);
-//            }
-//        }
     }
+
     return sum;
 }
 
