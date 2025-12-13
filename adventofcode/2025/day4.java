@@ -14,10 +14,11 @@ void main() {
             @.@.@@@.@.""";
 
     var g = gridify(sample);
-
     assert '.' == g.get(0, 0);
     assert '.' == g.get(1, 0);
     assert '@' == g.get(0, 1);
+
+    partA(g);
 }
 
 static class Grid extends HashMap<Point, Character> {
@@ -43,14 +44,21 @@ Grid gridify(String s) {
     return g;
 }
 
-//void partA(String data) {
-//    println(1);
-//    println(accessible(rolls(data)));
-//}
+void partA(Grid g) {
+    println("partA");
+    println(accessible(rolls(g)));
+}
 
-record Point(int x, int y) {
+List<Point> rolls(Grid g) {
+    return g.keySet().stream()
+            .filter(e -> g.get(e) == '@')
+            .toList();
 }
 
 int accessible(List<Point> rolls) {
+    println(rolls);
     return 0;
+}
+
+record Point(int x, int y) {
 }
