@@ -1,6 +1,6 @@
 import static java.lang.IO.println;
 
-void main() {
+void main() throws IOException {
     String sample = """
             ..@@.@@@@.
             @@@.@.@.@@
@@ -13,12 +13,20 @@ void main() {
             .@@@@@@@@.
             @.@.@@@.@.""";
 
-    var g = gridify(sample);
-    assert '.' == g.get(0, 0);
-    assert '.' == g.get(1, 0);
-    assert '@' == g.get(0, 1);
+    var sampleGrid = gridify(sample);
+    assert '.' == sampleGrid.get(0, 0);
+    assert '.' == sampleGrid.get(1, 0);
+    assert '@' == sampleGrid.get(0, 1);
 
-    partA(g);
+    // Rolls that are accessible have fewer than 4 rolls
+    // neighbouring them (4 cardinal directions + diagonals)
+
+    println("partA sample=" + accessible(rolls(sampleGrid), sampleGrid));
+
+    var input = Files.readString(Path.of("inputs/day4.txt"));
+    var grid = gridify(input);
+
+    println("partA=" + accessible(rolls(grid), grid));
 }
 
 static class Grid extends HashMap<Point, Character> {
@@ -48,13 +56,6 @@ Grid gridify(String s) {
     }
 
     return g;
-}
-
-// Rolls that are accessible have fewer than 4 rolls
-// neighbouring them (4 cardinal directions + diagonals)
-void partA(Grid g) {
-    println("partA");
-    println(accessible(rolls(g), g));
 }
 
 // Return all points with paper rolls on floor
