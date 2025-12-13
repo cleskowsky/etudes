@@ -21,12 +21,15 @@ void main() throws IOException {
     // Rolls that are accessible have fewer than 4 rolls
     // neighbouring them (4 cardinal directions + diagonals)
 
-    println("partA sample=" + accessible(rolls(sampleGrid), sampleGrid));
+    println("partA sample=" + accessible(rolls(sampleGrid), sampleGrid).size());
 
     var input = Files.readString(Path.of("inputs/day4.txt"));
     var grid = gridify(input);
 
-    println("partA=" + accessible(rolls(grid), grid));
+    println("partA=" + accessible(rolls(grid), grid).size());
+
+    partB(sampleGrid);
+    partB(grid);
 }
 
 static class Grid extends HashMap<Point, Character> {
@@ -66,19 +69,17 @@ List<Point> rolls(Grid g) {
 }
 
 // Return number of rolls that are accessible
-int accessible(List<Point> rolls, Grid g) {
-    var cnt = 0;
-
+List<Point> accessible(List<Point> rolls, Grid g) {
+    var val = new ArrayList<Point>();
     for (Point p : rolls) {
         var x = neighbours(p, g).stream()
                 .filter(e -> g.get(e) == '@')
                 .count();
         if (x < 4) {
-            cnt++;
+            val.add(p);
         }
     }
-
-    return cnt;
+    return val;
 }
 
 List<Point> neighbours(Point p, Grid g) {
@@ -104,3 +105,40 @@ List<Point> headings = List.of(
         new Point(0, 1),
         new Point(1, 1)
 );
+
+Grid remove(List<Point> rolls, Grid g) {
+    var val = new Grid();
+    val.putAll(g);
+    for (Point p : rolls) {
+        val.remove(p);
+    }
+    return val;
+}
+
+void partB(Grid g) {
+
+    // Part b wants me to remove the accessible paper rolls and
+    // then look for newly accessible ones on the floor
+    //
+    // I'll repeat until I can't find any accessible rolls
+    //
+    // How many did I remove?
+
+    int cnt = 0;
+
+    while (true) {
+        // get rolls
+        // find accessible ones
+        var rolls = accessible(rolls(g), g);
+
+        // if there are none, stop
+        if (rolls.isEmpty()) {
+            println(cnt);
+            return;
+        }
+
+        // remove them from g
+        g = remove(rolls, g);
+        cnt += rolls.size();
+    }
+}
