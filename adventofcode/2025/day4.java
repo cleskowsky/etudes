@@ -44,7 +44,6 @@ record Point(int x, int y) {
     }
 }
 
-// Return input as grid
 Grid gridify(String s) {
     var g = new Grid();
 
@@ -61,14 +60,14 @@ Grid gridify(String s) {
     return g;
 }
 
-// Return all points with paper rolls on floor
+// Returns all rolls in grid
 List<Point> rolls(Grid g) {
     return g.keySet().stream()
             .filter(e -> g.get(e) == '@')
             .toList();
 }
 
-// Return number of rolls that are accessible
+// Returns accessible rolls
 List<Point> accessible(List<Point> rolls, Grid g) {
     var val = new ArrayList<Point>();
     for (Point p : rolls) {
@@ -82,6 +81,7 @@ List<Point> accessible(List<Point> rolls, Grid g) {
     return val;
 }
 
+// Returns adjacent points to p
 List<Point> neighbours(Point p, Grid g) {
     ArrayList<Point> val = new ArrayList<>();
 
@@ -106,6 +106,7 @@ List<Point> headings = List.of(
         new Point(1, 1)
 );
 
+// Removes accessible paper rolls from grid
 Grid remove(List<Point> rolls, Grid g) {
     var val = new Grid();
     val.putAll(g);
