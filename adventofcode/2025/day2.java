@@ -1,5 +1,3 @@
-import static java.lang.IO.println;
-
 void main() throws IOException {
 
     List<Range> sampleRanges = parse("inputs/day2_sample.txt");
