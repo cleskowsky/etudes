@@ -1,0 +1,30 @@
+services:
+  db:
+    image: mongodb/mongodb-community-server:8.2-ubi8
+    container_name: mongo
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--keyFile", "/data/replicaset.key" ]
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=admin
+      - MONGODB_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - mongo-data:/data/db
+      - ./replicaset.key:/data/replicaset.key:ro
+
+  db2:
+    image: mongodb/mongodb-community-server:8.2-ubi8
+    container_name: mongo2
+    command: [ "--replSet", "rs0", "--bind_ip_all", "--port", "27017", "--keyFile", "/data/replicaset.key" ]
+    ports:
+      - "27018:27017"
+    environment:
+      - MONGODB_INITDB_ROOT_USERNAME=admin
+      - MONGODB_INITDB_ROOT_PASSWORD=admin
+    volumes:
+      - mongo2-data:/data/db
+      - ./replicaset.key:/data/replicaset.key:ro
+
+volumes:
+  mongo-data:
+  mongo2-data:

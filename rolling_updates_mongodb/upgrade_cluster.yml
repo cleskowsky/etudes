@@ -1,0 +1,18 @@
+---
+
+# first update secondaries,
+
+# for each node
+#   if node is primary
+#     skip
+#   else
+#     install new mongo version
+#     wait for it to rejoin replica set
+
+# then primary ...
+
+# for each node
+#   if node is primary
+#     step it down
+#     install new mongo version
+#     wait for it to rejoin replica set
