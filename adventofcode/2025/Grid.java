@@ -42,4 +42,16 @@ public class Grid extends HashMap<Point, String> {
                 .filter(p -> get(p).equals(val))
                 .findFirst();
     }
+    
+    public String toString() {
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < cols; j++) {
+                var c = get(j, i);
+                sb.append(c);
+            }
+            sb.append("\n");
+        }
+        return sb.toString();
+    }
 }

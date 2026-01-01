@@ -34,7 +34,8 @@ void main() throws IOException {
 //    assert newBeams.getFirst().x() == 7;
 //    assert newBeams.getFirst().y() == 0;
 
-    partA(g);
+    System.out.println(g);
+//    partA(g);
 
 //    partA(Grid.gridify(Files.readString(Path.of("inputs/day7.txt"))));
     // too high: 1768
