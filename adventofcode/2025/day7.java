@@ -31,27 +31,42 @@ void main() {
     assert g.get(new Point(14, 15)).equals(".");
     assert g.get(new Point(13, 14)).equals("^");
 
-    List<Point> seen = new ArrayList<>();
-    seen.add(g.findFirst("S").get());
-    assert seen.getFirst().x() == 7;
-    assert seen.getFirst().y() == 0;
-
     List<Beam> beams = new ArrayList<>();
-    int beamSplits = 0; 
-    while (!seen.isEmpty()) {
-        var result = traceBeam(seen.removeFirst(), g);
+    List<Point> newBeams = new ArrayList<>();
+    newBeams.add(g.findFirst("S").get());
+    Set<Point> seen = new HashSet<>();
+
+    assert newBeams.getFirst().x() == 7;
+    assert newBeams.getFirst().y() == 0;
+
+    // part a
+
+    int timesSplitterIsEntered = 0;
+    while (!newBeams.isEmpty()) {
+        var startingAt = newBeams.removeFirst();
+        if (seen.contains(startingAt)) {
+            // we've already traced this beam
+            continue;
+        }
+        seen.add(startingAt);
+
+        var result = traceBeam(startingAt, g);
         if (DEBUG) {
             System.out.println(result);
         }
         beams.add(result.beam());
-        if (!beams.isEmpty()) {
-            beamSplits++;
+
+        if (seen.containsAll(result.newBeams())) {
+            // it's possible a split returns beams we've
+            // already seen before ...
+        } else {
+            timesSplitterIsEntered++;
         }
-        seen.addAll(result.newBeams());
+        newBeams.addAll(result.newBeams());
     }
 
     System.out.println("Found beams: " + beams);
-    System.out.println("Number of splits: " + beamSplits);
+    System.out.println("Number of splits: " + timesSplitterIsEntered);
 }
 
 record Beam(List<Point> points) {
@@ -72,7 +87,7 @@ TraceResult traceBeam(Point startingAt, Grid g) {
     points.add(startingAt);
 
     // new beam start points if we hit a splitter
-    var found = new ArrayList<Point>();
+    var newBeams = new ArrayList<Point>();
 
     boolean finished = false;
     while (!finished) {
@@ -91,8 +106,8 @@ TraceResult traceBeam(Point startingAt, Grid g) {
             }
             var left = new Point(next.x() - 1, next.y());
             var right = new Point(next.x() + 1, next.y());
-            found.add(left);
-            found.add(right);
+            newBeams.add(left);
+            newBeams.add(right);
             finished = true;
         } else {
             // empty space
@@ -103,7 +118,7 @@ TraceResult traceBeam(Point startingAt, Grid g) {
         }
     }
 
-    return new TraceResult(new Beam(points), found);
+    return new TraceResult(new Beam(points), newBeams);
 }
 
 record TraceResult(Beam beam, List<Point> newBeams) {
