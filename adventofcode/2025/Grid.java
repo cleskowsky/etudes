@@ -2,7 +2,37 @@ import java.util.HashMap;
 
 public class Grid extends HashMap<Point, String> {
 
+    private int rows;
+    private int cols;
+    
     public static Grid gridify(String s) {
-        return null;
+
+        var lines = s.split("\n");
+
+        var g = new Grid();
+        g.rows = lines.length;
+        g.cols = lines[0].length();
+        System.out.printf("grid rows=%d cols=%d\n", lines.length, lines[0].length());
+
+        for (int i = 0; i < lines.length; i++) {
+            var line = lines[i];
+            for (int j = 0; j < line.length(); j++) {
+                g.put(new Point(j, i), line.substring(j, j + 1));
+            }
+        }
+
+        return g;
+    }
+    
+    public String get(int x, int y) {
+        return get(new Point(x, y));
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public int getCols() {
+        return cols;
     }
 }

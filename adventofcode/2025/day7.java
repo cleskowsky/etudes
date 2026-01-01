@@ -18,8 +18,6 @@ void main() {
             .^.^.^.^.^...^.
             ...............""";
 
-    System.out.println(sample);
-
     // i'll try finding all the beams
     // first beam enters the manifold at (S)
     // beam entering splitter creates 2 new beams (^)
@@ -27,5 +25,9 @@ void main() {
     // beams end at a splitter or when they would leave the manifold
 
     var g = Grid.gridify(sample);
-    System.out.println(g);
+    assert g.getRows() == 16;
+    assert g.getCols() == 15;
+    assert g.get(new Point(12, 12)).equals("^");
+    assert g.get(new Point(14, 15)).equals(".");
+    assert g.get(new Point(13, 14)).equals("^");
 }
