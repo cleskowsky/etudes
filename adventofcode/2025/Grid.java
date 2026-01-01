@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 public class Grid extends HashMap<Point, String> {
@@ -37,9 +39,9 @@ public class Grid extends HashMap<Point, String> {
         return cols;
     }
     
-    public Optional<Point> findFirst(String val) {
+    public Optional<Point> findFirst(String s) {
         return keySet().stream()
-                .filter(p -> get(p).equals(val))
+                .filter(p -> get(p).equals(s))
                 .findFirst();
     }
     
@@ -53,5 +55,10 @@ public class Grid extends HashMap<Point, String> {
             sb.append("\n");
         }
         return sb.toString();
+    }
+    
+    public List<Point> findAll(String s) {
+        return keySet().stream()
+                .filter(p -> get(p).equals(s)).toList();
     }
 }

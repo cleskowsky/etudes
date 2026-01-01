@@ -1,3 +1,6 @@
+
+final boolean DEBUG = false;
+
 void main() throws IOException {
 
     var sample = """
@@ -24,22 +27,23 @@ void main() throws IOException {
     // beams always flow down
     // beams end at a splitter or when they would leave the manifold
 
-    var g = Grid.gridify(sample);
-    assert g.getRows() == 16;
-    assert g.getCols() == 15;
-    assert g.get(new Point(12, 12)).equals("^");
-    assert g.get(new Point(14, 15)).equals(".");
-    assert g.get(new Point(13, 14)).equals("^");
+    var sampleGrid = Grid.gridify(sample);
 
-//    assert newBeams.getFirst().x() == 7;
-//    assert newBeams.getFirst().y() == 0;
+    assert sampleGrid.getRows() == 16;
+    assert sampleGrid.getCols() == 15;
 
-    System.out.println(g);
-//    partA(g);
+    assert sampleGrid.get(new Point(12, 12)).equals("^");
+    assert sampleGrid.get(new Point(14, 15)).equals(".");
+    assert sampleGrid.get(new Point(13, 14)).equals("^");
 
-//    partA(Grid.gridify(Files.readString(Path.of("inputs/day7.txt"))));
+    var S = sampleGrid.findFirst("S").get();
+    assert S.x() == 7;
+    assert S.y() == 0;
+
+    assert 21 == partA(sampleGrid);
     // too high: 1768
     // too low: 1432
+    assert 1678 == partA(Grid.gridify(Files.readString(Path.of("inputs/day7.txt"))));
 }
 
 record Beam(List<Point> points) {
@@ -81,6 +85,11 @@ TraceResult traceBeam(Point startingAt, Grid g) {
             var right = new Point(next.x() + 1, next.y());
             newBeams.add(left);
             newBeams.add(right);
+
+            // update grid
+            g.put(left, "|");
+            g.put(right, "|");
+
             finished = true;
         } else {
             // empty space
@@ -88,6 +97,9 @@ TraceResult traceBeam(Point startingAt, Grid g) {
                 System.out.printf("Adding beam point (%d, %d)%n", next.x(), next.y());
             }
             points.add(next);
+
+            // update grid
+            g.put(next, "|");
         }
     }
 
@@ -97,42 +109,48 @@ TraceResult traceBeam(Point startingAt, Grid g) {
 record TraceResult(Beam beam, List<Point> newBeams) {
 }
 
-final boolean DEBUG = true;
+int partA(Grid g) {
 
-void partA(Grid g) {
     List<Beam> beams = new ArrayList<>();
+
     List<Point> newBeams = new ArrayList<>();
     newBeams.add(g.findFirst("S").get());
-    Set<Point> seen = new HashSet<>();
 
-    // part a
+    // skip trace if we've seen the start point before
+    var seen = new ArrayList<Point>();
 
-    int timesSplitterIsEntered = 0;
     while (!newBeams.isEmpty()) {
-        var startingAt = newBeams.removeFirst();
-        if (seen.contains(startingAt)) {
-            // we've already traced this beam
+        var start = newBeams.removeFirst();
+        if (seen.contains(start)) {
             continue;
         }
-        seen.add(startingAt);
+        seen.add(start);
 
-        var result = traceBeam(startingAt, g);
+        var result = traceBeam(start, g);
         if (DEBUG) {
             System.out.println(result);
         }
         beams.add(result.beam());
-
-        if (!result.newBeams().isEmpty() &&
-                result.newBeams().stream().anyMatch(seen::contains)) {
-            // it's possible a split returns beams we've
-            // already seen before ...
-        } else {
-            timesSplitterIsEntered++;
-        }
-
         newBeams.addAll(result.newBeams());
     }
 
-    System.out.println("Found beams: " + beams);
-    System.out.println("Number of splits: " + timesSplitterIsEntered);
+    return beamSplits(g);
+}
+
+int beamSplits(Grid g) {
+
+    // find beams entering splitters
+
+    int cnt = 0;
+
+    var splitters = g.findAll("^");
+    for (var p : splitters) {
+        var top = g.get(p.x(), p.y() - 1);
+        if (top.equals("|")) {
+            // a beam enters the splitter
+            cnt++;
+        }
+    }
+
+    return cnt;
 }
