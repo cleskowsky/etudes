@@ -21,16 +21,11 @@ void main() {
     System.out.println(sample);
 
     // i'll try finding all the beams
-    // initial beam enters the manifold at ?(S)
-    // when a beam hits a splitter it creates 2 new beams (^)
-    // beams always flow straight down
+    // first beam enters the manifold at (S)
+    // beam entering splitter creates 2 new beams (^)
+    // beams always flow down
     // beams end at a splitter or when they would leave the manifold
 
-    Manifold m = gridify(sample);
-}
-
-record Point(int x, int y) {
-}
-
-class Manifold extends HashMap<Point, String> {
+    var g = Grid.gridify(sample);
+    System.out.println(g);
 }
