@@ -37,13 +37,21 @@ void main() {
     assert seen.getFirst().y() == 0;
 
     List<Beam> beams = new ArrayList<>();
+    int beamSplits = 0; 
     while (!seen.isEmpty()) {
-        var tr = traceBeam(seen.removeFirst(), g);
-        System.out.println(tr);
-        beams.add(tr.beam());
+        var result = traceBeam(seen.removeFirst(), g);
+        if (DEBUG) {
+            System.out.println(result);
+        }
+        beams.add(result.beam());
+        if (!beams.isEmpty()) {
+            beamSplits++;
+        }
+        seen.addAll(result.newBeams());
     }
 
     System.out.println("Found beams: " + beams);
+    System.out.println("Number of splits: " + beamSplits);
 }
 
 record Beam(List<Point> points) {
@@ -70,7 +78,13 @@ TraceResult traceBeam(Point startingAt, Grid g) {
     while (!finished) {
         var next = new Point(points.getLast().x(), points.getLast().y() + 1);
 
-        if (g.get(next).equals("^")) {
+        if (g.get(next) == null) {
+            // manifold end
+            if (DEBUG) {
+                System.out.printf("Stopping at manifold end (%d, %d)%n", next.x(), next.y());
+            }
+            finished = true;
+        } else if (g.get(next).equals("^")) {
             // splitter
             if (DEBUG) {
                 System.out.printf("Stopping at splitter (%d, %d)%n", next.x(), next.y());
@@ -79,12 +93,6 @@ TraceResult traceBeam(Point startingAt, Grid g) {
             var right = new Point(next.x() + 1, next.y());
             found.add(left);
             found.add(right);
-            finished = true;
-        } else if (g.get(next) == null) {
-            // manifold end
-            if (DEBUG) {
-                System.out.printf("Stopping at manifold end (%d, %d)%n", next.x(), next.y());
-            }
             finished = true;
         } else {
             // empty space
@@ -95,7 +103,7 @@ TraceResult traceBeam(Point startingAt, Grid g) {
         }
     }
 
-    return new TraceResult(new Beam(points), new ArrayList<Point>());
+    return new TraceResult(new Beam(points), found);
 }
 
 record TraceResult(Beam beam, List<Point> newBeams) {
