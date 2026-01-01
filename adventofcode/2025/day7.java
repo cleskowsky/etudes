@@ -1,4 +1,4 @@
-void main() {
+void main() throws IOException {
 
     var sample = """
             .......S.......
@@ -31,42 +31,14 @@ void main() {
     assert g.get(new Point(14, 15)).equals(".");
     assert g.get(new Point(13, 14)).equals("^");
 
-    List<Beam> beams = new ArrayList<>();
-    List<Point> newBeams = new ArrayList<>();
-    newBeams.add(g.findFirst("S").get());
-    Set<Point> seen = new HashSet<>();
+//    assert newBeams.getFirst().x() == 7;
+//    assert newBeams.getFirst().y() == 0;
 
-    assert newBeams.getFirst().x() == 7;
-    assert newBeams.getFirst().y() == 0;
+    partA(g);
 
-    // part a
-
-    int timesSplitterIsEntered = 0;
-    while (!newBeams.isEmpty()) {
-        var startingAt = newBeams.removeFirst();
-        if (seen.contains(startingAt)) {
-            // we've already traced this beam
-            continue;
-        }
-        seen.add(startingAt);
-
-        var result = traceBeam(startingAt, g);
-        if (DEBUG) {
-            System.out.println(result);
-        }
-        beams.add(result.beam());
-
-        if (seen.containsAll(result.newBeams())) {
-            // it's possible a split returns beams we've
-            // already seen before ...
-        } else {
-            timesSplitterIsEntered++;
-        }
-        newBeams.addAll(result.newBeams());
-    }
-
-    System.out.println("Found beams: " + beams);
-    System.out.println("Number of splits: " + timesSplitterIsEntered);
+//    partA(Grid.gridify(Files.readString(Path.of("inputs/day7.txt"))));
+    // too high: 1768
+    // too low: 1432
 }
 
 record Beam(List<Point> points) {
@@ -125,3 +97,41 @@ record TraceResult(Beam beam, List<Point> newBeams) {
 }
 
 final boolean DEBUG = true;
+
+void partA(Grid g) {
+    List<Beam> beams = new ArrayList<>();
+    List<Point> newBeams = new ArrayList<>();
+    newBeams.add(g.findFirst("S").get());
+    Set<Point> seen = new HashSet<>();
+
+    // part a
+
+    int timesSplitterIsEntered = 0;
+    while (!newBeams.isEmpty()) {
+        var startingAt = newBeams.removeFirst();
+        if (seen.contains(startingAt)) {
+            // we've already traced this beam
+            continue;
+        }
+        seen.add(startingAt);
+
+        var result = traceBeam(startingAt, g);
+        if (DEBUG) {
+            System.out.println(result);
+        }
+        beams.add(result.beam());
+
+        if (!result.newBeams().isEmpty() &&
+                result.newBeams().stream().anyMatch(seen::contains)) {
+            // it's possible a split returns beams we've
+            // already seen before ...
+        } else {
+            timesSplitterIsEntered++;
+        }
+
+        newBeams.addAll(result.newBeams());
+    }
+
+    System.out.println("Found beams: " + beams);
+    System.out.println("Number of splits: " + timesSplitterIsEntered);
+}
