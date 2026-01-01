@@ -15,7 +15,6 @@ public class Grid extends HashMap<Point, String> {
         var g = new Grid();
         g.rows = lines.length;
         g.cols = lines[0].length();
-        System.out.printf("grid rows=%d cols=%d\n", lines.length, lines[0].length());
 
         for (int i = 0; i < lines.length; i++) {
             var line = lines[i];

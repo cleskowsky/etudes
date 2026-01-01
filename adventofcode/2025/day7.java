@@ -27,23 +27,31 @@ void main() throws IOException {
     // beams always flow down
     // beams end at a splitter or when they would leave the manifold
 
-    var sampleGrid = Grid.gridify(sample);
+    var g = Grid.gridify(sample);
 
-    assert sampleGrid.getRows() == 16;
-    assert sampleGrid.getCols() == 15;
+    assert g.getRows() == 16;
+    assert g.getCols() == 15;
 
-    assert sampleGrid.get(new Point(12, 12)).equals("^");
-    assert sampleGrid.get(new Point(14, 15)).equals(".");
-    assert sampleGrid.get(new Point(13, 14)).equals("^");
+    assert g.get(new Point(12, 12)).equals("^");
+    assert g.get(new Point(14, 15)).equals(".");
+    assert g.get(new Point(13, 14)).equals("^");
 
-    var S = sampleGrid.findFirst("S").get();
+    var S = g.findFirst("S").get();
     assert S.x() == 7;
     assert S.y() == 0;
 
-    assert 21 == partA(sampleGrid);
+    System.out.println("Part a");
+
+    assert 21 == partA(g);
     // too high: 1768
     // too low: 1432
     assert 1678 == partA(Grid.gridify(Files.readString(Path.of("inputs/day7.txt"))));
+
+    System.out.println("Part b");
+
+    // reset g
+    g = Grid.gridify(sample);
+    System.out.println(partB(g));
 }
 
 record Beam(List<Point> points) {
@@ -153,4 +161,8 @@ int beamSplits(Grid g) {
     }
 
     return cnt;
+}
+
+int partB(Grid g) {
+    return 0;
 }
